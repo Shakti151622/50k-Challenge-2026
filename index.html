@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Shakti 50K"/>
+<title>Shakti's ₹50K Challenge</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,Georgia,serif;min-height:100vh;overflow-x:hidden}
+canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999}
+#pops{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:998}
+.pop{position:absolute;font-weight:900;animation:floatUp 1.3s ease-out forwards;white-space:nowrap;font-size:22px}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-120px)}}
+.row{display:flex;align-items:center;padding:14px 16px;cursor:pointer;user-select:none;-webkit-user-select:none;transition:opacity 0.15s}
+.row:active{opacity:0.7}
+.chk{width:26px;height:26px;border-radius:8px;border:2px solid;margin-right:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;transition:all 0.2s}
+.bar{border-radius:20px;overflow:hidden}
+.fill{height:100%;border-radius:20px;transition:width 0.8s ease}
+.dbar{height:7px;border-radius:4px;overflow:hidden;margin-top:5px}
+.dfill{height:100%;border-radius:4px;transition:width 0.5s ease}
+/* DARK */
+body.dark{background:#0a0014;color:#e8e0d0}
+.dark .card{background:#0d0820;border:1px solid #1e0a30}
+.dark .divider{border-bottom:1px solid #1a0a28}
+.dark .nav{background:#08000f;border-top:1px solid #2a1040}
+.dark .nav-btn{color:#4a3060;background:none;border:none;font-size:11px;padding:10px 0;flex:1}
+.dark .nav-btn.on{color:#C084FC;border-top:2px solid #C084FC}
+.dark .bar-bg{background:#1a0a28}
+.dark .sub{color:#7a5e9e}
+.dark .muted{color:#4a3060}
+.dark .task-text{color:#c0b0d8}
+.dark .chk-empty{border-color:#2a1a40}
+.dark .habit-done{background:#041a10}
+.dark .toggle-bg{background:#2a1a40}
+.dark .toggle-on{background:#7C3AED}
+/* LIGHT */
+body.light{background:#f5f3ff;color:#1e0a38}
+.light .card{background:#ffffff;border:1px solid #e8e4f8;box-shadow:0 2px 10px #7C3AED0f}
+.light .divider{border-bottom:1px solid #f0eeff}
+.light .nav{background:#ffffff;border-top:1px solid #e8e4f8;box-shadow:0 -1px 8px #7C3AED0a}
+.light .nav-btn{color:#c4b5fd;background:none;border:none;font-size:11px;padding:10px 0;flex:1}
+.light .nav-btn.on{color:#7C3AED;border-top:2px solid #7C3AED}
+.light .bar-bg{background:#ede9fe}
+.light .sub{color:#7C3AED}
+.light .muted{color:#9ca3af}
+.light .task-text{color:#374151}
+.light .chk-empty{border-color:#d1d5db}
+.light .habit-done{background:#f0fdf4}
+.light .toggle-bg{background:#e5e7eb}
+.light .toggle-on{background:#7C3AED}
+</style>
+</head>
+<body class="dark">
+<canvas id="cv"></canvas>
+<div id="pops"></div>
+<div id="app"></div>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+const NAME = "Shakti";
+const START = new Date("2025-03-08");
+const TODAY = new Date().toISOString().split("T")[0];
+
+const DOMAINS = [
+  {id:"health", name:"Health & Energy", emoji:"💪", dc:"#FF6B35", lc:"#ea580c",
+   tasks:[
+    {id:"h1",text:"Burn ≥300 kcal workout",star:false},
+    {id:"h2",text:"Walk 10,000 steps",star:false},
+    {id:"h3",text:"No sugar day",star:false},
+    {id:"h4",text:"Intermittent fasting 14–16 hrs",star:false},
+    {id:"h5",text:"Eat ≥100g protein",star:false},
+    {id:"h6",text:"Sleep before 10:30 PM",star:false},
+    {id:"h7",text:"🏸 Play sport",star:false},
+    {id:"h8",text:"🚶 Family walk",star:false},
+    {id:"h9",text:"★ 60+ min intense workout",star:true},
+    {id:"h10",text:"★ Full day clean diet",star:true},
+  ]},
+  {id:"finance", name:"Finance & Wealth", emoji:"📈", dc:"#00D4AA", lc:"#0d9488",
+   tasks:[
+    {id:"f1",text:"Study 30 min market structure",star:false},
+    {id:"f2",text:"Write trading journal 10+ lines",star:false},
+    {id:"f3",text:"Analyze 3 charts with liquidity zones",star:false},
+    {id:"f4",text:"Backtest one trading setup",star:false},
+    {id:"f5",text:"Track daily expenses or savings",star:false},
+    {id:"f6",text:"🎥 Watch finance video",star:false},
+    {id:"f7",text:"🎧 Finance podcast while walking",star:false},
+    {id:"f8",text:"★ 1 hr deep market analysis",star:true},
+    {id:"f9",text:"★ Write detailed strategy review",star:true},
+  ]},
+  {id:"skill", name:"Skill & Creation", emoji:"🎯", dc:"#C084FC", lc:"#7C3AED",
+   tasks:[
+    {id:"s1",text:"Study 45 min trading concepts",star:false},
+    {id:"s2",text:"Analyze 20 historical charts",star:false},
+    {id:"s3",text:"Write notes on one concept",star:false},
+    {id:"s4",text:"Practice communication or teaching",star:false},
+    {id:"s5",text:"Draft YouTube script or idea",star:false},
+    {id:"s6",text:"🎬 Record practice video",star:false},
+    {id:"s7",text:"💡 Experiment with content idea",star:false},
+    {id:"s8",text:"★ Publish a YouTube video",star:true},
+    {id:"s9",text:"★ Teach one concept clearly",star:true},
+  ]},
+  {id:"mind", name:"Mind & Learning", emoji:"🧠", dc:"#f472b6", lc:"#db2777",
+   tasks:[
+    {id:"m1",text:"Read 20 pages of a book",star:false},
+    {id:"m2",text:"Meditate 10 minutes",star:false},
+    {id:"m3",text:"Write 10 min reflection journal",star:false},
+    {id:"m4",text:"Record one strategic insight",star:false},
+    {id:"m5",text:"Learn one concept outside trading",star:false},
+    {id:"m6",text:"🎥 Watch documentary or edu video",star:false},
+    {id:"m7",text:"🎧 Listen to audiobook",star:false},
+    {id:"m8",text:"★ Write deep 1-page reflection",star:true},
+    {id:"m9",text:"★ Create summary of a book",star:true},
+  ]},
+  {id:"life", name:"Life Systems", emoji:"🏡", dc:"#38bdf8", lc:"#0284c7",
+   tasks:[
+    {id:"l1",text:"No phone in office until 2 PM",star:false},
+    {id:"l2",text:"Prepare next day task list",star:false},
+    {id:"l3",text:"Meaningful talk with spouse 30 min",star:false},
+    {id:"l4",text:"Organize workspace or home area",star:false},
+    {id:"l5",text:"Help someone with advice",star:false},
+    {id:"l6",text:"🏞️ Family outing or park visit",star:false},
+    {id:"l7",text:"🎲 Play board game with family",star:false},
+    {id:"l8",text:"★ Weekly life review & planning",star:true},
+    {id:"l9",text:"★ Teach someone a life concept",star:true},
+  ]},
+];
+
+const HABITS = [
+  {id:"hab1", emoji:"🎒", text:"Prepare clothes, bag & plan before sleep"},
+  {id:"hab2", emoji:"🦷", text:"Brush before sleep"},
+  {id:"hab3", emoji:"👧", text:"Playtime with daughter 30–60 min"},
+  {id:"hab4", emoji:"📵", text:"No phone in washroom"},
+];
+
+const CONFETTI = ["#FF6B35","#00D4AA","#C084FC","#f472b6","#38bdf8","#FFD700","#FF69B4","#00FF88"];
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let DARK = localStorage.getItem("theme") !== "light";
+let VIEW = "today";
+let EXP = null;
+let MISSION = null;
+let LOCKED = false;
+
+function load(){try{return JSON.parse(localStorage.getItem("s50k")||"{}")}catch{return{}}}
+function save(s){try{localStorage.setItem("s50k",JSON.stringify(s))}catch{}}
+let S = load();
+
+function setTheme(){
+  document.body.className = DARK ? "dark" : "light";
+  localStorage.setItem("theme", DARK ? "dark" : "light");
+}
+
+function dayNum(){return Math.max(1,Math.min(Math.floor((new Date()-START)/86400000)+1,60));}
+function allTasks(){return DOMAINS.flatMap(d=>d.tasks);}
+function dcolor(d){return DARK ? d.dc : d.lc;}
+
+function weekStart(ds){
+  const d=new Date(ds),day=d.getDay(),diff=d.getDate()-day+(day===0?-6:1);
+  return new Date(d.setDate(diff)).toISOString().split("T")[0];
+}
+
+// ─── SCORING ─────────────────────────────────────────────────────────────────
+function dayScore(day){
+  const tasks = S[day]?.tasks || {};
+  const at = allTasks();
+  let c=0,v=0;
+  Object.entries(tasks).forEach(([k,ok])=>{
+    if(ok){const t=at.find(x=>x.id===k);if(t){c+=t.star?2:1;v+=t.star?200:100;}}
+  });
+  return{c,v};
+}
+
+function totals(){
+  let tt=0,tv=0,dc=0,pen=0;
+  Object.keys(S).forEach(day=>{
+    const{c,v}=dayScore(day);const ds=S[day]||{};
+    tt+=c;tv+=v;if(c>=8)dc++;
+    pen+=HABITS.filter(h=>!(ds.habits||{})[h.id]).length*200;
+    if(day<TODAY){if(c<8&&c>0)pen+=500;if(c===0)pen+=1000;}
+  });
+  return{tt,tv,dc,pen,net:Math.max(0,tv-pen)};
+}
+
+function streak(){
+  let s=0,d=new Date(TODAY);
+  while(true){
+    const k=new Date(d).toISOString().split("T")[0];
+    if(dayScore(k).c>=8)s++;else break;
+    d.setDate(d.getDate()-1);if(s>60)break;
+  }
+  return s;
+}
+
+// ─── MISSION GEN ─────────────────────────────────────────────────────────────
+function genMission(){
+  const ws=weekStart(TODAY);
+  const wdays=Object.keys(S).filter(d=>d>=ws&&d<TODAY);
+  const wc={};let ws2=0;
+  wdays.forEach(day=>{
+    Object.entries(S[day]?.tasks||{}).forEach(([id,done])=>{
+      if(done){wc[id]=(wc[id]||0)+1;if(allTasks().find(t=>t.id===id)?.star)ws2++;}
+    });
+  });
+  const m={};let ts=0;
+  DOMAINS.forEach(domain=>{
+    const elig=domain.tasks.filter(t=>{
+      if((wc[t.id]||0)>=2)return false;
+      if(t.star&&(ws2>=2||ts>=1))return false;
+      return true;
+    }).sort(()=>Math.random()-0.5);
+    const picked=[];
+    const st=elig.find(t=>t.star&&ts<1&&ws2<2);
+    if(st){picked.push(st);ts++;ws2++;}
+    const rest=elig.filter(t=>!picked.includes(t)&&!t.star);
+    while(picked.length<2&&rest.length>0)picked.push(rest.shift());
+    if(picked.length<2){const fb=domain.tasks.filter(t=>!picked.includes(t)).sort(()=>Math.random()-0.5);while(picked.length<2&&fb.length>0)picked.push(fb.shift());}
+    m[domain.id]=picked;
+  });
+  return m;
+}
+
+// ─── CONFETTI ────────────────────────────────────────────────────────────────
+let parts=[],raf=null;
+const cv=document.getElementById("cv"),ctx=cv.getContext("2d");
+function resize(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
+resize();window.addEventListener("resize",resize);
+
+function boom(x,y,n=60){
+  resize();
+  for(let i=0;i<n;i++)parts.push({
+    x,y,vx:(Math.random()-0.5)*18,vy:(Math.random()-0.5)*18-6,
+    color:CONFETTI[Math.floor(Math.random()*CONFETTI.length)],
+    size:Math.random()*8+3,rot:Math.random()*360,rs:(Math.random()-0.5)*10,
+    alpha:1,g:0.4+Math.random()*0.3
+  });
+  if(!raf)tick();
+}
+function tick(){
+  ctx.clearRect(0,0,cv.width,cv.height);
+  parts=parts.filter(p=>p.alpha>0.01);
+  parts.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.vx*=0.98;p.rot+=p.rs;p.alpha-=0.018;
+    ctx.save();ctx.globalAlpha=p.alpha;ctx.fillStyle=p.color;
+    ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);
+    ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.5);
+    ctx.restore();
+  });
+  raf=parts.length?requestAnimationFrame(tick):(ctx.clearRect(0,0,cv.width,cv.height),null);
+}
+
+function moneyPop(x,y,star){
+  const el=document.createElement("div");el.className="pop";
+  el.style.left=(x-40)+"px";el.style.top=(y-20)+"px";
+  el.style.color=star?"#FFD700":"#00D4AA";
+  el.style.textShadow="0 0 15px currentColor";
+  el.textContent=star?"⭐ +₹200":"+₹100";
+  document.getElementById("pops").appendChild(el);
+  setTimeout(()=>el.remove(),1400);
+}
+
+function sound(type){
+  try{
+    const ac=new(window.AudioContext||window.webkitAudioContext)();
+    if(type==="tick"){
+      const o=ac.createOscillator(),g=ac.createGain();
+      o.connect(g);g.connect(ac.destination);
+      o.frequency.setValueAtTime(520,ac.currentTime);
+      o.frequency.exponentialRampToValueAtTime(880,ac.currentTime+0.1);
+      g.gain.setValueAtTime(0.2,ac.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+0.2);
+      o.start();o.stop(ac.currentTime+0.2);
+    } else {
+      [523,659,784,1047].forEach((f,i)=>{
+        const o=ac.createOscillator(),g=ac.createGain();
+        o.connect(g);g.connect(ac.destination);
+        o.frequency.value=f;
+        g.gain.setValueAtTime(0.15,ac.currentTime+i*0.1);
+        g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+i*0.1+0.3);
+        o.start(ac.currentTime+i*0.1);o.stop(ac.currentTime+i*0.1+0.35);
+      });
+    }
+  }catch(e){}
+}
+
+// ─── ACTIONS ─────────────────────────────────────────────────────────────────
+function tapTask(id,star,x,y){
+  const ds=S[TODAY]||{},prev=ds.tasks||{};
+  if(prev[id]){S[TODAY]={...ds,tasks:{...prev,[id]:false}};save(S);render();return;}
+  if(star){
+    const sids=allTasks().filter(t=>t.star).map(t=>t.id);
+    if(Object.entries(prev).filter(([k,v])=>v&&sids.includes(k)).length>=1){
+      alert("Max 1 ★ per day!");return;
+    }
+  }
+  S[TODAY]={...ds,tasks:{...prev,[id]:true}};save(S);
+  star?([0,120,260].forEach(d=>setTimeout(()=>boom(x+(Math.random()-.5)*150,y,80),d)),moneyPop(x,y,true),sound("star"))
+      :(boom(x,y),moneyPop(x,y,false),sound("tick"));
+  render();
+}
+
+function tapHabit(id,x,y){
+  const ds=S[TODAY]||{},prev=ds.habits||{},now=!prev[id];
+  S[TODAY]={...ds,habits:{...prev,[id]:now}};save(S);
+  if(now){boom(x,y,40);moneyPop(x,y,false);sound("tick");}
+  render();
+}
+
+function getXY(e){
+  const r=e.currentTarget.getBoundingClientRect();
+  return[r.left+r.width/2, r.top+r.height/2];
+}
+
+// ─── RENDER ──────────────────────────────────────────────────────────────────
+function render(){
+  const ds=S[TODAY]||{};
+  const tt=ds.tasks||{},th=ds.habits||{};
+  const{c:tc,v:tv}=dayScore(TODAY);
+  const hc=HABITS.filter(h=>th[h.id]).length;
+  const T=totals(),str=streak();
+  const pct=Math.min(100,(T.tt/500)*100);
+
+  const accentMain=DARK?"#C084FC":"#7C3AED";
+  const accentSub=DARK?"#4a3060":"#c4b5fd";
+  const cardBg=DARK?"#0d0820":"#ffffff";
+  const divCol=DARK?"#1a0a28":"#f0eeff";
+  const okC=DARK?"#34d399":"#059669";
+  const warnC=DARK?"#fb923c":"#ea580c";
+  const penR=DARK?"#7f1d1d":"#991b1b";
+  const textMain=DARK?"#e8e0d0":"#1e0a38";
+  const textSub=DARK?"#7a5e9e":"#7C3AED";
+  const textMuted=DARK?"#4a3060":"#9ca3af";
+  const textTask=DARK?"#c0b0d8":"#374151";
+  const barBg=DARK?"#1a0a28":"#ede9fe";
+  const chkEmpty=DARK?"#2a1a40":"#d1d5db";
+
+  document.getElementById("app").innerHTML=`
+  <!-- HEADER -->
+  <div style="padding:20px 16px 14px;background:${DARK?"linear-gradient(180deg,#110028,transparent)":"linear-gradient(180deg,#ede9fe,transparent)"}">
+    <div style="max-width:480px;margin:0 auto">
+
+      <!-- Name + theme toggle -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:26px">🔥</span>
+          <div>
+            <div style="font-size:16px;font-weight:900;color:${textMain}">${NAME} Sharma</div>
+            <div style="font-size:10px;color:${textSub}">Day ${dayNum()} of 60 • ₹50K Challenge</div>
+          </div>
+        </div>
+        <div onclick="DARK=!DARK;localStorage.setItem('theme',DARK?'dark':'light');setTheme();render()"
+          style="width:46px;height:26px;border-radius:13px;background:${DARK?"#7C3AED":"#e5e7eb"};position:relative;cursor:pointer;flex-shrink:0;transition:background 0.3s">
+          <div style="position:absolute;top:4px;left:${DARK?26:4}px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left 0.3s;box-shadow:0 2px 4px #00000044"></div>
+        </div>
+      </div>
+
+      <!-- Money pot -->
+      <div style="text-align:center;margin-bottom:14px">
+        <div style="font-size:10px;letter-spacing:3px;color:${textSub};text-transform:uppercase;margin-bottom:4px">💰 Money Pot</div>
+        <div style="font-size:54px;font-weight:900;letter-spacing:-2px;color:${DARK?"#FFD700":"#d97706"};text-shadow:0 0 30px ${DARK?"#FFD70066":"#d9770633"};line-height:1">₹${T.net.toLocaleString("en-IN")}</div>
+        <div style="font-size:11px;color:${textMuted};margin-top:3px">of ₹50,000 goal</div>
+        <div class="bar bar-bg" style="margin-top:10px;height:10px">
+          <div class="fill" style="width:${pct}%;background:linear-gradient(90deg,${DARK?"#7C3AED,#C084FC,#f472b6":"#7C3AED,#a78bfa,#f472b6"})"></div>
+        </div>
+      </div>
+
+      <!-- Quick stats -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px">
+        ${[
+          [`${tc}/10`,"Today",tc>=8?okC:warnC],
+          [`${T.dc}`,"Days ✓",accentMain],
+          [`${hc}/4`,"Habits",hc===4?okC:DARK?"#f472b6":"#db2777"],
+          [`${str}🔥`,"Streak",DARK?"#FFD700":"#d97706"],
+        ].map(([v,l,c])=>`
+          <div style="background:${DARK?"#ffffff08":"#7C3AED0a"};border-radius:10px;padding:8px 4px;text-align:center;border:1px solid ${DARK?"#ffffff0a":"#ddd6fe"}">
+            <div style="font-size:15px;font-weight:900;color:${c}">${v}</div>
+            <div style="font-size:9px;color:${textMuted};margin-top:1px">${l}</div>
+          </div>`).join("")}
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav" style="display:flex;max-width:480px;margin:0 auto;position:sticky;top:0;z-index:50">
+    <button class="nav-btn ${VIEW==="today"?"on":""}" onclick="VIEW='today';render()">🎯 Today</button>
+    <button class="nav-btn ${VIEW==="stats"?"on":""}" onclick="VIEW='stats';render()">📊 Stats</button>
+  </div>
+
+  <!-- CONTENT -->
+  <div style="max-width:480px;margin:0 auto;padding:14px 16px 100px">
+    ${VIEW==="today"?renderToday(tt,th,tc,tv,okC,warnC,penR,textMain,textSub,textMuted,textTask,cardBg,divCol,chkEmpty):""}
+    ${VIEW==="stats"?renderStats(T,tt,str,okC,warnC,textMain,textSub,textMuted,textTask,cardBg,divCol,barBg,accentMain):""}
+  </div>`;
+}
+
+function renderToday(tt,th,tc,tv,okC,warnC,penR,textMain,textSub,textMuted,textTask,cardBg,divCol,chkEmpty){
+  if(!MISSION)return"";
+
+  return`
+  <!-- Mission header -->
+  <div style="background:${DARK?"linear-gradient(135deg,#180a2e,#0a1628)":"linear-gradient(135deg,#ede9fe,#dbeafe)"};border-radius:16px;padding:14px 16px;margin-bottom:12px;border:1px solid ${DARK?"#3a1060":"#c4b5fd"};text-align:center">
+    <div style="font-size:14px;font-weight:bold;color:${textMain};margin-bottom:3px">⚡ ${NAME}'s Mission — Day ${dayNum()}</div>
+    <div style="font-size:11px;color:${textSub}">2 tasks per domain • rules auto-enforced</div>
+    ${!LOCKED?`
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:10px">
+        <button onclick="MISSION=genMission();render()" style="background:${DARK?"#1e0a35":"#f5f3ff"};border:1px solid ${DARK?"#4a2080":"#c4b5fd"};border-radius:9px;color:${DARK?"#C084FC":"#7C3AED"};padding:7px 14px;font-size:12px">🔀 Reroll</button>
+        <button onclick="LOCKED=true;const ds=S[TODAY]||{};S[TODAY]={...ds,mission:MISSION};save(S);render()" style="background:${DARK?"#7C3AED":"#7C3AED"};border:none;border-radius:9px;color:#fff;padding:7px 18px;font-size:12px;font-weight:bold">✅ Lock Mission</button>
+      </div>`
+    :`<div style="margin-top:8px;font-size:11px;color:${okC}">🔒 Mission locked — go crush it!</div>`}
+  </div>
+
+  <!-- Day status -->
+  ${tc>=8
+    ?`<div style="background:${DARK?"#041a10":"#f0fdf4"};border:1px solid ${DARK?"#22c55e":"#86efac"};border-radius:12px;padding:11px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px">
+        <span style="font-size:20px">🎉</span>
+        <div><div style="color:${okC};font-size:13px;font-weight:bold">Day Complete, ${NAME}!</div>
+        <div style="color:${okC};font-size:11px;opacity:0.8">₹${tv} earned today</div></div>
+      </div>`
+    :`<div style="background:${DARK?"#1a0800":"#fff7ed"};border:1px solid ${DARK?"#f97316":"#fdba74"};border-radius:12px;padding:11px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px">
+        <span style="font-size:20px">⚡</span>
+        <div><div style="color:${warnC};font-size:13px;font-weight:bold">${8-tc} more task${8-tc!==1?"s":""} to avoid ₹500 penalty</div>
+        <div style="color:${warnC};font-size:11px;opacity:0.8">Need at least 8 tasks today</div></div>
+      </div>`}
+
+  <!-- Domain tasks -->
+  ${DOMAINS.map(domain=>{
+    const mt=MISSION[domain.id]||[];
+    const done2=mt.filter(t=>tt[t.id]).length;
+    const col=dcolor(domain);
+    const allDone=done2>=mt.length;
+    return`
+    <div style="margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
+        <span style="font-size:16px">${domain.emoji}</span>
+        <span style="font-size:13px;font-weight:bold;color:${col}">${domain.name}</span>
+        <div style="margin-left:auto;display:flex;gap:4px">
+          ${mt.map((_,i)=>`<div style="width:7px;height:7px;border-radius:50%;background:${i<done2?col:DARK?"#2a1a3a":"#e8e4f8"}"></div>`).join("")}
+        </div>
+      </div>
+      <div style="background:${cardBg};border-radius:14px;border:1px solid ${allDone?col+"55":DARK?"#1e0a30":"#e8e4f8"};overflow:hidden;box-shadow:${allDone?`0 0 16px ${col}33`:"none"}">
+        ${mt.map((task,i)=>{
+          const done=!!tt[task.id];
+          return`<div class="row" style="border-bottom:${i<mt.length-1?`1px solid ${divCol}`:"none"};background:${done?(DARK?col+"15":col+"18"):"transparent"}"
+            onclick="const r=this.getBoundingClientRect();tapTask('${task.id}',${task.star},r.left+r.width/2,r.top+r.height/2)">
+            <div class="chk" style="border-color:${done?col:chkEmpty};background:${done?col:"transparent"};box-shadow:${done?`0 0 10px ${col}66`:""};color:#fff">${done?"✓":""}</div>
+            <div style="flex:1;font-size:13px;color:${done?(DARK?"#4a7a4a":"#9ca3af"):task.star?(DARK?"#FFD700":"#d97706"):textTask};text-decoration:${done?"line-through":"none"};line-height:1.35">${task.text}</div>
+            <div style="font-size:12px;font-weight:bold;color:${done?col:task.star?(DARK?"#FFD700":"#d97706"):DARK?"#4a3060":"#9ca3af"};margin-left:8px;flex-shrink:0">${task.star?"₹200":"₹100"}</div>
+          </div>`;
+        }).join("")}
+      </div>
+    </div>`;
+  }).join("")}
+
+  <!-- Habits -->
+  <div style="margin-bottom:12px">
+    <div style="font-size:10px;letter-spacing:3px;color:${textSub};text-transform:uppercase;margin-bottom:8px;font-weight:bold">
+      Non-Negotiable Habits <span style="color:${penR};font-size:9px;font-weight:normal">−₹200 each if missed</span>
+    </div>
+    <div style="background:${cardBg};border-radius:14px;border:1px solid ${DARK?"#1e0a30":"#e8e4f8"};overflow:hidden">
+      ${HABITS.map((h,i)=>{
+        const done=!!th[h.id];
+        const hc=DARK?"#34d399":"#059669";
+        return`<div class="row" style="border-bottom:${i<HABITS.length-1?`1px solid ${divCol}`:"none"};background:${done?(DARK?"#041a10":"#f0fdf4"):"transparent"}"
+          onclick="const r=this.getBoundingClientRect();tapHabit('${h.id}',r.left+r.width/2,r.top+r.height/2)">
+          <div class="chk" style="border-color:${done?hc:chkEmpty};background:${done?hc:"transparent"};box-shadow:${done?`0 0 10px ${hc}66`:""};color:#fff">${done?"✓":""}</div>
+          <div style="flex:1;font-size:12px;color:${done?(DARK?"#4ade80":"#166534"):textTask}">${h.emoji} ${h.text}</div>
+          ${!done?`<div style="font-size:10px;color:${penR}">−₹200</div>`:""}
+        </div>`;
+      }).join("")}
+    </div>
+  </div>`;
+}
+
+function renderStats(T,tt,str,okC,warnC,textMain,textSub,textMuted,textTask,cardBg,divCol,barBg,accentMain){
+  const proj=dayNum()>=2&&T.net>0?Math.round((T.net/dayNum())*60):null;
+
+  return`
+  <!-- Big money -->
+  <div style="background:${DARK?"linear-gradient(135deg,#180a2e,#0a1628)":"linear-gradient(135deg,#fef9c3,#fde68a)"};border-radius:18px;padding:20px;margin-bottom:14px;border:1px solid ${DARK?"#3a1060":"#fcd34d"};text-align:center">
+    <div style="font-size:10px;letter-spacing:3px;color:${textSub};text-transform:uppercase;margin-bottom:8px">Total Money Pot 💰</div>
+    <div style="font-size:48px;font-weight:900;color:${DARK?"#FFD700":"#b45309"}">₹${T.net.toLocaleString("en-IN")}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+      <div style="background:${DARK?"#ffffff08":"#ffffff66"};border-radius:10px;padding:10px;border:1px solid ${DARK?"#ffffff0a":"#fde68a"}">
+        <div style="font-size:16px;font-weight:bold;color:${okC}">₹${T.tv.toLocaleString("en-IN")}</div>
+        <div style="font-size:10px;color:${textMuted}">Gross Earned</div>
+      </div>
+      <div style="background:${DARK?"#ffffff08":"#ffffff66"};border-radius:10px;padding:10px;border:1px solid ${DARK?"#ffffff0a":"#fde68a"}">
+        <div style="font-size:16px;font-weight:bold;color:${DARK?"#f472b6":"#e11d48"}">−₹${T.pen.toLocaleString("en-IN")}</div>
+        <div style="font-size:10px;color:${textMuted}">Penalties</div>
+      </div>
+    </div>
+    <div class="bar bar-bg" style="margin-top:12px;height:10px">
+      <div class="fill" style="width:${Math.min(100,(T.net/50000)*100)}%;background:linear-gradient(90deg,${DARK?"#7C3AED,#C084FC,#FFD700":"#7C3AED,#a78bfa,#f59e0b"})"></div>
+    </div>
+    <div style="font-size:10px;color:${textMuted};margin-top:5px">${((T.net/50000)*100).toFixed(1)}% of ₹50,000</div>
+    ${proj?`<div style="margin-top:10px;font-size:12px;color:${proj>=45000?okC:warnC};font-weight:bold">
+      📈 At this pace → ₹${proj.toLocaleString("en-IN")} by Day 60 ${proj>=45000?"✅":"— push harder!"}
+    </div>`:""}
+  </div>
+
+  <!-- Stats grid -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+    ${[[T.tt,500,"Total Tasks",accentMain],[T.dc,60,"Days Complete",okC],[str,60,"🔥 Streak",DARK?"#FFD700":"#d97706"],[HABITS.filter(h=>(S[TODAY]?.habits||{})[h.id]).length,4,"Today Habits",DARK?"#f472b6":"#db2777"]].map(([v,m,l,c])=>`
+      <div style="background:${cardBg};border-radius:14px;padding:14px;border:1px solid ${DARK?"#1e0a30":"#e8e4f8"};text-align:center">
+        <div style="font-size:28px;font-weight:900;color:${c}">${v}</div>
+        <div style="font-size:10px;color:${DARK?"#3a2060":"#d1d5db"}">/  ${m}</div>
+        <div style="font-size:11px;color:${textMuted};margin-bottom:7px">${l}</div>
+        <div class="dbar" style="background:${barBg}">
+          <div class="dfill" style="width:${Math.min(100,(v/m)*100)}%;background:${c}"></div>
+        </div>
+      </div>`).join("")}
+  </div>
+
+  <!-- Domain progress today -->
+  <div style="font-size:10px;letter-spacing:3px;color:${textSub};text-transform:uppercase;margin-bottom:8px;font-weight:bold">Today's Domain Progress</div>
+  <div style="background:${cardBg};border-radius:14px;border:1px solid ${DARK?"#1e0a30":"#e8e4f8"};overflow:hidden;margin-bottom:14px">
+    ${DOMAINS.map((domain,i)=>{
+      const done=domain.tasks.filter(t=>tt[t.id]).length;
+      const col=dcolor(domain);
+      return`<div style="display:flex;align-items:center;gap:10px;padding:12px 14px;${i<DOMAINS.length-1?`border-bottom:1px solid ${divCol}`:""}">
+        <span style="font-size:17px">${domain.emoji}</span>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span style="font-size:12px;color:${textTask}">${domain.name}</span>
+            <span style="font-size:12px;font-weight:bold;color:${col}">${done}/${domain.tasks.length}</span>
+          </div>
+          <div class="dbar" style="background:${barBg}">
+            <div class="dfill" style="width:${Math.min(100,(done/domain.tasks.length)*100)}%;background:${col}"></div>
+          </div>
+        </div>
+      </div>`;
+    }).join("")}
+  </div>
+
+  <!-- Rules -->
+  <div style="background:${cardBg};border-radius:14px;padding:14px;border:1px solid ${DARK?"#1e0a30":"#e8e4f8"};margin-bottom:14px">
+    <div style="font-size:10px;letter-spacing:3px;color:${textSub};text-transform:uppercase;margin-bottom:8px;font-weight:bold">Game Rules</div>
+    ${["No task more than 2× per week","Each task at least 1× per week","★ Star: max 1/day, 2/week","Each domain: min 10 tasks/week","Miss habit = −₹200 each","< 8 tasks/day = −₹500","Miss full day = −₹1000"].map((r,i,a)=>`
+      <div style="font-size:12px;color:${DARK?"#6a5080":"#6b7280"};padding:5px 0;${i<a.length-1?`border-bottom:1px solid ${divCol}`:"}"}">${i+1}. ${r}</div>
+    `).join("")}
+  </div>
+
+  <div style="text-align:center">
+    <button onclick="if(confirm('Reset all data?')){S={};save(S);MISSION=genMission();LOCKED=false;render()}" style="background:${DARK?"#1a0000":"#fff1f2"};border:1px solid ${DARK?"#3a1010":"#fecdd3"};border-radius:10px;color:${DARK?"#7f1d1d":"#9f1239"};padding:10px 20px;font-size:11px">⚠️ Reset All Data</button>
+  </div>`;
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+setTheme();
+const sm=S[TODAY]?.mission;
+if(sm){MISSION=sm;LOCKED=true;}else MISSION=genMission();
+render();
+</script>
+</body>
+</html>
