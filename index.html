@@ -1017,7 +1017,10 @@ function loadDay(){
     ci.querySelector('.ci-box').textContent=cks[i]?'✓':'';
   });
   var tD={med:15,phy:30,pod:40,pat:30,dip:40};
-  Object.keys(tD).forEach(function(id){ tR(id,tD[id]); });
+  Object.keys(tD).forEach(function(id){
+    timState[id]={elapsedAtPause:0,tg:tD[id]*60,running:false};
+    tR(id,tD[id]);
+  });
   buildGT();
   if(data){ for(var i=1;i<=10;i++){ var el=document.getElementById('f-gt'+i); if(el&&data['f-gt'+i]) el.value=data['f-gt'+i]; } }
   buildGrid(); setDate(); updRing(); updSum(); updHdr();
@@ -1081,56 +1084,174 @@ function rep(n){
 
 function pad(n){ return String(n).padStart(2,'0'); }
 
-function tS(id,mins){
-  if(timState[id]&&timState[id].iv) return;
-  if(!timState[id]) timState[id]={el:0,tg:mins*60};
-  var ts=timState[id]; ts.tg=mins*60;
-  var disp=document.getElementById('t-'+id);
-  if(disp){ disp.classList.add('trun'); disp.classList.remove('tdone'); }
-  ts.iv=setInterval(function(){
-    ts.el++;
-    var rem=ts.tg-ts.el;
-    if(rem<=0){
-      clearInterval(ts.iv); ts.iv=null;
-      if(disp){ disp.textContent='00:00'; disp.classList.remove('trun'); disp.classList.add('tdone'); }
-      var bar=document.getElementById('tb-'+id); if(bar) bar.style.width='100%';
-      toast('🎯 '+id.toUpperCase()+' timer complete!');
-      updSum(); return;
-    }
-    var m=Math.floor(rem/60),s=rem%60;
-    if(disp) disp.textContent=pad(m)+':'+pad(s);
-    var bar=document.getElementById('tb-'+id);
-    if(bar) bar.style.width=Math.min(100,ts.el/ts.tg*100)+'%';
+/* ═══════════════════════════════════════════════════════════════
+   BACKGROUND-SAFE TIMER ENGINE
+   Uses wall-clock timestamps (Date.now) instead of counting JS ticks.
+   Works even when iOS Safari suspends the tab / app is backgrounded.
+   On return to foreground, Page Visibility API triggers a sync.
+   ═══════════════════════════════════════════════════════════════ */
+
+// Web Audio context for alarm beeps — created on first user gesture
+var audioCtx = null;
+
+function getAudio(){
+  if(!audioCtx){
+    try {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    } catch(e){}
+  }
+  // Resume if suspended (iOS requires resume after background)
+  if(audioCtx && audioCtx.state === 'suspended'){
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+
+// Plays a loud 3-beep alarm pattern
+function playAlarm(){
+  var ctx = getAudio();
+  if(!ctx) return;
+  var beeps = [0, 0.35, 0.70]; // beep start times in seconds
+  beeps.forEach(function(t){
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, ctx.currentTime + t);        // A5 — loud, piercing
+    osc.frequency.setValueAtTime(1100, ctx.currentTime + t + 0.1); // ramp up
+    gain.gain.setValueAtTime(0, ctx.currentTime + t);
+    gain.gain.linearRampToValueAtTime(1.0, ctx.currentTime + t + 0.02);
+    gain.gain.setValueAtTime(1.0, ctx.currentTime + t + 0.18);
+    gain.gain.linearRampToValueAtTime(0, ctx.currentTime + t + 0.30);
+    osc.start(ctx.currentTime + t);
+    osc.stop(ctx.currentTime + t + 0.32);
+  });
+}
+
+// Master tick loop — runs every 500ms, recalculates from wall clock
+var masterTick = null;
+
+function startMasterTick(){
+  if(masterTick) return;
+  masterTick = setInterval(function(){
+    var anyActive = false;
+    Object.keys(timState).forEach(function(id){
+      var ts = timState[id];
+      if(!ts.running) return;
+      anyActive = true;
+      var now = Date.now();
+      var elapsed = ts.elapsedAtPause + Math.floor((now - ts.startWall) / 1000);
+      var rem = ts.tg - elapsed;
+      var disp = document.getElementById('t-' + id);
+      var bar  = document.getElementById('tb-' + id);
+      if(rem <= 0){
+        // Timer finished
+        ts.running = false;
+        ts.elapsedAtPause = ts.tg;
+        if(disp){ disp.textContent = '00:00'; disp.classList.remove('trun'); disp.classList.add('tdone'); }
+        if(bar) bar.style.width = '100%';
+        playAlarm();
+        toast('🎯 ' + id.toUpperCase() + ' DONE! ');
+        updSum();
+      } else {
+        var m = Math.floor(rem/60), s = rem%60;
+        if(disp) disp.textContent = pad(m)+':'+pad(s);
+        if(bar)  bar.style.width = Math.min(100, (elapsed/ts.tg)*100) + '%';
+      }
+    });
     updSum();
-  },1000);
+    if(!anyActive){ clearInterval(masterTick); masterTick = null; }
+  }, 500);
+}
+
+// Page Visibility — sync immediately when user comes back to tab
+document.addEventListener('visibilitychange', function(){
+  if(!document.hidden){
+    // Resync all running timers instantly on foreground
+    Object.keys(timState).forEach(function(id){
+      var ts = timState[id];
+      if(!ts || !ts.running) return;
+      var now = Date.now();
+      var elapsed = ts.elapsedAtPause + Math.floor((now - ts.startWall)/1000);
+      var rem = ts.tg - elapsed;
+      var disp = document.getElementById('t-'+id);
+      var bar  = document.getElementById('tb-'+id);
+      if(rem <= 0){
+        ts.running = false;
+        ts.elapsedAtPause = ts.tg;
+        if(disp){ disp.textContent='00:00'; disp.classList.remove('trun'); disp.classList.add('tdone'); }
+        if(bar) bar.style.width='100%';
+        playAlarm();
+        toast('🎯 '+id.toUpperCase()+' DONE! Time was up.');
+      } else {
+        var m=Math.floor(rem/60),s=rem%60;
+        if(disp) disp.textContent=pad(m)+':'+pad(s);
+        if(bar) bar.style.width=Math.min(100,(elapsed/ts.tg)*100)+'%';
+      }
+      updSum();
+    });
+    // Restart audio context if iOS suspended it
+    if(audioCtx && audioCtx.state==='suspended') audioCtx.resume();
+    // Restart tick if needed
+    var anyRunning = Object.values(timState).some(function(ts){ return ts && ts.running; });
+    if(anyRunning) startMasterTick();
+  }
+});
+
+function tS(id, mins){
+  // Unlock audio on first user tap (required by iOS)
+  getAudio();
+  var ts = timState[id];
+  if(ts && ts.running) return; // already running
+  if(!ts){ timState[id] = { elapsedAtPause:0, tg:mins*60, running:false }; ts = timState[id]; }
+  ts.tg = mins*60;
+  ts.startWall = Date.now();
+  ts.running = true;
+  var disp = document.getElementById('t-'+id);
+  if(disp){ disp.classList.add('trun'); disp.classList.remove('tdone'); }
+  startMasterTick();
 }
 
 function tP(id){
-  if(timState[id]&&timState[id].iv){
-    clearInterval(timState[id].iv); timState[id].iv=null;
-    var d=document.getElementById('t-'+id); if(d) d.classList.remove('trun');
-  }
+  var ts = timState[id];
+  if(!ts || !ts.running) return;
+  // Save elapsed so we can resume correctly
+  ts.elapsedAtPause = ts.elapsedAtPause + Math.floor((Date.now() - ts.startWall)/1000);
+  ts.running = false;
+  var d = document.getElementById('t-'+id);
+  if(d) d.classList.remove('trun');
 }
 
-function tR(id,mins){
+function tR(id, mins){
   tP(id);
-  if(timState[id]) timState[id].el=0;
-  var d=document.getElementById('t-'+id);
+  timState[id] = { elapsedAtPause:0, tg:mins*60, running:false };
+  var d = document.getElementById('t-'+id);
   if(d){ d.textContent=pad(mins)+':00'; d.classList.remove('trun','tdone'); }
-  var b=document.getElementById('tb-'+id); if(b) b.style.width='0%';
+  var b = document.getElementById('tb-'+id);
+  if(b) b.style.width='0%';
   updSum();
+}
+
+function getElapsed(id){
+  var ts = timState[id];
+  if(!ts) return 0;
+  if(ts.running){
+    return ts.elapsedAtPause + Math.floor((Date.now() - ts.startWall)/1000);
+  }
+  return ts.elapsedAtPause;
 }
 
 function updSum(){
   var ids=['med','phy','pod','pat','dip'], total=0;
   ids.forEach(function(id){
-    var m=timState[id]?Math.round(timState[id].el/60):0;
-    var el=document.getElementById('s-'+id); if(el) el.textContent=m+'m';
-    total+=m;
+    var m = Math.round(getElapsed(id)/60);
+    var el = document.getElementById('s-'+id); if(el) el.textContent=m+'m';
+    total += m;
   });
-  var tm=doneMap['trd']?60:0;
-  var te=document.getElementById('s-trd'); if(te) te.textContent=tm+'m';
-  total+=tm;
+  var tm = doneMap['trd']?60:0;
+  var te = document.getElementById('s-trd'); if(te) te.textContent=tm+'m';
+  total += tm;
   var h=Math.floor(total/60),m=total%60,disp=h+'h '+m+'m';
   document.getElementById('totV').textContent=disp;
   document.getElementById('prodT').textContent=disp;
