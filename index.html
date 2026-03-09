@@ -3,713 +3,528 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>50K Challenge — 100 Day Tracker</title>
-<!-- Force dark background immediately before CSS loads — prevents white flash on GitHub Pages -->
-<style>html{background:#070A0F!important;color:#E4EAF2!important}</style>
-<!-- Preconnect speeds up font load on GitHub Pages -->
+<style>html,body{background:#070A0F!important;color:#E4EAF2!important}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
+/* ═══════════════════════════════════════════════════
+   ALL COLOURS HARDCODED — NO CSS VARIABLES
+   Works on Safari, Chrome, Firefox, GitHub Pages
+   ═══════════════════════════════════════════════════ */
 
-/* ── FORCED DARK THEME — overrides any GitHub/browser default ── */
+- { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
+
 html, body {
-background-color: #070A0F !important;
-color: #E4EAF2 !important;
--webkit-text-size-adjust: 100%;
+background:#070A0F;
+color:#E4EAF2;
+font-family:‘DM Sans’,-apple-system,BlinkMacSystemFont,‘Helvetica Neue’,Arial,sans-serif;
+font-size:15px;
+min-height:100vh;
 }
 
-:root {
-–bg: #070A0F;
-–surface: #0D1117;
-–card: #111820;
-–card2: #151E28;
-–border: #1C2A38;
-–border2: #243040;
-–text: #E4EAF2;
-–muted: #4A6278;
-–soft: #8AA0B4;
-–fire: #FF5F1F;
-–gold: #F5A623;
-–green: #2ECC8A;
-–blue: #3B9EFF;
-–purple: #8B5CF6;
-–red: #FF4757;
-–cyan: #00D4FF;
-–amber: #FFBE0B;
-–ff-display: ‘Bebas Neue’, Impact, ‘Arial Narrow’, Arial, sans-serif;
-–ff-body: ‘DM Sans’, -apple-system, BlinkMacSystemFont, ‘Helvetica Neue’, Arial, sans-serif;
-–ff-mono: ‘JetBrains Mono’, ‘SF Mono’, ‘Fira Code’, ‘Courier New’, monospace;
-}
-
-- { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-
-body {
-background: var(–bg);
-color: var(–text);
-font-family: var(–ff-body);
-font-size: 15px;
-line-height: 1.6;
-min-height: 100vh;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: var(–bg); }
-::-webkit-scrollbar-thumb { background: var(–fire); border-radius: 2px; }
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:#FF5F1F;border-radius:2px}
 
 /* ── HEADER ── */
-.header {
-background: #0D1117;
-border-bottom: 1px solid var(–border);
-position: sticky;
-top: 0;
-z-index: 200;
-width: 100%;
+.hdr {
+background:#0D1117;
+border-bottom:1px solid #1C2A38;
+position:sticky;
+top:0;
+z-index:200;
+width:100%;
 }
-
-.header-top {
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding: 12px 16px;
-gap: 10px;
-flex-wrap: wrap;
+.hdr-top {
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:10px 14px;
+gap:10px;
+flex-wrap:wrap;
 }
-
-.brand { display: flex; align-items: center; gap: 10px; }
-
+.brand { display:flex; align-items:center; gap:10px; }
 .brand-icon {
-width: 36px; height: 36px;
-background: var(–fire);
-border-radius: 6px;
-display: flex; align-items: center; justify-content: center;
-font-size: 18px; flex-shrink: 0;
+width:36px; height:36px;
+background:#FF5F1F;
+border-radius:6px;
+display:flex; align-items:center; justify-content:center;
+font-size:18px; flex-shrink:0;
 }
-
-.brand-title {
-font-family: var(–ff-display);
-font-size: 20px;
-letter-spacing: 2px;
-color: var(–text);
-line-height: 1;
+.brand-name {
+font-family:‘Bebas Neue’,Impact,‘Arial Narrow’,Arial,sans-serif;
+font-size:20px;
+letter-spacing:2px;
+color:#E4EAF2;
+line-height:1;
 }
-
 .brand-sub {
-font-family: var(–ff-mono);
-font-size: 9px;
-letter-spacing: 2px;
-color: var(–muted);
-text-transform: uppercase;
-margin-top: 2px;
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:9px;
+letter-spacing:2px;
+color:#4A6278;
+text-transform:uppercase;
+margin-top:1px;
 }
-
-.header-right {
-display: flex;
-align-items: center;
-gap: 12px;
-flex-wrap: wrap;
-}
+.hdr-r { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
 
 .day-nav {
-display: flex;
-align-items: center;
-gap: 6px;
-background: var(–card);
-border: 1px solid var(–border);
-border-radius: 6px;
-padding: 5px 8px;
+display:flex; align-items:center; gap:6px;
+background:#111820;
+border:1px solid #1C2A38;
+border-radius:6px;
+padding:5px 8px;
 }
-
 .nav-btn {
-width: 26px; height: 26px;
-background: var(–border);
-border: none;
-border-radius: 4px;
-color: var(–text);
-font-size: 16px;
-cursor: pointer;
-display: flex; align-items: center; justify-content: center;
-transition: background .2s;
-line-height: 1;
+width:26px; height:26px;
+background:#1C2A38;
+border:none;
+border-radius:4px;
+color:#E4EAF2;
+font-size:16px;
+cursor:pointer;
+display:flex; align-items:center; justify-content:center;
+transition:background .2s;
+}
+.nav-btn:hover { background:#FF5F1F; }
+.day-lbl {
+font-family:‘Bebas Neue’,Impact,Arial,sans-serif;
+font-size:18px;
+color:#FF5F1F;
+min-width:68px;
+text-align:center;
+letter-spacing:1px;
 }
 
-.nav-btn:hover { background: var(–fire); }
-
-.day-label {
-font-family: var(–ff-display);
-font-size: 18px;
-color: var(–fire);
-min-width: 72px;
-text-align: center;
-letter-spacing: 1px;
+.hstats { display:flex; gap:14px; }
+.hs { text-align:center; min-width:38px; }
+.hs-v {
+font-family:‘Bebas Neue’,Impact,Arial,sans-serif;
+font-size:20px;
+color:#F5A623;
+line-height:1;
+display:block;
+}
+.hs-l {
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:7px;
+letter-spacing:1px;
+color:#4A6278;
+text-transform:uppercase;
+display:block;
 }
 
-.hstats { display: flex; gap: 14px; }
-
-.hs {
-text-align: center;
-min-width: 40px;
-}
-
-.hs-val {
-font-family: var(–ff-display);
-font-size: 20px;
-color: var(–gold);
-line-height: 1;
-display: block;
-}
-
-.hs-lbl {
-font-family: var(–ff-mono);
-font-size: 7px;
-letter-spacing: 1px;
-color: var(–muted);
-text-transform: uppercase;
-display: block;
-}
-
-.gpbar { height: 3px; background: var(–border); }
-.gpbar-fill {
-height: 100%;
-background: linear-gradient(90deg, var(–fire), var(–gold), var(–green));
-transition: width .8s ease;
-min-width: 2px;
+.gbar { height:3px; background:#1C2A38; }
+.gbar-f {
+height:100%;
+background:linear-gradient(90deg,#FF5F1F,#F5A623,#2ECC8A);
+min-width:2px;
+transition:width .8s ease;
 }
 
 /* ── MAIN ── */
-.main { max-width: 900px; margin: 0 auto; padding: 20px 14px 80px; }
+.main { max-width:900px; margin:0 auto; padding:18px 14px 80px; }
 
 /* ── DATE HERO ── */
-.date-hero {
-display: flex;
-align-items: flex-start;
-justify-content: space-between;
-margin-bottom: 24px;
-gap: 12px;
-flex-wrap: wrap;
+.hero {
+display:flex;
+align-items:flex-start;
+justify-content:space-between;
+margin-bottom:22px;
+gap:12px;
+flex-wrap:wrap;
+}
+.day-eyebrow {
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:9px;
+letter-spacing:3px;
+color:#4A6278;
+text-transform:uppercase;
+margin-bottom:4px;
+}
+.day-big {
+font-family:‘Bebas Neue’,Impact,‘Arial Narrow’,Arial,sans-serif;
+font-size:clamp(52px,10vw,84px);
+line-height:.88;
+color:#FF5F1F;
+letter-spacing:2px;
+}
+.day-date {
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:10px;
+letter-spacing:2px;
+color:#4A6278;
+text-transform:uppercase;
+margin-top:6px;
 }
 
-.day-big-num {
-font-family: var(–ff-display);
-font-size: clamp(56px, 12vw, 90px);
-line-height: .88;
-color: var(–fire);
-letter-spacing: 2px;
-}
-
-.day-big-sub {
-font-family: var(–ff-mono);
-font-size: 10px;
-letter-spacing: 2px;
-color: var(–muted);
-text-transform: uppercase;
-margin-top: 6px;
-}
-
-.hero-right {
-display: flex;
-gap: 20px;
-align-items: center;
-flex-wrap: wrap;
-}
+.hero-r { display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
 
 /* Ring */
-.ring-wrap { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
-.ring-wrap svg { transform: rotate(-90deg); display: block; }
-.ring-bg { fill: none; stroke: #1C2A38; stroke-width: 8; }
-.ring-fill {
-fill: none; stroke: var(–fire); stroke-width: 8;
-stroke-linecap: round;
-stroke-dasharray: 226.2;
-stroke-dashoffset: 226.2;
-transition: stroke-dashoffset .8s ease, stroke .3s ease;
+.ring-w { position:relative; width:88px; height:88px; flex-shrink:0; }
+.ring-w svg { transform:rotate(-90deg); display:block; }
+.r-bg { fill:none; stroke:#1C2A38; stroke-width:8; }
+.r-fill {
+fill:none; stroke:#FF5F1F; stroke-width:8;
+stroke-linecap:round;
+stroke-dasharray:220.9;
+stroke-dashoffset:220.9;
+transition:stroke-dashoffset .8s ease, stroke .3s;
 }
 .ring-inner {
-position: absolute; inset: 0;
-display: flex; flex-direction: column;
-align-items: center; justify-content: center;
+position:absolute; inset:0;
+display:flex; flex-direction:column;
+align-items:center; justify-content:center;
 }
 .ring-pct {
-font-family: var(–ff-display);
-font-size: 24px;
-color: var(–gold);
-line-height: 1;
+font-family:‘Bebas Neue’,Impact,Arial,sans-serif;
+font-size:22px; color:#F5A623; line-height:1;
 }
 .ring-lbl {
-font-family: var(–ff-mono);
-font-size: 8px;
-color: var(–muted);
-letter-spacing: 1px;
-text-transform: uppercase;
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:8px; color:#4A6278; text-transform:uppercase;
 }
 
-.hero-stats-col { display: flex; flex-direction: column; gap: 6px; }
+.hero-stats { display:flex; flex-direction:column; gap:6px; }
+.hs2-l { font-family:‘JetBrains Mono’,‘Courier New’,monospace; font-size:8px; letter-spacing:2px; color:#4A6278; text-transform:uppercase; }
+.hs2-v { font-family:‘Bebas Neue’,Impact,Arial,sans-serif; font-size:22px; color:#00D4FF; line-height:1.1; }
+.hs2-v.gold { color:#F5A623; }
 
-.hs2-row { }
-.hs2-lbl {
-font-family: var(–ff-mono);
-font-size: 8px;
-letter-spacing: 2px;
-color: var(–muted);
-text-transform: uppercase;
+/* ── SECTION LABEL ── */
+.slbl {
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:9px;
+letter-spacing:3px;
+color:#4A6278;
+text-transform:uppercase;
+margin-bottom:10px;
+display:flex;
+align-items:center;
+gap:10px;
 }
-.hs2-val {
-font-family: var(–ff-display);
-font-size: 22px;
-color: var(–cyan);
-line-height: 1.1;
-letter-spacing: 1px;
-}
-.hs2-val.gold { color: var(–gold); }
+.slbl::after { content:’’; flex:1; height:1px; background:#1C2A38; }
 
 /* ── 100 DAY GRID ── */
-.sec-label {
-font-family: var(–ff-mono);
-font-size: 9px;
-letter-spacing: 3px;
-color: var(–muted);
-text-transform: uppercase;
-margin-bottom: 10px;
-display: flex;
-align-items: center;
-gap: 10px;
-}
-.sec-label::after { content: ‘’; flex: 1; height: 1px; background: var(–border); }
-
 .dgrid {
-display: grid;
-grid-template-columns: repeat(20, 1fr);
-gap: 3px;
-margin-bottom: 24px;
+display:grid;
+grid-template-columns:repeat(20,1fr);
+gap:3px;
+margin-bottom:22px;
 }
+@media(max-width:480px){ .dgrid{ grid-template-columns:repeat(10,1fr); gap:4px; } }
 
-@media(max-width: 480px) {
-.dgrid { grid-template-columns: repeat(10, 1fr); gap: 4px; }
-}
-
-.ddot {
-aspect-ratio: 1;
-border-radius: 3px;
-background: var(–border);
-cursor: pointer;
-transition: transform .15s;
-position: relative;
-}
-.ddot:hover { transform: scale(1.4); z-index: 10; }
-.ddot.d-done  { background: var(–green); }
-.ddot.d-part  { background: var(–gold); }
-.ddot.d-today { background: var(–fire); box-shadow: 0 0 6px rgba(255,95,31,.6); }
-.ddot.d-future { background: var(–border); opacity: .35; }
+.dot { aspect-ratio:1; border-radius:3px; background:#1C2A38; cursor:pointer; transition:transform .15s; }
+.dot:hover { transform:scale(1.4); z-index:10; }
+.dot.done   { background:#2ECC8A; }
+.dot.part   { background:#F5A623; }
+.dot.today  { background:#FF5F1F; box-shadow:0 0 7px rgba(255,95,31,.6); }
+.dot.future { background:#1C2A38; opacity:.35; }
 
 /* ── RITUAL CARD ── */
-.rcard {
-background: var(–card);
-border: 1px solid var(–border);
-border-radius: 10px;
-overflow: hidden;
-margin-bottom: 12px;
-transition: border-color .3s;
+.rc {
+background:#111820;
+border:1px solid #1C2A38;
+border-radius:10px;
+overflow:hidden;
+margin-bottom:11px;
+transition:border-color .3s;
 }
-.rcard.done { border-color: var(–green); }
-.rcard.done .rcard-hdr { background: rgba(46,204,138,.05); }
+.rc.done { border-color:#2ECC8A; }
+.rc.done .rc-hdr { background:rgba(46,204,138,.05); }
 
-.rcard-hdr {
-display: flex;
-align-items: center;
-gap: 10px;
-padding: 13px 14px;
-border-bottom: 1px solid var(–border);
-cursor: pointer;
-user-select: none;
+.rc-hdr {
+display:flex; align-items:center; gap:10px;
+padding:12px 14px;
+border-bottom:1px solid #1C2A38;
+cursor:pointer;
+user-select:none;
 }
-
-.rcard-icon {
-width: 34px; height: 34px;
-border-radius: 7px;
-display: flex; align-items: center; justify-content: center;
-font-size: 17px; flex-shrink: 0;
+.rc-ico {
+width:34px; height:34px;
+border-radius:7px;
+display:flex; align-items:center; justify-content:center;
+font-size:17px; flex-shrink:0;
 }
-
-.rcard-meta { flex: 1; min-width: 0; }
-
-.rcard-title {
-font-family: var(–ff-display);
-font-size: 16px;
-letter-spacing: .5px;
-line-height: 1.1;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
+.rc-meta { flex:1; min-width:0; }
+.rc-title {
+font-family:‘Bebas Neue’,Impact,Arial,sans-serif;
+font-size:16px;
+letter-spacing:.5px;
+line-height:1.1;
 }
-
-.rcard-sub {
-font-family: var(–ff-mono);
-font-size: 9px;
-letter-spacing: 1px;
-color: var(–muted);
-text-transform: uppercase;
-margin-top: 2px;
+.rc-sub {
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:9px;
+letter-spacing:1px;
+color:#4A6278;
+text-transform:uppercase;
+margin-top:2px;
 }
-
-.rcard-right { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+.rc-r { display:flex; align-items:center; gap:7px; flex-shrink:0; }
 
 .done-tag {
-display: none;
-background: var(–green);
-color: #000;
-font-family: var(–ff-mono);
-font-size: 8px;
-letter-spacing: 1px;
-padding: 2px 6px;
-border-radius: 3px;
-text-transform: uppercase;
-font-weight: 700;
+display:none;
+background:#2ECC8A;
+color:#000;
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:8px; letter-spacing:1px; padding:2px 6px;
+border-radius:3px; text-transform:uppercase; font-weight:700;
 }
-.rcard.done .done-tag { display: block; }
+.rc.done .done-tag { display:block; }
 
-.arr {
-color: var(–muted);
-font-size: 12px;
-transition: transform .3s;
-}
-.rcard.open .arr { transform: rotate(180deg); }
+.arr { color:#4A6278; font-size:11px; transition:transform .3s; }
+.rc.open .arr { transform:rotate(180deg); }
 
-.rcard-body { display: none; padding: 14px; }
-.rcard.open .rcard-body { display: block; }
+.rc-body { display:none; padding:14px; }
+.rc.open .rc-body { display:block; }
 
 /* tags */
 .tag {
-display: inline-block;
-font-family: var(–ff-mono);
-font-size: 8px;
-letter-spacing: 1px;
-padding: 2px 6px;
-border-radius: 2px;
-text-transform: uppercase;
-margin-left: 5px;
-vertical-align: middle;
+display:inline-block;
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:8px; letter-spacing:1px;
+padding:2px 6px; border-radius:2px;
+text-transform:uppercase; margin-left:5px;
+vertical-align:middle;
 }
-.tag-must { background: rgba(255,71,87,.15); border: 1px solid rgba(255,71,87,.3); color: var(–red); }
-.tag-opt  { background: rgba(74,98,120,.12); border: 1px solid rgba(74,98,120,.3); color: var(–muted); }
+.tag-m { background:rgba(255,71,87,.15); border:1px solid rgba(255,71,87,.3); color:#FF4757; }
+.tag-o { background:rgba(74,98,120,.12); border:1px solid rgba(74,98,120,.3); color:#4A6278; }
 
 /* ── TIMER ── */
-.timer-row {
-display: flex;
-align-items: center;
-gap: 10px;
-background: var(–card2);
-border: 1px solid var(–border2);
-border-radius: 8px;
-padding: 12px 14px;
-margin-bottom: 12px;
-flex-wrap: wrap;
+.trow {
+display:flex; align-items:center; gap:10px;
+background:#151E28; border:1px solid #243040;
+border-radius:8px; padding:12px 14px;
+margin-bottom:12px; flex-wrap:wrap;
 }
-.timer-num {
-font-family: var(–ff-mono);
-font-size: 30px;
-font-weight: 600;
-color: var(–gold);
-letter-spacing: 2px;
-min-width: 90px;
+.tnum {
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:30px; font-weight:600;
+color:#F5A623; letter-spacing:2px; min-width:90px;
 }
-.timer-num.trun { color: var(–fire); }
-.timer-num.tdone { color: var(–green); }
+.tnum.trun { color:#FF5F1F; }
+.tnum.tdone { color:#2ECC8A; }
 
-.tbars { flex: 1; min-width: 120px; }
-.tbar-info {
-font-family: var(–ff-mono);
-font-size: 8px;
-letter-spacing: 1px;
-color: var(–muted);
-text-transform: uppercase;
-margin-bottom: 4px;
+.tbars { flex:1; min-width:100px; }
+.tbar-lbl {
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:8px; letter-spacing:1px; color:#4A6278;
+text-transform:uppercase; margin-bottom:4px;
 }
-.tbar {
-height: 4px;
-background: var(–border2);
-border-radius: 2px;
-overflow: hidden;
-}
-.tbar-fill {
-height: 100%;
-background: linear-gradient(90deg, var(–fire), var(–gold));
-border-radius: 2px;
-width: 0%;
-transition: width .4s;
+.tbar { height:4px; background:#243040; border-radius:2px; overflow:hidden; }
+.tbar-f {
+height:100%;
+background:linear-gradient(90deg,#FF5F1F,#F5A623);
+border-radius:2px; width:0%;
+transition:width .4s;
 }
 
-.tbtns { display: flex; gap: 6px; flex-wrap: wrap; }
+.tbtns { display:flex; gap:6px; flex-wrap:wrap; }
 .tbtn {
-font-family: var(–ff-mono);
-font-size: 9px;
-letter-spacing: 1px;
-text-transform: uppercase;
-padding: 6px 12px;
-border: 1px solid var(–border2);
-border-radius: 4px;
-background: transparent;
-color: var(–soft);
-cursor: pointer;
-transition: all .2s;
-white-space: nowrap;
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:9px; letter-spacing:1px; text-transform:uppercase;
+padding:6px 12px; border:1px solid #243040;
+border-radius:4px; background:transparent;
+color:#8AA0B4; cursor:pointer; transition:all .2s; white-space:nowrap;
 }
-.tbtn.ts { background: var(–fire); color: #fff; border-color: var(–fire); }
-.tbtn.tp { background: var(–red); color: #fff; border-color: var(–red); }
-.tbtn:hover:not(.ts):not(.tp) { border-color: var(–soft); color: var(–text); }
+.tbtn.ts { background:#FF5F1F; color:#fff; border-color:#FF5F1F; }
+.tbtn.tp { background:#FF4757; color:#fff; border-color:#FF4757; }
+.tbtn:hover:not(.ts):not(.tp) { border-color:#8AA0B4; color:#E4EAF2; }
 
 /* ── FORM ── */
-.fl { margin-bottom: 10px; }
+.fl { margin-bottom:10px; }
 .fl label {
-display: block;
-font-family: var(–ff-mono);
-font-size: 8px;
-letter-spacing: 2px;
-color: var(–muted);
-text-transform: uppercase;
-margin-bottom: 4px;
+display:block;
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:8px; letter-spacing:2px; color:#4A6278;
+text-transform:uppercase; margin-bottom:4px;
 }
-.fi, .fta, .fsel {
-width: 100%;
-background: var(–bg);
-border: 1px solid var(–border2);
-border-radius: 6px;
-color: var(–text);
-font-family: var(–ff-body);
-font-size: 13px;
-padding: 8px 11px;
-transition: border-color .2s;
-appearance: none;
+.fi,.fta,.fsel {
+width:100%;
+background:#070A0F; border:1px solid #243040;
+border-radius:6px; color:#E4EAF2;
+font-family:‘DM Sans’,-apple-system,sans-serif;
+font-size:13px; padding:8px 11px;
+transition:border-color .2s; -webkit-appearance:none;
 }
-.fi:focus, .fta:focus, .fsel:focus { outline: none; border-color: var(–fire); }
-.fta { min-height: 65px; resize: vertical; line-height: 1.55; }
+.fi:focus,.fta:focus { outline:none; border-color:#FF5F1F; }
+.fta { min-height:65px; resize:vertical; line-height:1.55; }
+.fsel { background:#070A0F; color:#E4EAF2; cursor:pointer; }
 
-.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-@media(max-width:480px) { .g2,.g3 { grid-template-columns: 1fr; } }
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+@media(max-width:480px){ .g2,.g3{ grid-template-columns:1fr; } }
 
-.div { height: 1px; background: var(–border); margin: 12px 0; }
+.divr { height:1px; background:#1C2A38; margin:12px 0; }
 
-/* ── AFFIRM ── */
-.aff-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
-.aff-n {
-font-family: var(–ff-display);
-font-size: 18px;
-color: rgba(245,166,35,.25);
-width: 18px; flex-shrink: 0;
+/* ── AFFIRMATIONS ── */
+.arow { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
+.an {
+font-family:‘Bebas Neue’,Impact,Arial,sans-serif;
+font-size:18px; color:rgba(245,166,35,.25);
+width:18px; flex-shrink:0;
 }
-.aff-fi {
-flex: 1;
-background: var(–bg);
-border: 1px solid var(–border2);
-border-radius: 6px;
-color: var(–text);
-font-family: var(–ff-body);
-font-size: 13px;
-padding: 7px 11px;
-transition: border-color .2s;
+.afi {
+flex:1; background:#070A0F; border:1px solid #243040;
+border-radius:6px; color:#E4EAF2;
+font-family:‘DM Sans’,sans-serif; font-size:13px; padding:7px 11px;
+transition:border-color .2s;
 }
-.aff-fi:focus { outline: none; border-color: var(–gold); }
+.afi:focus { outline:none; border-color:#F5A623; }
 
-.rep-wrap { display: flex; gap: 8px; margin: 10px 0; }
-.rep-btn {
-flex: 1;
-padding: 8px;
-border-radius: 5px;
-border: 1px solid var(–border2);
-background: transparent;
-color: var(–soft);
-font-family: var(–ff-mono);
-font-size: 9px;
-letter-spacing: 1px;
-cursor: pointer;
-transition: all .2s;
-text-transform: uppercase;
-text-align: center;
+.repw { display:flex; gap:8px; margin:10px 0; }
+.repb {
+flex:1; padding:8px; border-radius:5px;
+border:1px solid #243040; background:transparent;
+color:#8AA0B4;
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:9px; letter-spacing:1px;
+cursor:pointer; transition:all .2s; text-transform:uppercase;
 }
-.rep-btn.rdone { background: var(–gold); color: #000; border-color: var(–gold); font-weight: 700; }
+.repb.rd { background:#F5A623; color:#000; border-color:#F5A623; font-weight:700; }
 
 /* ── CHECKLIST ── */
-.clist { display: flex; flex-direction: column; gap: 7px; }
+.clist { display:flex; flex-direction:column; gap:7px; }
 .ci {
-display: flex; align-items: center; gap: 9px;
-padding: 9px 11px;
-background: var(–bg);
-border: 1px solid var(–border);
-border-radius: 6px;
-cursor: pointer;
-transition: border-color .2s, background .2s;
-user-select: none;
+display:flex; align-items:center; gap:9px;
+padding:9px 11px;
+background:#070A0F; border:1px solid #1C2A38;
+border-radius:6px; cursor:pointer;
+transition:border-color .2s,background .2s; user-select:none;
 }
-.ci:hover { border-color: var(–border2); }
-.ci.ck { background: rgba(46,204,138,.05); border-color: rgba(46,204,138,.3); }
+.ci:hover { border-color:#243040; }
+.ci.ck { background:rgba(46,204,138,.05); border-color:rgba(46,204,138,.3); }
 .ci-box {
-width: 18px; height: 18px;
-border: 2px solid var(–border2);
-border-radius: 3px;
-flex-shrink: 0;
-display: flex; align-items: center; justify-content: center;
-font-size: 10px; color: #000;
-transition: all .2s;
+width:18px; height:18px;
+border:2px solid #243040;
+border-radius:3px; flex-shrink:0;
+display:flex; align-items:center; justify-content:center;
+font-size:10px; color:#000; transition:all .2s;
 }
-.ci.ck .ci-box { background: var(–green); border-color: var(–green); }
-.ci-txt { font-size: 13px; color: var(–soft); flex: 1; line-height: 1.4; }
-.ci.ck .ci-txt { color: var(–green); text-decoration: line-through; }
-.ci-ic { font-size: 15px; flex-shrink: 0; }
+.ci.ck .ci-box { background:#2ECC8A; border-color:#2ECC8A; }
+.ci-t { font-size:13px; color:#8AA0B4; flex:1; line-height:1.4; }
+.ci.ck .ci-t { color:#2ECC8A; text-decoration:line-through; }
+.ci-ic { font-size:15px; flex-shrink:0; }
 
-/* ── TRADE SECTION ── */
-.trade-wrap {
-background: var(–card2);
-border: 1px solid var(–border2);
-border-radius: 8px;
-overflow: hidden;
-margin-bottom: 10px;
+/* ── TRADE BLOCK ── */
+.twrap {
+background:#151E28; border:1px solid #243040;
+border-radius:8px; overflow:hidden; margin-bottom:10px;
 }
-.trade-hdr {
-display: flex; align-items: center; justify-content: space-between;
-padding: 9px 13px;
-background: rgba(59,158,255,.05);
-border-bottom: 1px solid var(–border2);
+.thdr {
+display:flex; align-items:center; justify-content:space-between;
+padding:9px 13px;
+background:rgba(59,158,255,.05);
+border-bottom:1px solid #243040;
 }
-.trade-lbl {
-font-family: var(–ff-display);
-font-size: 15px;
-letter-spacing: 1px;
-color: var(–blue);
+.tlbl {
+font-family:‘Bebas Neue’,Impact,Arial,sans-serif;
+font-size:15px; letter-spacing:1px; color:#3B9EFF;
 }
-.trade-body { padding: 11px 13px; }
-.fsel {
-background: var(–bg);
-border: 1px solid var(–border2);
-border-radius: 4px;
-color: var(–text);
-font-family: var(–ff-mono);
-font-size: 10px;
-padding: 4px 8px;
-cursor: pointer;
-}
+.tbody { padding:11px 13px; }
 
 /* ── SUMMARY ── */
-.sum-grid {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 8px;
-margin-bottom: 14px;
+.sg {
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px; margin-bottom:14px;
 }
-@media(max-width:480px) { .sum-grid { grid-template-columns: repeat(2, 1fr); } }
+@media(max-width:480px){ .sg{ grid-template-columns:repeat(2,1fr); } }
 
-.sum-c {
-background: var(–card2);
-border: 1px solid var(–border);
-border-radius: 7px;
-padding: 12px 10px;
-text-align: center;
+.sc {
+background:#151E28; border:1px solid #1C2A38;
+border-radius:7px; padding:12px 10px; text-align:center;
 }
-.sum-ic { font-size: 20px; margin-bottom: 4px; }
-.sum-v {
-font-family: var(–ff-display);
-font-size: 24px;
-color: var(–gold);
-line-height: 1;
-margin-bottom: 2px;
-letter-spacing: 1px;
+.sc-ic { font-size:20px; margin-bottom:4px; }
+.sc-v {
+font-family:‘Bebas Neue’,Impact,Arial,sans-serif;
+font-size:24px; color:#F5A623; line-height:1;
+margin-bottom:2px; letter-spacing:1px;
 }
-.sum-l {
-font-family: var(–ff-mono);
-font-size: 8px;
-letter-spacing: 1px;
-color: var(–muted);
-text-transform: uppercase;
+.sc-l {
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:8px; letter-spacing:1px; color:#4A6278; text-transform:uppercase;
 }
 
-.total-box {
-background: var(–card2);
-border: 1px solid rgba(245,166,35,.2);
-border-radius: 8px;
-padding: 16px;
-text-align: center;
+.totbox {
+background:#151E28; border:1px solid rgba(245,166,35,.2);
+border-radius:8px; padding:16px; text-align:center;
 }
-.total-lbl {
-font-family: var(–ff-mono);
-font-size: 8px;
-letter-spacing: 2px;
-color: var(–muted);
-text-transform: uppercase;
-margin-bottom: 5px;
+.tot-l {
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:8px; letter-spacing:2px; color:#4A6278;
+text-transform:uppercase; margin-bottom:5px;
 }
-.total-val {
-font-family: var(–ff-display);
-font-size: 50px;
-color: var(–gold);
-line-height: 1;
-letter-spacing: 2px;
+.tot-v {
+font-family:‘Bebas Neue’,Impact,Arial,sans-serif;
+font-size:50px; color:#F5A623; line-height:1; letter-spacing:2px;
 }
-.total-target {
-font-family: var(–ff-mono);
-font-size: 9px;
-color: var(–muted);
-margin-top: 5px;
-}
-.total-pbar { height: 5px; background: var(–border2); border-radius: 3px; margin-top: 10px; overflow: hidden; }
-.total-pfill {
-height: 100%;
-background: linear-gradient(90deg, var(–fire), var(–gold));
-border-radius: 3px;
-width: 0%;
-transition: width .8s ease;
+.tot-sub { font-family:‘JetBrains Mono’,‘Courier New’,monospace; font-size:9px; color:#4A6278; margin-top:5px; }
+.tot-pb { height:5px; background:#243040; border-radius:3px; margin-top:10px; overflow:hidden; }
+.tot-pf {
+height:100%;
+background:linear-gradient(90deg,#FF5F1F,#F5A623);
+border-radius:3px; width:0%;
+transition:width .8s ease;
 }
 
-/* ── SAVE BTN ── */
+/* ── SAVE BUTTON ── */
 .sbtn {
-display: block; width: 100%;
-padding: 12px; margin-top: 10px;
-background: linear-gradient(135deg, var(–fire), #e05000);
-border: none; border-radius: 7px;
-color: #fff;
-font-family: var(–ff-display);
-font-size: 16px;
-letter-spacing: 2px;
-cursor: pointer;
-transition: transform .2s, box-shadow .2s;
+display:block; width:100%;
+padding:12px; margin-top:10px;
+border:none; border-radius:7px;
+color:#fff; cursor:pointer;
+font-family:‘Bebas Neue’,Impact,Arial,sans-serif;
+font-size:16px; letter-spacing:2px;
+transition:transform .2s, box-shadow .2s;
 }
-.sbtn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,95,31,.3); }
-.sbtn.g { background: linear-gradient(135deg, var(–green), #1a9a60); }
-.sbtn.b { background: linear-gradient(135deg, var(–gold), #c47a00); }
-.sbtn.p { background: linear-gradient(135deg, var(–purple), #5b21b6); }
-.sbtn.c { background: linear-gradient(135deg, var(–cyan), #0090aa); }
+.sbtn:hover { transform:translateY(-1px); }
+.sbtn.fire { background:linear-gradient(135deg,#FF5F1F,#e05000); }
+.sbtn.grn  { background:linear-gradient(135deg,#2ECC8A,#1a9a60); }
+.sbtn.gld  { background:linear-gradient(135deg,#F5A623,#c47a00); }
+.sbtn.pur  { background:linear-gradient(135deg,#8B5CF6,#5b21b6); }
+.sbtn.cyn  { background:linear-gradient(135deg,#00D4FF,#0090aa); }
 
 /* ── TOAST ── */
 .toast {
-position: fixed; bottom: 20px; right: 16px;
-background: var(–green); color: #000;
-font-family: var(–ff-mono);
-font-size: 10px; letter-spacing: 1px;
-padding: 9px 16px; border-radius: 6px;
-opacity: 0; transform: translateY(8px);
-transition: all .3s; z-index: 999;
-text-transform: uppercase; font-weight: 700;
-max-width: calc(100vw - 32px);
+position:fixed; bottom:18px; right:14px;
+background:#2ECC8A; color:#000;
+font-family:‘JetBrains Mono’,‘Courier New’,monospace;
+font-size:10px; letter-spacing:1px; padding:9px 15px;
+border-radius:6px; opacity:0; transform:translateY(8px);
+transition:all .3s; z-index:999;
+text-transform:uppercase; font-weight:700;
+max-width:calc(100vw - 28px);
 }
-.toast.show { opacity: 1; transform: translateY(0); }
+.toast.show { opacity:1; transform:translateY(0); }
 
-/* ── COLOUR ACCENTS ── */
-.c-med .rcard-icon { background: rgba(139,92,246,.2); }
-.c-med .rcard-title { color: var(–purple); }
-.c-phy .rcard-icon { background: rgba(46,204,138,.2); }
-.c-phy .rcard-title { color: var(–green); }
-.c-aff .rcard-icon { background: rgba(245,166,35,.2); }
-.c-aff .rcard-title { color: var(–gold); }
-.c-pod .rcard-icon { background: rgba(0,212,255,.2); }
-.c-pod .rcard-title { color: var(–cyan); }
-.c-trd .rcard-icon { background: rgba(59,158,255,.2); }
-.c-trd .rcard-title { color: var(–blue); }
-.c-pat .rcard-icon { background: rgba(255,95,31,.2); }
-.c-pat .rcard-title { color: var(–fire); }
-.c-dip .rcard-icon { background: rgba(139,92,246,.2); }
-.c-dip .rcard-title { color: var(–purple); }
-.c-ngt .rcard-icon { background: rgba(255,190,11,.2); }
-.c-ngt .rcard-title { color: var(–amber); }
+/* ═══ COLOUR ACCENTS ═══ */
+/* Meditation — Purple */
+.cm .rc-ico { background:rgba(139,92,246,.2); }
+.cm .rc-title { color:#8B5CF6; }
+/* Physical — Green */
+.cg .rc-ico { background:rgba(46,204,138,.2); }
+.cg .rc-title { color:#2ECC8A; }
+/* Affirmations — Gold */
+.ca .rc-ico { background:rgba(245,166,35,.2); }
+.ca .rc-title { color:#F5A623; }
+/* Podcast — Cyan */
+.cc .rc-ico { background:rgba(0,212,255,.2); }
+.cc .rc-title { color:#00D4FF; }
+/* Trading — Blue */
+.cb .rc-ico { background:rgba(59,158,255,.2); }
+.cb .rc-title { color:#3B9EFF; }
+/* Pattern — Orange */
+.co .rc-ico { background:rgba(255,95,31,.2); }
+.co .rc-title { color:#FF5F1F; }
+/* Diploma — Purple */
+.cd .rc-ico { background:rgba(139,92,246,.2); }
+.cd .rc-title { color:#8B5CF6; }
+/* Night — Amber */
+.cn .rc-ico { background:rgba(255,190,11,.2); }
+.cn .rc-title { color:#FFBE0B; }
 </style>
 
 </head>
@@ -717,725 +532,617 @@ max-width: calc(100vw - 32px);
 
 <!-- HEADER -->
 
-<div class="header">
-  <div class="header-top">
+<div class="hdr">
+  <div class="hdr-top">
     <div class="brand">
       <div class="brand-icon">🏆</div>
       <div>
-        <div class="brand-title">50K CHALLENGE</div>
+        <div class="brand-name">50K CHALLENGE</div>
         <div class="brand-sub">100 Day · 2026</div>
       </div>
     </div>
-    <div class="header-right">
+    <div class="hdr-r">
       <div class="day-nav">
         <button class="nav-btn" onclick="chDay(-1)">‹</button>
-        <div class="day-label" id="dayLbl">DAY 1</div>
+        <div class="day-lbl" id="dayLbl">DAY 1</div>
         <button class="nav-btn" onclick="chDay(1)">›</button>
       </div>
       <div class="hstats">
-        <div class="hs"><span class="hs-val" id="hLeft">99</span><span class="hs-lbl">Left</span></div>
-        <div class="hs"><span class="hs-val" id="hStreak">0🔥</span><span class="hs-lbl">Streak</span></div>
-        <div class="hs"><span class="hs-val" id="hPct">0%</span><span class="hs-lbl">Done</span></div>
+        <div class="hs"><span class="hs-v" id="hLeft">99</span><span class="hs-l">Left</span></div>
+        <div class="hs"><span class="hs-v" id="hStreak">0🔥</span><span class="hs-l">Streak</span></div>
+        <div class="hs"><span class="hs-v" id="hPct">0%</span><span class="hs-l">Done</span></div>
       </div>
     </div>
   </div>
-  <div class="gpbar"><div class="gpbar-fill" id="gpFill" style="width:1%"></div></div>
+  <div class="gbar"><div class="gbar-f" id="gpf" style="width:1%"></div></div>
 </div>
 
 <!-- MAIN -->
 
 <div class="main">
 
-<!-- DATE HERO -->
+<!-- HERO -->
 
-<div class="date-hero">
+<div class="hero">
   <div>
-    <div style="font-family:var(--ff-mono);font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Day of Challenge</div>
-    <div class="day-big-num">DAY <span id="bigDay">1</span></div>
-    <div class="day-big-sub" id="dateStr">Thursday, 1 January 2026</div>
+    <div class="day-eyebrow">Day of Challenge</div>
+    <div class="day-big">DAY <span id="bigDay">1</span></div>
+    <div class="day-date" id="dateStr">Thursday, 1 January 2026</div>
   </div>
-  <div class="hero-right">
-    <div class="ring-wrap">
-      <svg width="90" height="90" viewBox="0 0 90 90">
-        <circle class="ring-bg" cx="45" cy="45" r="36"/>
-        <circle class="ring-fill" id="ringCirc" cx="45" cy="45" r="36"/>
+  <div class="hero-r">
+    <div class="ring-w">
+      <svg width="88" height="88" viewBox="0 0 88 88">
+        <circle class="r-bg" cx="44" cy="44" r="35"/>
+        <circle class="r-fill" id="rc" cx="44" cy="44" r="35"/>
       </svg>
       <div class="ring-inner">
-        <div class="ring-pct" id="ringPct">0%</div>
+        <div class="ring-pct" id="rPct">0%</div>
         <div class="ring-lbl">Today</div>
       </div>
     </div>
-    <div class="hero-stats-col">
-      <div class="hs2-row">
-        <div class="hs2-lbl">Productive Today</div>
-        <div class="hs2-val" id="prodTime">0h 0m</div>
-      </div>
-      <div class="hs2-row">
-        <div class="hs2-lbl">Tasks Done</div>
-        <div class="hs2-val gold" id="tasksDone">0 / 8</div>
-      </div>
+    <div class="hero-stats">
+      <div><div class="hs2-l">Productive Today</div><div class="hs2-v" id="prodT">0h 0m</div></div>
+      <div><div class="hs2-l">Tasks Done</div><div class="hs2-v gold" id="taskD">0 / 8</div></div>
     </div>
   </div>
 </div>
 
 <!-- 100 DAY GRID -->
 
-<div class="sec-label">100 Day Progress Map</div>
+<div class="slbl">100 Day Progress Map</div>
 <div class="dgrid" id="dgrid"></div>
 
-<!-- SECTION: MORNING -->
-
-<div class="sec-label" style="margin-top:6px;">Morning Rituals</div>
+<div class="slbl" style="margin-top:4px">Morning Rituals</div>
 
 <!-- MEDITATION -->
 
-<div class="rcard c-med" id="rc-med">
-  <div class="rcard-hdr" onclick="tog('med')">
-    <div class="rcard-icon">🧘</div>
-    <div class="rcard-meta">
-      <div class="rcard-title">Meditation <span class="tag tag-must">Compulsory</span></div>
-      <div class="rcard-sub">15 min · Silence &amp; Breath · Day <span class="db">1</span>/100</div>
+<div class="rc cm" id="rc-med">
+  <div class="rc-hdr" onclick="tog('med')">
+    <div class="rc-ico">🧘</div>
+    <div class="rc-meta">
+      <div class="rc-title">Meditation <span class="tag tag-m">Compulsory</span></div>
+      <div class="rc-sub">15 min · Silence &amp; Breath · Day <span class="db">1</span>/100</div>
     </div>
-    <div class="rcard-right"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+    <div class="rc-r"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
   </div>
-  <div class="rcard-body">
-    <div class="timer-row">
-      <div class="timer-num" id="t-med">15:00</div>
+  <div class="rc-body">
+    <div class="trow">
+      <div class="tnum" id="t-med">15:00</div>
       <div class="tbars">
-        <div class="tbar-info">Target — 15 minutes</div>
-        <div class="tbar"><div class="tbar-fill" id="tb-med"></div></div>
+        <div class="tbar-lbl">Target — 15 minutes</div>
+        <div class="tbar"><div class="tbar-f" id="tb-med"></div></div>
       </div>
       <div class="tbtns">
-        <button class="tbtn ts" onclick="tStart('med',15)">▶️ Start</button>
-        <button class="tbtn tp" onclick="tStop('med')">■ Stop</button>
-        <button class="tbtn" onclick="tReset('med',15)">↺</button>
+        <button class="tbtn ts" onclick="tS('med',15)">▶️ Start</button>
+        <button class="tbtn tp" onclick="tP('med')">■ Stop</button>
+        <button class="tbtn" onclick="tR('med',15)">↺</button>
       </div>
     </div>
     <div class="fl"><label>How did you feel during meditation?</label>
-    <textarea class="fta" id="f-med-note" placeholder="Mind was restless for first 5 min, then settled. Felt calm after..."></textarea></div>
-    <button class="sbtn p" onclick="done('med')">✓ Mark Meditation Complete</button>
+    <textarea class="fta" id="f-med-n" placeholder="Mind was restless for first 5 min, then settled. Felt calm after..."></textarea></div>
+    <button class="sbtn pur" onclick="done('med')">✓ Mark Meditation Complete</button>
   </div>
 </div>
 
 <!-- PHYSICAL -->
 
-<div class="rcard c-phy" id="rc-phy">
-  <div class="rcard-hdr" onclick="tog('phy')">
-    <div class="rcard-icon">🏀</div>
-    <div class="rcard-meta">
-      <div class="rcard-title">Physical Activity <span class="tag tag-must">Compulsory</span></div>
-      <div class="rcard-sub">30 min · Move · Win the morning</div>
+<div class="rc cg" id="rc-phy">
+  <div class="rc-hdr" onclick="tog('phy')">
+    <div class="rc-ico">🏀</div>
+    <div class="rc-meta">
+      <div class="rc-title">Physical Activity <span class="tag tag-m">Compulsory</span></div>
+      <div class="rc-sub">30 min · Move · Win the morning</div>
     </div>
-    <div class="rcard-right"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+    <div class="rc-r"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
   </div>
-  <div class="rcard-body">
+  <div class="rc-body">
     <div class="fl"><label>Activity Name — What did you do?</label>
-    <input type="text" class="fi" id="f-phy-act" placeholder="e.g. Basketball · Running 3km · Home Circuit · Cycling..."></div>
-    <div class="timer-row">
-      <div class="timer-num" id="t-phy">30:00</div>
+    <input type="text" class="fi" id="f-phy-a" placeholder="e.g. Basketball · Running 3km · Home Circuit · Cycling..."></div>
+    <div class="trow">
+      <div class="tnum" id="t-phy">30:00</div>
       <div class="tbars">
-        <div class="tbar-info">Target — 30 minutes</div>
-        <div class="tbar"><div class="tbar-fill" id="tb-phy"></div></div>
+        <div class="tbar-lbl">Target — 30 minutes</div>
+        <div class="tbar"><div class="tbar-f" id="tb-phy"></div></div>
       </div>
       <div class="tbtns">
-        <button class="tbtn ts" onclick="tStart('phy',30)">▶️ Start</button>
-        <button class="tbtn tp" onclick="tStop('phy')">■ Stop</button>
-        <button class="tbtn" onclick="tReset('phy',30)">↺</button>
+        <button class="tbtn ts" onclick="tS('phy',30)">▶️ Start</button>
+        <button class="tbtn tp" onclick="tP('phy')">■ Stop</button>
+        <button class="tbtn" onclick="tR('phy',30)">↺</button>
       </div>
     </div>
-    <div class="fl"><label>Energy level / how it felt</label>
-    <textarea class="fta" id="f-phy-note" placeholder="Felt heavy at start. Won 3 basketball games. Energised after..." style="min-height:50px;"></textarea></div>
-    <button class="sbtn g" onclick="done('phy')">✓ Mark Physical Complete</button>
+    <div class="fl"><label>Energy level / How it felt</label>
+    <textarea class="fta" id="f-phy-n" placeholder="Felt heavy at start. Won 3 basketball games. Energised after..." style="min-height:50px"></textarea></div>
+    <button class="sbtn grn" onclick="done('phy')">✓ Mark Physical Complete</button>
   </div>
 </div>
 
 <!-- AFFIRMATIONS -->
 
-<div class="rcard c-aff" id="rc-aff">
-  <div class="rcard-hdr" onclick="tog('aff')">
-    <div class="rcard-icon">✍️</div>
-    <div class="rcard-meta">
-      <div class="rcard-title">Affirmations + Gratitude <span class="tag tag-must">Compulsory</span></div>
-      <div class="rcard-sub">5 affirmations · Speak 2× · 3 gratitudes</div>
+<div class="rc ca" id="rc-aff">
+  <div class="rc-hdr" onclick="tog('aff')">
+    <div class="rc-ico">✍️</div>
+    <div class="rc-meta">
+      <div class="rc-title">Affirmations + Gratitude <span class="tag tag-m">Compulsory</span></div>
+      <div class="rc-sub">5 affirmations · Speak 2× · 3 gratitudes</div>
     </div>
-    <div class="rcard-right"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+    <div class="rc-r"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
   </div>
-  <div class="rcard-body">
-    <div class="sec-label" style="font-size:8px;margin-bottom:8px;">Write 5 Affirmations in Your Notebook</div>
-    <div class="aff-row"><div class="aff-n">1</div><input type="text" class="aff-fi" id="f-a1" placeholder="I am a disciplined trader who follows my rules..."></div>
-    <div class="aff-row"><div class="aff-n">2</div><input type="text" class="aff-fi" id="f-a2" placeholder="I wake at 5:30 AM and invest in my future daily..."></div>
-    <div class="aff-row"><div class="aff-n">3</div><input type="text" class="aff-fi" id="f-a3" placeholder="I am building a life my daughter is proud of..."></div>
-    <div class="aff-row"><div class="aff-n">4</div><input type="text" class="aff-fi" id="f-a4" placeholder="I learn from every trade, win or loss..."></div>
-    <div class="aff-row"><div class="aff-n">5</div><input type="text" class="aff-fi" id="f-a5" placeholder="I am becoming top 1% through daily consistency..."></div>
-    <div class="div"></div>
-    <div class="sec-label" style="font-size:8px;margin-bottom:6px;">Speak Aloud — 2 Rounds</div>
-    <div class="rep-wrap">
-      <button class="rep-btn" id="rb1" onclick="rep(1)">Round 1 — Speak Now</button>
-      <button class="rep-btn" id="rb2" onclick="rep(2)">Round 2 — Speak Now</button>
+  <div class="rc-body">
+    <div class="slbl" style="font-size:8px;margin-bottom:8px">Write 5 Affirmations in Notebook</div>
+    <div class="arow"><div class="an">1</div><input type="text" class="afi" id="f-a1" placeholder="I am a disciplined trader who follows my rules..."></div>
+    <div class="arow"><div class="an">2</div><input type="text" class="afi" id="f-a2" placeholder="I wake at 5:30 AM and invest in my future daily..."></div>
+    <div class="arow"><div class="an">3</div><input type="text" class="afi" id="f-a3" placeholder="I am building a life my daughter is proud of..."></div>
+    <div class="arow"><div class="an">4</div><input type="text" class="afi" id="f-a4" placeholder="I learn from every trade, win or loss..."></div>
+    <div class="arow"><div class="an">5</div><input type="text" class="afi" id="f-a5" placeholder="I am top 1% through daily consistency..."></div>
+    <div class="divr"></div>
+    <div class="slbl" style="font-size:8px;margin-bottom:6px">Speak Aloud — 2 Rounds</div>
+    <div class="repw">
+      <button class="repb" id="rb1" onclick="rep(1)">Round 1 — Speak Now</button>
+      <button class="repb" id="rb2" onclick="rep(2)">Round 2 — Speak Now</button>
     </div>
-    <div class="div"></div>
-    <div class="sec-label" style="font-size:8px;margin-bottom:8px;">3 Gratitudes</div>
+    <div class="divr"></div>
+    <div class="slbl" style="font-size:8px;margin-bottom:8px">3 Gratitudes</div>
     <div class="fl"><input type="text" class="fi" id="f-g1" placeholder="I am grateful for..."></div>
     <div class="fl"><input type="text" class="fi" id="f-g2" placeholder="I am grateful for..."></div>
     <div class="fl"><input type="text" class="fi" id="f-g3" placeholder="I am grateful for..."></div>
-    <button class="sbtn b" onclick="done('aff')" style="margin-top:10px;">✓ Mark Affirmations Complete</button>
+    <button class="sbtn gld" style="margin-top:10px" onclick="done('aff')">✓ Mark Affirmations Complete</button>
   </div>
 </div>
 
 <!-- PODCAST -->
 
-<div class="rcard c-pod" id="rc-pod">
-  <div class="rcard-hdr" onclick="tog('pod')">
-    <div class="rcard-icon">🎧</div>
-    <div class="rcard-meta">
-      <div class="rcard-title">Morning Podcast <span class="tag tag-must">Compulsory</span></div>
-      <div class="rcard-sub">40 min · One episode · Metro / Home</div>
+<div class="rc cc" id="rc-pod">
+  <div class="rc-hdr" onclick="tog('pod')">
+    <div class="rc-ico">🎧</div>
+    <div class="rc-meta">
+      <div class="rc-title">Morning Podcast <span class="tag tag-m">Compulsory</span></div>
+      <div class="rc-sub">40 min · One episode · Metro / Home</div>
     </div>
-    <div class="rcard-right"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+    <div class="rc-r"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
   </div>
-  <div class="rcard-body">
+  <div class="rc-body">
     <div class="fl"><label>Podcast Name + Episode</label>
-    <input type="text" class="fi" id="f-pod-name" placeholder="e.g. Chat With Traders Ep.245 — Risk Management Systems..."></div>
-    <div class="timer-row">
-      <div class="timer-num" id="t-pod">40:00</div>
+    <input type="text" class="fi" id="f-pod-n" placeholder="e.g. Chat With Traders Ep.245 — Risk Management..."></div>
+    <div class="trow">
+      <div class="tnum" id="t-pod">40:00</div>
       <div class="tbars">
-        <div class="tbar-info">Target — 40 minutes</div>
-        <div class="tbar"><div class="tbar-fill" id="tb-pod"></div></div>
+        <div class="tbar-lbl">Target — 40 minutes</div>
+        <div class="tbar"><div class="tbar-f" id="tb-pod"></div></div>
       </div>
       <div class="tbtns">
-        <button class="tbtn ts" onclick="tStart('pod',40)">▶️ Start</button>
-        <button class="tbtn tp" onclick="tStop('pod')">■ Stop</button>
-        <button class="tbtn" onclick="tReset('pod',40)">↺</button>
+        <button class="tbtn ts" onclick="tS('pod',40)">▶️ Start</button>
+        <button class="tbtn tp" onclick="tP('pod')">■ Stop</button>
+        <button class="tbtn" onclick="tR('pod',40)">↺</button>
       </div>
     </div>
     <div class="fl"><label>Key Insight from this Episode</label>
-    <textarea class="fta" id="f-pod-note" placeholder="The single most important thing I learned today was..."></textarea></div>
-    <button class="sbtn c" onclick="done('pod')">✓ Mark Podcast Complete</button>
+    <textarea class="fta" id="f-pod-k" placeholder="The single most important thing I learned..."></textarea></div>
+    <button class="sbtn cyn" onclick="done('pod')">✓ Mark Podcast Complete</button>
   </div>
 </div>
 
+<div class="slbl" style="margin-top:4px">Trading Block</div>
+
 <!-- TRADING -->
 
-<div class="sec-label" style="margin-top:6px;">Trading Block</div>
-
-<div class="rcard c-trd" id="rc-trd">
-  <div class="rcard-hdr" onclick="tog('trd')">
-    <div class="rcard-icon">📊</div>
-    <div class="rcard-meta">
-      <div class="rcard-title">Paper Trades 1 + 2 <span class="tag tag-must">Compulsory</span></div>
-      <div class="rcard-sub">Max loss $100 each · Full journal · Both trades</div>
+<div class="rc cb" id="rc-trd">
+  <div class="rc-hdr" onclick="tog('trd')">
+    <div class="rc-ico">📊</div>
+    <div class="rc-meta">
+      <div class="rc-title">Paper Trades 1 + 2 <span class="tag tag-m">Compulsory</span></div>
+      <div class="rc-sub">Max loss $100 each · Full journal · Both trades</div>
     </div>
-    <div class="rcard-right"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+    <div class="rc-r"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
   </div>
-  <div class="rcard-body">
+  <div class="rc-body">
 
 ```
 <!-- TRADE 1 -->
-<div class="trade-wrap">
-  <div class="trade-hdr">
-    <div class="trade-lbl">📈 TRADE 1</div>
-    <select class="fsel" id="f-t1-res">
+<div class="twrap">
+  <div class="thdr">
+    <div class="tlbl">📈 TRADE 1</div>
+    <select class="fsel" id="f-t1r" style="background:#070A0F;border:1px solid #243040;border-radius:4px;color:#E4EAF2;font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 8px">
       <option value="">— Result —</option>
       <option value="win">✅ WIN</option>
       <option value="loss">❌ LOSS</option>
       <option value="be">⚖️ BREAKEVEN</option>
     </select>
   </div>
-  <div class="trade-body">
+  <div class="tbody">
     <div class="fl"><label>Structure / Setup Seen</label>
-    <input type="text" class="fi" id="f-t1-str" placeholder="e.g. Bullish Engulfing at support — BankNifty 15min..."></div>
+    <input type="text" class="fi" id="f-t1s" placeholder="e.g. Bullish Engulfing at support — BankNifty 15min..."></div>
     <div class="g3">
-      <div class="fl"><label>Entry Price</label><input type="text" class="fi" id="f-t1-en" placeholder="₹44,200"></div>
-      <div class="fl"><label>Stop Loss (Max $100)</label><input type="text" class="fi" id="f-t1-sl" placeholder="₹43,900"></div>
-      <div class="fl"><label>Target (2:1 R:R)</label><input type="text" class="fi" id="f-t1-tg" placeholder="₹44,700"></div>
+      <div class="fl"><label>Entry Price</label><input type="text" class="fi" id="f-t1en" placeholder="₹44,200"></div>
+      <div class="fl"><label>Stop Loss (Max $100)</label><input type="text" class="fi" id="f-t1sl" placeholder="₹43,900"></div>
+      <div class="fl"><label>Target (2:1 R:R)</label><input type="text" class="fi" id="f-t1tg" placeholder="₹44,700"></div>
     </div>
     <div class="g2">
-      <div class="fl"><label>Exit Price</label><input type="text" class="fi" id="f-t1-ex" placeholder="Actual exit"></div>
-      <div class="fl"><label>Time in Trade</label><input type="text" class="fi" id="f-t1-tm" placeholder="e.g. 1h 20m"></div>
+      <div class="fl"><label>Exit Price</label><input type="text" class="fi" id="f-t1ex" placeholder="Actual exit"></div>
+      <div class="fl"><label>Time in Trade</label><input type="text" class="fi" id="f-t1tm" placeholder="e.g. 1h 20m"></div>
     </div>
     <div class="fl"><label>Entry Logic / Reason</label>
-    <textarea class="fta" id="f-t1-why" placeholder="Why did this setup qualify? Be specific about your rules..."></textarea></div>
+    <textarea class="fta" id="f-t1wh" placeholder="Why did this setup qualify? Be specific about your rules..."></textarea></div>
     <div class="g2">
       <div class="fl"><label>✅ Good Decision</label>
-      <textarea class="fta" id="f-t1-gd" placeholder="What you did right — followed SL, waited for confirmation..." style="min-height:55px;"></textarea></div>
+      <textarea class="fta" id="f-t1gd" placeholder="What you did right..." style="min-height:55px"></textarea></div>
       <div class="fl"><label>❌ Bad Decision</label>
-      <textarea class="fta" id="f-t1-bd" placeholder="What you did wrong — moved SL, entered early, FOMO..." style="min-height:55px;"></textarea></div>
+      <textarea class="fta" id="f-t1bd" placeholder="What you did wrong..." style="min-height:55px"></textarea></div>
     </div>
     <div class="fl"><label>📚 Learning + Patience Score (1-10)</label>
-    <textarea class="fta" id="f-t1-lrn" placeholder="Key learning from this trade. Patience score: X/10 because..."></textarea></div>
+    <textarea class="fta" id="f-t1ln" placeholder="Key learning. Patience score: X/10 because..."></textarea></div>
   </div>
 </div>
 
 <!-- TRADE 2 -->
-<div class="trade-wrap">
-  <div class="trade-hdr">
-    <div class="trade-lbl">📉 TRADE 2</div>
-    <select class="fsel" id="f-t2-res">
+<div class="twrap">
+  <div class="thdr">
+    <div class="tlbl">📉 TRADE 2</div>
+    <select class="fsel" id="f-t2r" style="background:#070A0F;border:1px solid #243040;border-radius:4px;color:#E4EAF2;font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 8px">
       <option value="">— Result —</option>
       <option value="win">✅ WIN</option>
       <option value="loss">❌ LOSS</option>
       <option value="be">⚖️ BREAKEVEN</option>
     </select>
   </div>
-  <div class="trade-body">
+  <div class="tbody">
     <div class="fl"><label>Structure / Setup Seen</label>
-    <input type="text" class="fi" id="f-t2-str" placeholder="e.g. Bearish breakdown below resistance — Nifty 5min..."></div>
+    <input type="text" class="fi" id="f-t2s" placeholder="e.g. Bearish breakdown below resistance — Nifty 5min..."></div>
     <div class="g3">
-      <div class="fl"><label>Entry Price</label><input type="text" class="fi" id="f-t2-en" placeholder="₹19,850"></div>
-      <div class="fl"><label>Stop Loss (Max $100)</label><input type="text" class="fi" id="f-t2-sl" placeholder="₹20,050"></div>
-      <div class="fl"><label>Target (2:1 R:R)</label><input type="text" class="fi" id="f-t2-tg" placeholder="₹19,450"></div>
+      <div class="fl"><label>Entry Price</label><input type="text" class="fi" id="f-t2en" placeholder="₹19,850"></div>
+      <div class="fl"><label>Stop Loss (Max $100)</label><input type="text" class="fi" id="f-t2sl" placeholder="₹20,050"></div>
+      <div class="fl"><label>Target (2:1 R:R)</label><input type="text" class="fi" id="f-t2tg" placeholder="₹19,450"></div>
     </div>
     <div class="g2">
-      <div class="fl"><label>Exit Price</label><input type="text" class="fi" id="f-t2-ex" placeholder="Actual exit"></div>
-      <div class="fl"><label>Time in Trade</label><input type="text" class="fi" id="f-t2-tm" placeholder="e.g. 45m"></div>
+      <div class="fl"><label>Exit Price</label><input type="text" class="fi" id="f-t2ex" placeholder="Actual exit"></div>
+      <div class="fl"><label>Time in Trade</label><input type="text" class="fi" id="f-t2tm" placeholder="e.g. 45m"></div>
     </div>
     <div class="fl"><label>Entry Logic / Reason</label>
-    <textarea class="fta" id="f-t2-why" placeholder="What rule did this setup meet? Why did you enter?"></textarea></div>
+    <textarea class="fta" id="f-t2wh" placeholder="What rule did this setup meet?"></textarea></div>
     <div class="g2">
       <div class="fl"><label>✅ Good Decision</label>
-      <textarea class="fta" id="f-t2-gd" style="min-height:55px;" placeholder="What you did right..."></textarea></div>
+      <textarea class="fta" id="f-t2gd" style="min-height:55px" placeholder="What you did right..."></textarea></div>
       <div class="fl"><label>❌ Bad Decision</label>
-      <textarea class="fta" id="f-t2-bd" style="min-height:55px;" placeholder="What you did wrong..."></textarea></div>
+      <textarea class="fta" id="f-t2bd" style="min-height:55px" placeholder="What you did wrong..."></textarea></div>
     </div>
     <div class="fl"><label>📚 Learning + Patience Score (1-10)</label>
-    <textarea class="fta" id="f-t2-lrn" placeholder="Key learning. Patience score: X/10 because..."></textarea></div>
+    <textarea class="fta" id="f-t2ln" placeholder="Key learning. Patience score: X/10 because..."></textarea></div>
   </div>
 </div>
-
-<button class="sbtn" onclick="done('trd')">✓ Both Trades Logged</button>
+<button class="sbtn fire" onclick="done('trd')">✓ Both Trades Logged</button>
 ```
 
   </div>
 </div>
 
-<!-- TRADE PATTERN STUDY -->
+<!-- PATTERN STUDY -->
 
-<div class="rcard c-pat" id="rc-pat">
-  <div class="rcard-hdr" onclick="tog('pat')">
-    <div class="rcard-icon">🔬</div>
-    <div class="rcard-meta">
-      <div class="rcard-title">Trade Pattern Study</div>
-      <div class="rcard-sub">30 min · One pattern · Office / Metro</div>
+<div class="rc co" id="rc-pat">
+  <div class="rc-hdr" onclick="tog('pat')">
+    <div class="rc-ico">🔬</div>
+    <div class="rc-meta">
+      <div class="rc-title">Trade Pattern Study</div>
+      <div class="rc-sub">30 min · One pattern · Office / Metro</div>
     </div>
-    <div class="rcard-right"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+    <div class="rc-r"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
   </div>
-  <div class="rcard-body">
+  <div class="rc-body">
     <div class="fl"><label>Pattern / Topic Studied</label>
-    <input type="text" class="fi" id="f-pat-name" placeholder="e.g. Head &amp; Shoulders · Double Bottom · Options Delta Decay..."></div>
-    <div class="timer-row">
-      <div class="timer-num" id="t-pat">30:00</div>
+    <input type="text" class="fi" id="f-pat-n" placeholder="e.g. Head &amp; Shoulders · Double Bottom · Options Delta Decay..."></div>
+    <div class="trow">
+      <div class="tnum" id="t-pat">30:00</div>
       <div class="tbars">
-        <div class="tbar-info">Target — 30 minutes</div>
-        <div class="tbar"><div class="tbar-fill" id="tb-pat"></div></div>
+        <div class="tbar-lbl">Target — 30 minutes</div>
+        <div class="tbar"><div class="tbar-f" id="tb-pat"></div></div>
       </div>
       <div class="tbtns">
-        <button class="tbtn ts" onclick="tStart('pat',30)">▶️ Start</button>
-        <button class="tbtn tp" onclick="tStop('pat')">■ Stop</button>
-        <button class="tbtn" onclick="tReset('pat',30)">↺</button>
+        <button class="tbtn ts" onclick="tS('pat',30)">▶️ Start</button>
+        <button class="tbtn tp" onclick="tP('pat')">■ Stop</button>
+        <button class="tbtn" onclick="tR('pat',30)">↺</button>
       </div>
     </div>
-    <div class="fl"><label>Key Insight — Describe in Your Own Words</label>
-    <textarea class="fta" id="f-pat-note" placeholder="When does this pattern work? When does it fail? What confirmation do I wait for?"></textarea></div>
-    <button class="sbtn" onclick="done('pat')">✓ Mark Pattern Study Complete</button>
+    <div class="fl"><label>Key Insight — In Your Own Words</label>
+    <textarea class="fta" id="f-pat-k" placeholder="When does this pattern work? When does it fail?"></textarea></div>
+    <button class="sbtn fire" onclick="done('pat')">✓ Mark Pattern Study Complete</button>
   </div>
 </div>
 
-<!-- HEALTH DIPLOMA -->
+<!-- DIPLOMA -->
 
-<div class="rcard c-dip" id="rc-dip">
-  <div class="rcard-hdr" onclick="tog('dip')">
-    <div class="rcard-icon">🎓</div>
-    <div class="rcard-meta">
-      <div class="rcard-title">Health Diploma / Certification <span class="tag tag-opt">If Time</span></div>
-      <div class="rcard-sub">40 min · Evening study · Compound with Finance background</div>
+<div class="rc cd" id="rc-dip">
+  <div class="rc-hdr" onclick="tog('dip')">
+    <div class="rc-ico">🎓</div>
+    <div class="rc-meta">
+      <div class="rc-title">Health Diploma / Certification <span class="tag tag-o">If Time</span></div>
+      <div class="rc-sub">40 min · Evening study · Compounds with Finance background</div>
     </div>
-    <div class="rcard-right"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+    <div class="rc-r"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
   </div>
-  <div class="rcard-body">
+  <div class="rc-body">
     <div class="fl"><label>Course / Module Studied Today</label>
-    <input type="text" class="fi" id="f-dip-topic" placeholder="e.g. NISM Options Module 3 · Precision Nutrition Unit 4 · CFA Reading 12..."></div>
-    <div class="timer-row">
-      <div class="timer-num" id="t-dip">40:00</div>
+    <input type="text" class="fi" id="f-dip-n" placeholder="e.g. NISM Options Module 3 · Precision Nutrition Unit 4..."></div>
+    <div class="trow">
+      <div class="tnum" id="t-dip">40:00</div>
       <div class="tbars">
-        <div class="tbar-info">Target — 40 minutes</div>
-        <div class="tbar"><div class="tbar-fill" id="tb-dip"></div></div>
+        <div class="tbar-lbl">Target — 40 minutes</div>
+        <div class="tbar"><div class="tbar-f" id="tb-dip"></div></div>
       </div>
       <div class="tbtns">
-        <button class="tbtn ts" onclick="tStart('dip',40)">▶️ Start</button>
-        <button class="tbtn tp" onclick="tStop('dip')">■ Stop</button>
-        <button class="tbtn" onclick="tReset('dip',40)">↺</button>
+        <button class="tbtn ts" onclick="tS('dip',40)">▶️ Start</button>
+        <button class="tbtn tp" onclick="tP('dip')">■ Stop</button>
+        <button class="tbtn" onclick="tR('dip',40)">↺</button>
       </div>
     </div>
     <div class="fl"><label>Concept Learned Today</label>
-    <textarea class="fta" id="f-dip-note" placeholder="Summarise in your own words what you studied today..."></textarea></div>
-    <button class="sbtn p" onclick="done('dip')">✓ Mark Diploma Study Complete</button>
+    <textarea class="fta" id="f-dip-k" placeholder="Summarise in your own words what you studied..."></textarea></div>
+    <button class="sbtn pur" onclick="done('dip')">✓ Mark Diploma Study Complete</button>
   </div>
 </div>
 
-<!-- NIGHT RITUALS -->
+<div class="slbl" style="margin-top:4px">Night Rituals</div>
 
-<div class="sec-label" style="margin-top:6px;">Night Rituals</div>
+<!-- NIGHT -->
 
-<div class="rcard c-ngt" id="rc-ngt">
-  <div class="rcard-hdr" onclick="tog('ngt')">
-    <div class="rcard-icon">🌙</div>
-    <div class="rcard-meta">
-      <div class="rcard-title">Night Rituals — Sleep by 10:30 PM <span class="tag tag-must">Compulsory</span></div>
-      <div class="rcard-sub">5 habits · Prepare · Reflect · Visualise · Rest</div>
+<div class="rc cn" id="rc-ngt">
+  <div class="rc-hdr" onclick="tog('ngt')">
+    <div class="rc-ico">🌙</div>
+    <div class="rc-meta">
+      <div class="rc-title">Night Rituals — Sleep by 10:30 PM <span class="tag tag-m">Compulsory</span></div>
+      <div class="rc-sub">5 habits · Prepare · Reflect · Visualise · Rest</div>
     </div>
-    <div class="rcard-right"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+    <div class="rc-r"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
   </div>
-  <div class="rcard-body">
-    <div class="sec-label" style="font-size:8px;margin-bottom:8px;">5 Compulsory Night Habits</div>
+  <div class="rc-body">
+    <div class="slbl" style="font-size:8px;margin-bottom:8px">5 Compulsory Night Habits</div>
     <div class="clist">
-      <div class="ci" onclick="ck(this)"><div class="ci-box"></div><div class="ci-ic">📋</div><div class="ci-txt">Prepared tomorrow — trades, schedule, 1 priority written in notebook</div></div>
-      <div class="ci" onclick="ck(this)"><div class="ci-box"></div><div class="ci-ic">🦷</div><div class="ci-txt">Brushed teeth — non-negotiable nightly habit</div></div>
-      <div class="ci" onclick="ck(this)"><div class="ci-box"></div><div class="ci-ic">😴</div><div class="ci-txt">Sleep prep started at 10:00 PM — phone in hall, lights dim</div></div>
-      <div class="ci" onclick="ck(this)"><div class="ci-box"></div><div class="ci-ic">🖼️</div><div class="ci-txt">Read Vision Board — basketball, 400 gaj house, family, personal office</div></div>
-      <div class="ci" onclick="ck(this)"><div class="ci-box"></div><div class="ci-ic">✨</div><div class="ci-txt">Wrote 10 good things about myself — full 10, no shortcuts</div></div>
+      <div class="ci" onclick="ck(this)"><div class="ci-box"></div><div class="ci-ic">📋</div><div class="ci-t">Prepared tomorrow — trades, schedule, 1 priority written</div></div>
+      <div class="ci" onclick="ck(this)"><div class="ci-box"></div><div class="ci-ic">🦷</div><div class="ci-t">Brushed teeth — non-negotiable nightly habit</div></div>
+      <div class="ci" onclick="ck(this)"><div class="ci-box"></div><div class="ci-ic">😴</div><div class="ci-t">Sleep prep at 10:00 PM — phone in hall, lights dim</div></div>
+      <div class="ci" onclick="ck(this)"><div class="ci-box"></div><div class="ci-ic">🖼️</div><div class="ci-t">Read Vision Board — basketball, 400 gaj house, family, office</div></div>
+      <div class="ci" onclick="ck(this)"><div class="ci-box"></div><div class="ci-ic">✨</div><div class="ci-t">Wrote 10 good things about myself — full 10, no shortcuts</div></div>
     </div>
-
-```
-<div class="div"></div>
-<div class="sec-label" style="font-size:8px;margin-bottom:8px;">10 Good Things About Me Tonight</div>
-<div id="gthings"></div>
-
-<div class="div"></div>
-<div class="fl"><label>Tomorrow's Top Priority</label>
-<input type="text" class="fi" id="f-tmrw" placeholder="e.g. Study Options Delta 60min · Paper trade BankNifty breakout setup..."></div>
-<div class="fl"><label>Actual Sleep Time</label>
-<input type="text" class="fi" id="f-sleep" value="10:30 PM" placeholder="10:30 PM target"></div>
-
-<button class="sbtn b" onclick="done('ngt')">✓ Night Rituals Complete — Rest Well 🌙</button>
-```
-
+    <div class="divr"></div>
+    <div class="slbl" style="font-size:8px;margin-bottom:8px">10 Good Things About Me Tonight</div>
+    <div id="gthings"></div>
+    <div class="divr"></div>
+    <div class="fl"><label>Tomorrow's Top Priority</label>
+    <input type="text" class="fi" id="f-tmrw" placeholder="e.g. Study Options Delta 60min · Paper trade BankNifty breakout..."></div>
+    <div class="fl"><label>Actual Sleep Time</label>
+    <input type="text" class="fi" id="f-sleep" value="10:30 PM"></div>
+    <button class="sbtn gld" onclick="done('ngt')">✓ Night Rituals Complete — Rest Well 🌙</button>
   </div>
 </div>
+
+<div class="slbl" style="margin-top:4px">Day Summary</div>
 
 <!-- SUMMARY -->
 
-<div class="sec-label" style="margin-top:6px;">Day Summary</div>
-
-<div class="rcard" style="border-color:rgba(245,166,35,.2);">
-  <div class="rcard-hdr" onclick="tog('sum')" style="cursor:pointer;">
-    <div class="rcard-icon" style="background:rgba(245,166,35,.15);font-size:18px;">⚡</div>
-    <div class="rcard-meta">
-      <div class="rcard-title" style="color:var(--gold);">Productive Time Breakdown</div>
-      <div class="rcard-sub">Auto-calculated from timers</div>
+<div class="rc" style="border-color:rgba(245,166,35,.2)">
+  <div class="rc-hdr" onclick="tog('sum')">
+    <div class="rc-ico" style="background:rgba(245,166,35,.15);font-size:18px">⚡</div>
+    <div class="rc-meta">
+      <div class="rc-title" style="color:#F5A623">Productive Time Breakdown</div>
+      <div class="rc-sub">Auto-calculated from completed timers</div>
     </div>
-    <div class="rcard-right"><div class="arr">▼</div></div>
+    <div class="rc-r"><div class="arr">▼</div></div>
   </div>
-  <div class="rcard-body" style="display:block;">
-    <div class="sum-grid">
-      <div class="sum-c"><div class="sum-ic">🧘</div><div class="sum-v" id="s-med">0m</div><div class="sum-l">Meditation</div></div>
-      <div class="sum-c"><div class="sum-ic">🏀</div><div class="sum-v" id="s-phy">0m</div><div class="sum-l">Physical</div></div>
-      <div class="sum-c"><div class="sum-ic">🎧</div><div class="sum-v" id="s-pod">0m</div><div class="sum-l">Podcast</div></div>
-      <div class="sum-c"><div class="sum-ic">📊</div><div class="sum-v" id="s-trd">0m</div><div class="sum-l">Trading</div></div>
-      <div class="sum-c"><div class="sum-ic">🔬</div><div class="sum-v" id="s-pat">0m</div><div class="sum-l">Patterns</div></div>
-      <div class="sum-c"><div class="sum-ic">🎓</div><div class="sum-v" id="s-dip">0m</div><div class="sum-l">Diploma</div></div>
+  <div class="rc-body" style="display:block">
+    <div class="sg">
+      <div class="sc"><div class="sc-ic">🧘</div><div class="sc-v" id="s-med">0m</div><div class="sc-l">Meditation</div></div>
+      <div class="sc"><div class="sc-ic">🏀</div><div class="sc-v" id="s-phy">0m</div><div class="sc-l">Physical</div></div>
+      <div class="sc"><div class="sc-ic">🎧</div><div class="sc-v" id="s-pod">0m</div><div class="sc-l">Podcast</div></div>
+      <div class="sc"><div class="sc-ic">📊</div><div class="sc-v" id="s-trd">0m</div><div class="sc-l">Trading</div></div>
+      <div class="sc"><div class="sc-ic">🔬</div><div class="sc-v" id="s-pat">0m</div><div class="sc-l">Patterns</div></div>
+      <div class="sc"><div class="sc-ic">🎓</div><div class="sc-v" id="s-dip">0m</div><div class="sc-l">Diploma</div></div>
     </div>
-    <div class="total-box">
-      <div class="total-lbl">Total Productive Time Today</div>
-      <div class="total-val" id="totalVal">0h 0m</div>
-      <div class="total-target">Target: 3h 15m+ daily</div>
-      <div class="total-pbar"><div class="total-pfill" id="totalFill"></div></div>
+    <div class="totbox">
+      <div class="tot-l">Total Productive Time Today</div>
+      <div class="tot-v" id="totV">0h 0m</div>
+      <div class="tot-sub">Target: 3h 15m+ daily</div>
+      <div class="tot-pb"><div class="tot-pf" id="totF"></div></div>
     </div>
   </div>
 </div>
 
 </div><!-- /main -->
-
 <div class="toast" id="toast"></div>
 
 <script>
-// ── State ──────────────────────────────────────────────────────
-var day = 1;
-var allData = {};
-var timState = {}; // {id: {interval, elapsed, target}}
-var doneMap = {};
+var day=1, allData={}, timState={}, doneMap={};
 
-// ── Init ──────────────────────────────────────────────────────
-(function init() {
-  buildGthings();
-  buildGrid();
-  setDate();
-  updateRing();
-  updateSummary();
-  updateHeader();
-  // open meditation by default
+(function(){
+  buildGT();buildGrid();setDate();updRing();updSum();updHdr();
   document.getElementById('rc-med').classList.add('open');
 })();
 
-// ── Good Things ───────────────────────────────────────────────
-function buildGthings() {
-  var c = document.getElementById('gthings');
-  c.innerHTML = '';
-  for (var i = 1; i <= 10; i++) {
-    var d = document.createElement('div');
-    d.className = 'fl';
-    d.style.cssText = 'display:flex;align-items:center;gap:7px;';
-    d.innerHTML = '<span style="font-family:var(--ff-mono);font-size:9px;color:var(--muted);width:16px;flex-shrink:0;">' + i + '.</span>' +
-      '<input type="text" class="fi" id="f-gt' + i + '" placeholder="Something good about me today..." style="flex:1;">';
+function buildGT(){
+  var c=document.getElementById('gthings'); c.innerHTML='';
+  for(var i=1;i<=10;i++){
+    var d=document.createElement('div');
+    d.className='fl';
+    d.style.cssText='display:flex;align-items:center;gap:7px;';
+    d.innerHTML='<span style="font-family:JetBrains Mono,Courier New,monospace;font-size:9px;color:#4A6278;width:16px;flex-shrink:0">'+i+'.</span>'+
+      '<input type="text" class="fi" id="f-gt'+i+'" placeholder="Something good about me today..." style="flex:1">';
     c.appendChild(d);
   }
 }
 
-// ── 100 Day Grid ──────────────────────────────────────────────
-function buildGrid() {
-  var g = document.getElementById('dgrid');
-  g.innerHTML = '';
-  for (var d = 1; d <= 100; d++) {
-    var el = document.createElement('div');
-    el.className = 'ddot';
-    var dd = allData[d];
-    if (d < day) el.classList.add(dd && dd._done ? 'd-done' : 'd-part');
-    else if (d === day) el.classList.add('d-today');
-    else el.classList.add('d-future');
-    (function(n){ el.onclick = function(){ goDay(n); }; })(d);
+function buildGrid(){
+  var g=document.getElementById('dgrid'); g.innerHTML='';
+  for(var d=1;d<=100;d++){
+    var el=document.createElement('div');
+    el.className='dot';
+    var dd=allData[d];
+    if(d<day) el.classList.add(dd&&dd._ok?'done':'part');
+    else if(d===day) el.classList.add('today');
+    else el.classList.add('future');
+    (function(n){el.onclick=function(){goDay(n);};})(d);
     g.appendChild(el);
   }
 }
 
-// ── Day Navigation ────────────────────────────────────────────
-function chDay(delta) {
-  saveDay();
-  day = Math.max(1, Math.min(100, day + delta));
-  loadDay();
+function chDay(delta){ saveDay(); day=Math.max(1,Math.min(100,day+delta)); loadDay(); }
+function goDay(n){ saveDay(); day=n; loadDay(); }
+
+function saveDay(){
+  var data={_ok:Object.values(doneMap).filter(Boolean).length>=4};
+  document.querySelectorAll('[id^="f-"]').forEach(function(e){ data[e.id]=e.value; });
+  data._dm=Object.assign({},doneMap);
+  var cks=[];
+  document.querySelectorAll('.clist .ci').forEach(function(ci){ cks.push(ci.classList.contains('ck')); });
+  data._cks=cks;
+  data._r1=document.getElementById('rb1').classList.contains('rd');
+  data._r2=document.getElementById('rb2').classList.contains('rd');
+  allData[day]=data;
 }
 
-function goDay(n) {
-  saveDay();
-  day = n;
-  loadDay();
-}
-
-function saveDay() {
-  var data = { _done: Object.values(doneMap).filter(Boolean).length >= 4 };
-  document.querySelectorAll('[id^="f-"]').forEach(function(el) {
-    data[el.id] = el.value;
+function loadDay(){
+  Object.keys(timState).forEach(function(id){ tP(id); }); timState={};
+  var data=allData[day]||{};
+  document.querySelectorAll('[id^="f-"]').forEach(function(e){ e.value=data[e.id]!==undefined?data[e.id]:''; });
+  var st=document.getElementById('f-sleep'); if(st&&!st.value) st.value='10:30 PM';
+  doneMap=Object.assign({},data._dm||{});
+  ['med','phy','aff','pod','trd','pat','dip','ngt'].forEach(function(id){
+    var c=document.getElementById('rc-'+id);
+    if(c) c.classList.toggle('done',!!doneMap[id]);
   });
-  data._doneMap = Object.assign({}, doneMap);
-  // night checks
-  var cks = [];
-  document.querySelectorAll('.clist .ci').forEach(function(ci) {
-    cks.push(ci.classList.contains('ck'));
+  var rb1=document.getElementById('rb1');
+  rb1.classList.toggle('rd',!!data._r1);
+  rb1.textContent=data._r1?'✓ Round 1 Done':'Round 1 — Speak Now';
+  var rb2=document.getElementById('rb2');
+  rb2.classList.toggle('rd',!!data._r2);
+  rb2.textContent=data._r2?'✓ Round 2 Done':'Round 2 — Speak Now';
+  var cks=data._cks||[];
+  document.querySelectorAll('.clist .ci').forEach(function(ci,i){
+    ci.classList.toggle('ck',!!cks[i]);
+    ci.querySelector('.ci-box').textContent=cks[i]?'✓':'';
   });
-  data._nightCks = cks;
-  data._rep1 = document.getElementById('rb1').classList.contains('rdone');
-  data._rep2 = document.getElementById('rb2').classList.contains('rdone');
-  allData[day] = data;
+  var tD={med:15,phy:30,pod:40,pat:30,dip:40};
+  Object.keys(tD).forEach(function(id){ tR(id,tD[id]); });
+  buildGT();
+  if(data){ for(var i=1;i<=10;i++){ var el=document.getElementById('f-gt'+i); if(el&&data['f-gt'+i]) el.value=data['f-gt'+i]; } }
+  buildGrid(); setDate(); updRing(); updSum(); updHdr();
+  document.querySelectorAll('.db').forEach(function(b){ b.textContent=day; });
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function loadDay() {
-  // stop all timers
-  Object.keys(timState).forEach(function(id) { tStop(id); });
-  timState = {};
-
-  var data = allData[day] || {};
-
-  // reset inputs
-  document.querySelectorAll('[id^="f-"]').forEach(function(el) {
-    el.value = (data[el.id] !== undefined) ? data[el.id] : '';
-  });
-  var st = document.getElementById('f-sleep');
-  if (st && !st.value) st.value = '10:30 PM';
-
-  // restore doneMap
-  doneMap = Object.assign({}, data._doneMap || {});
-  var ids = ['med','phy','aff','pod','trd','pat','dip','ngt'];
-  ids.forEach(function(id) {
-    var card = document.getElementById('rc-' + id);
-    if (card) card.classList.toggle('done', !!doneMap[id]);
-  });
-
-  // restore rep
-  document.getElementById('rb1').classList.toggle('rdone', !!data._rep1);
-  document.getElementById('rb1').textContent = data._rep1 ? '✓ Round 1 Done' : 'Round 1 — Speak Now';
-  document.getElementById('rb2').classList.toggle('rdone', !!data._rep2);
-  document.getElementById('rb2').textContent = data._rep2 ? '✓ Round 2 Done' : 'Round 2 — Speak Now';
-
-  // restore night checks
-  var cks = data._nightCks || [];
-  document.querySelectorAll('.clist .ci').forEach(function(ci, i) {
-    ci.classList.toggle('ck', !!cks[i]);
-    ci.querySelector('.ci-box').textContent = cks[i] ? '✓' : '';
-  });
-
-  // reset timers display
-  var tDefs = {med:15,phy:30,pod:40,pat:30,dip:40};
-  Object.keys(tDefs).forEach(function(id) { tReset(id, tDefs[id]); });
-
-  // rebuild good things
-  buildGthings();
-  if (data) {
-    for (var i = 1; i <= 10; i++) {
-      var el = document.getElementById('f-gt' + i);
-      if (el && data['f-gt' + i]) el.value = data['f-gt' + i];
-    }
-  }
-
-  // update UI
-  buildGrid();
-  setDate();
-  updateRing();
-  updateSummary();
-  updateHeader();
-  document.querySelectorAll('.db').forEach(function(b) { b.textContent = day; });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+function setDate(){
+  var s=new Date('2026-01-01T00:00:00'); s.setDate(s.getDate()+day-1);
+  document.getElementById('dateStr').textContent=s.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('dayLbl').textContent='DAY '+day;
+  document.getElementById('bigDay').textContent=day;
 }
 
-// ── Date Display ──────────────────────────────────────────────
-function setDate() {
-  var start = new Date('2026-01-01T00:00:00');
-  start.setDate(start.getDate() + day - 1);
-  var opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-  document.getElementById('dateStr').textContent = start.toLocaleDateString('en-IN', opts);
-  document.getElementById('dayLbl').textContent = 'DAY ' + day;
-  document.getElementById('bigDay').textContent = day;
+function updHdr(){
+  document.getElementById('hLeft').textContent=100-day;
+  var streak=0;
+  for(var d=day-1;d>=1;d--){ if(allData[d]&&allData[d]._ok) streak++; else break; }
+  document.getElementById('hStreak').textContent=streak+'🔥';
+  var done=Object.values(allData).filter(function(d){ return d&&d._ok; }).length;
+  var pct=Math.round(done/100*100);
+  document.getElementById('hPct').textContent=pct+'%';
+  document.getElementById('gpf').style.width=Math.max(1,pct)+'%';
 }
 
-// ── Header ────────────────────────────────────────────────────
-function updateHeader() {
-  document.getElementById('hLeft').textContent = 100 - day;
-  var streak = 0;
-  for (var d = day - 1; d >= 1; d--) {
-    if (allData[d] && allData[d]._done) streak++;
-    else break;
-  }
-  document.getElementById('hStreak').textContent = streak + '🔥';
-  var doneDays = Object.values(allData).filter(function(d) { return d && d._done; }).length;
-  var pct = Math.round(doneDays / 100 * 100);
-  document.getElementById('hPct').textContent = pct + '%';
-  document.getElementById('gpFill').style.width = Math.max(1, pct) + '%';
+function updRing(){
+  var ids=['med','phy','aff','pod','trd','pat','dip','ngt'];
+  var n=ids.filter(function(k){ return doneMap[k]; }).length;
+  var pct=Math.round(n/ids.length*100);
+  document.getElementById('rPct').textContent=pct+'%';
+  document.getElementById('taskD').textContent=n+' / '+ids.length;
+  var circ=220.9;
+  var ring=document.getElementById('rc');
+  ring.style.strokeDashoffset=circ-(circ*pct/100);
+  ring.style.stroke=pct===100?'#2ECC8A':pct>=50?'#F5A623':'#FF5F1F';
 }
 
-// ── Ring ──────────────────────────────────────────────────────
-function updateRing() {
-  var ids = ['med','phy','aff','pod','trd','pat','dip','ngt'];
-  var n = ids.filter(function(k) { return doneMap[k]; }).length;
-  var pct = Math.round(n / ids.length * 100);
-  document.getElementById('ringPct').textContent = pct + '%';
-  document.getElementById('tasksDone').textContent = n + ' / ' + ids.length;
-  var circ = 226.2;
-  var offset = circ - (circ * pct / 100);
-  var ring = document.getElementById('ringCirc');
-  ring.style.strokeDashoffset = offset;
-  ring.style.stroke = pct === 100 ? 'var(--green)' : pct >= 50 ? 'var(--gold)' : 'var(--fire)';
+function tog(id){
+  var c=document.getElementById('rc-'+id); if(c) c.classList.toggle('open');
 }
 
-// ── Toggle Card ───────────────────────────────────────────────
-function tog(id) {
-  var card = document.getElementById('rc-' + id);
-  if (card) card.classList.toggle('open');
+function done(id){
+  doneMap[id]=true;
+  var c=document.getElementById('rc-'+id);
+  if(c){ c.classList.add('done'); c.classList.remove('open'); }
+  updRing(); updSum(); updHdr();
+  toast('✓ '+id.toUpperCase()+' — Day '+day+' logged!');
 }
 
-// ── Mark Done ─────────────────────────────────────────────────
-function done(id) {
-  doneMap[id] = true;
-  var card = document.getElementById('rc-' + id);
-  if (card) { card.classList.add('done'); card.classList.remove('open'); }
-  updateRing();
-  updateSummary();
-  updateHeader();
-  toast('✓ ' + id.toUpperCase() + ' — Day ' + day + ' logged!');
-}
-
-// ── Check Items ───────────────────────────────────────────────
-function ck(el) {
+function ck(el){
   el.classList.toggle('ck');
-  el.querySelector('.ci-box').textContent = el.classList.contains('ck') ? '✓' : '';
+  el.querySelector('.ci-box').textContent=el.classList.contains('ck')?'✓':'';
 }
 
-// ── Reps ──────────────────────────────────────────────────────
-function rep(n) {
-  var btn = document.getElementById('rb' + n);
-  btn.classList.add('rdone');
-  btn.textContent = '✓ Round ' + n + ' Done';
-  toast('Round ' + n + ' spoken! 💪');
+function rep(n){
+  var btn=document.getElementById('rb'+n);
+  btn.classList.add('rd');
+  btn.textContent='✓ Round '+n+' Done';
+  toast('Round '+n+' spoken! 💪');
 }
 
-// ── Timers ────────────────────────────────────────────────────
-function tStart(id, mins) {
-  if (timState[id] && timState[id].interval) return;
-  if (!timState[id]) timState[id] = { elapsed: 0, target: mins * 60 };
-  var ts = timState[id];
-  ts.target = mins * 60;
-  var disp = document.getElementById('t-' + id);
-  if (disp) { disp.classList.add('trun'); disp.classList.remove('tdone'); }
+function pad(n){ return String(n).padStart(2,'0'); }
 
-  ts.interval = setInterval(function() {
-    ts.elapsed++;
-    var rem = ts.target - ts.elapsed;
-    if (rem <= 0) {
-      clearInterval(ts.interval);
-      ts.interval = null;
-      if (disp) { disp.textContent = '00:00'; disp.classList.remove('trun'); disp.classList.add('tdone'); }
-      var bar = document.getElementById('tb-' + id);
-      if (bar) bar.style.width = '100%';
-      toast('🎯 ' + id.toUpperCase() + ' timer complete!');
-      updateSummary();
-      return;
+function tS(id,mins){
+  if(timState[id]&&timState[id].iv) return;
+  if(!timState[id]) timState[id]={el:0,tg:mins*60};
+  var ts=timState[id]; ts.tg=mins*60;
+  var disp=document.getElementById('t-'+id);
+  if(disp){ disp.classList.add('trun'); disp.classList.remove('tdone'); }
+  ts.iv=setInterval(function(){
+    ts.el++;
+    var rem=ts.tg-ts.el;
+    if(rem<=0){
+      clearInterval(ts.iv); ts.iv=null;
+      if(disp){ disp.textContent='00:00'; disp.classList.remove('trun'); disp.classList.add('tdone'); }
+      var bar=document.getElementById('tb-'+id); if(bar) bar.style.width='100%';
+      toast('🎯 '+id.toUpperCase()+' timer complete!');
+      updSum(); return;
     }
-    var m = Math.floor(rem / 60), s = rem % 60;
-    if (disp) disp.textContent = pad(m) + ':' + pad(s);
-    var bar = document.getElementById('tb-' + id);
-    if (bar) bar.style.width = Math.min(100, ts.elapsed / ts.target * 100) + '%';
-    updateSummary();
-  }, 1000);
+    var m=Math.floor(rem/60),s=rem%60;
+    if(disp) disp.textContent=pad(m)+':'+pad(s);
+    var bar=document.getElementById('tb-'+id);
+    if(bar) bar.style.width=Math.min(100,ts.el/ts.tg*100)+'%';
+    updSum();
+  },1000);
 }
 
-function tStop(id) {
-  if (timState[id] && timState[id].interval) {
-    clearInterval(timState[id].interval);
-    timState[id].interval = null;
-    var disp = document.getElementById('t-' + id);
-    if (disp) disp.classList.remove('trun');
+function tP(id){
+  if(timState[id]&&timState[id].iv){
+    clearInterval(timState[id].iv); timState[id].iv=null;
+    var d=document.getElementById('t-'+id); if(d) d.classList.remove('trun');
   }
 }
 
-function tReset(id, mins) {
-  tStop(id);
-  if (timState[id]) timState[id].elapsed = 0;
-  var disp = document.getElementById('t-' + id);
-  if (disp) { disp.textContent = pad(mins) + ':00'; disp.classList.remove('trun','tdone'); }
-  var bar = document.getElementById('tb-' + id);
-  if (bar) bar.style.width = '0%';
-  updateSummary();
+function tR(id,mins){
+  tP(id);
+  if(timState[id]) timState[id].el=0;
+  var d=document.getElementById('t-'+id);
+  if(d){ d.textContent=pad(mins)+':00'; d.classList.remove('trun','tdone'); }
+  var b=document.getElementById('tb-'+id); if(b) b.style.width='0%';
+  updSum();
 }
 
-function pad(n) { return String(n).padStart(2,'0'); }
-
-// ── Summary ───────────────────────────────────────────────────
-function updateSummary() {
-  var timerIds = ['med','phy','pod','pat','dip'];
-  var total = 0;
-  timerIds.forEach(function(id) {
-    var el = document.getElementById('s-' + id);
-    var m = timState[id] ? Math.round(timState[id].elapsed / 60) : 0;
-    if (el) el.textContent = m + 'm';
-    total += m;
+function updSum(){
+  var ids=['med','phy','pod','pat','dip'], total=0;
+  ids.forEach(function(id){
+    var m=timState[id]?Math.round(timState[id].el/60):0;
+    var el=document.getElementById('s-'+id); if(el) el.textContent=m+'m';
+    total+=m;
   });
-  var trdM = doneMap['trd'] ? 60 : 0;
-  var trdEl = document.getElementById('s-trd');
-  if (trdEl) trdEl.textContent = trdM + 'm';
-  total += trdM;
-
-  var h = Math.floor(total / 60), m = total % 60;
-  var disp = h + 'h ' + m + 'm';
-  document.getElementById('totalVal').textContent = disp;
-  document.getElementById('prodTime').textContent = disp;
-  var pct = Math.min(100, Math.round(total / 195 * 100));
-  document.getElementById('totalFill').style.width = pct + '%';
+  var tm=doneMap['trd']?60:0;
+  var te=document.getElementById('s-trd'); if(te) te.textContent=tm+'m';
+  total+=tm;
+  var h=Math.floor(total/60),m=total%60,disp=h+'h '+m+'m';
+  document.getElementById('totV').textContent=disp;
+  document.getElementById('prodT').textContent=disp;
+  document.getElementById('totF').style.width=Math.min(100,Math.round(total/195*100))+'%';
 }
 
-// ── Toast ─────────────────────────────────────────────────────
 var toastTmr;
-function toast(msg) {
-  var el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
+function toast(msg){
+  var el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
   clearTimeout(toastTmr);
-  toastTmr = setTimeout(function() { el.classList.remove('show'); }, 2800);
+  toastTmr=setTimeout(function(){ el.classList.remove('show'); },2800);
 }
 </script>
 
