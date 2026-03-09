@@ -3,311 +3,349 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>50K Challenge — 100 Day Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Force dark background immediately before CSS loads — prevents white flash on GitHub Pages -->
+<style>html{background:#070A0F!important;color:#E4EAF2!important}</style>
+<!-- Preconnect speeds up font load on GitHub Pages -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #070A0F;
-  --surface: #0D1117;
-  --card: #111820;
-  --card2: #151E28;
-  --border: #1C2A38;
-  --border2: #243040;
-  --text: #E4EAF2;
-  --muted: #4A6278;
-  --soft: #8AA0B4;
-  --fire: #FF5F1F;
-  --gold: #F5A623;
-  --green: #2ECC8A;
-  --blue: #3B9EFF;
-  --purple: #8B5CF6;
-  --red: #FF4757;
-  --cyan: #00D4FF;
-  --amber: #FFBE0B;
+
+/* ── FORCED DARK THEME — overrides any GitHub/browser default ── */
+html, body {
+background-color: #070A0F !important;
+color: #E4EAF2 !important;
+-webkit-text-size-adjust: 100%;
 }
 
-- { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+–bg: #070A0F;
+–surface: #0D1117;
+–card: #111820;
+–card2: #151E28;
+–border: #1C2A38;
+–border2: #243040;
+–text: #E4EAF2;
+–muted: #4A6278;
+–soft: #8AA0B4;
+–fire: #FF5F1F;
+–gold: #F5A623;
+–green: #2ECC8A;
+–blue: #3B9EFF;
+–purple: #8B5CF6;
+–red: #FF4757;
+–cyan: #00D4FF;
+–amber: #FFBE0B;
+–ff-display: ‘Bebas Neue’, Impact, ‘Arial Narrow’, Arial, sans-serif;
+–ff-body: ‘DM Sans’, -apple-system, BlinkMacSystemFont, ‘Helvetica Neue’, Arial, sans-serif;
+–ff-mono: ‘JetBrains Mono’, ‘SF Mono’, ‘Fira Code’, ‘Courier New’, monospace;
+}
+
+- { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
 body {
 background: var(–bg);
 color: var(–text);
-font-family: ‘DM Sans’, sans-serif;
+font-family: var(–ff-body);
+font-size: 15px;
+line-height: 1.6;
 min-height: 100vh;
-overflow-x: hidden;
 }
 
+/* Scrollbar */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: var(–bg); }
 ::-webkit-scrollbar-thumb { background: var(–fire); border-radius: 2px; }
 
 /* ── HEADER ── */
 .header {
-background: linear-gradient(135deg, #0D1117 0%, #070A0F 100%);
+background: #0D1117;
 border-bottom: 1px solid var(–border);
-padding: 0;
 position: sticky;
 top: 0;
 z-index: 200;
+width: 100%;
 }
 
 .header-top {
 display: flex;
 align-items: center;
 justify-content: space-between;
-padding: 14px 24px;
-gap: 16px;
+padding: 12px 16px;
+gap: 10px;
 flex-wrap: wrap;
 }
 
-.brand {
-display: flex;
-align-items: center;
-gap: 12px;
-}
+.brand { display: flex; align-items: center; gap: 10px; }
 
 .brand-icon {
-width: 38px; height: 38px;
+width: 36px; height: 36px;
 background: var(–fire);
 border-radius: 6px;
 display: flex; align-items: center; justify-content: center;
-font-size: 18px;
-flex-shrink: 0;
+font-size: 18px; flex-shrink: 0;
 }
 
-.brand-text .title {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 22px;
+.brand-title {
+font-family: var(–ff-display);
+font-size: 20px;
 letter-spacing: 2px;
-line-height: 1;
 color: var(–text);
+line-height: 1;
 }
 
-.brand-text .sub {
-font-family: ‘JetBrains Mono’, monospace;
+.brand-sub {
+font-family: var(–ff-mono);
 font-size: 9px;
 letter-spacing: 2px;
 color: var(–muted);
 text-transform: uppercase;
+margin-top: 2px;
 }
 
-.header-stats {
+.header-right {
+display: flex;
+align-items: center;
+gap: 12px;
+flex-wrap: wrap;
+}
+
+.day-nav {
+display: flex;
+align-items: center;
+gap: 6px;
+background: var(–card);
+border: 1px solid var(–border);
+border-radius: 6px;
+padding: 5px 8px;
+}
+
+.nav-btn {
+width: 26px; height: 26px;
+background: var(–border);
+border: none;
+border-radius: 4px;
+color: var(–text);
+font-size: 16px;
+cursor: pointer;
+display: flex; align-items: center; justify-content: center;
+transition: background .2s;
+line-height: 1;
+}
+
+.nav-btn:hover { background: var(–fire); }
+
+.day-label {
+font-family: var(–ff-display);
+font-size: 18px;
+color: var(–fire);
+min-width: 72px;
+text-align: center;
+letter-spacing: 1px;
+}
+
+.hstats { display: flex; gap: 14px; }
+
+.hs {
+text-align: center;
+min-width: 40px;
+}
+
+.hs-val {
+font-family: var(–ff-display);
+font-size: 20px;
+color: var(–gold);
+line-height: 1;
+display: block;
+}
+
+.hs-lbl {
+font-family: var(–ff-mono);
+font-size: 7px;
+letter-spacing: 1px;
+color: var(–muted);
+text-transform: uppercase;
+display: block;
+}
+
+.gpbar { height: 3px; background: var(–border); }
+.gpbar-fill {
+height: 100%;
+background: linear-gradient(90deg, var(–fire), var(–gold), var(–green));
+transition: width .8s ease;
+min-width: 2px;
+}
+
+/* ── MAIN ── */
+.main { max-width: 900px; margin: 0 auto; padding: 20px 14px 80px; }
+
+/* ── DATE HERO ── */
+.date-hero {
+display: flex;
+align-items: flex-start;
+justify-content: space-between;
+margin-bottom: 24px;
+gap: 12px;
+flex-wrap: wrap;
+}
+
+.day-big-num {
+font-family: var(–ff-display);
+font-size: clamp(56px, 12vw, 90px);
+line-height: .88;
+color: var(–fire);
+letter-spacing: 2px;
+}
+
+.day-big-sub {
+font-family: var(–ff-mono);
+font-size: 10px;
+letter-spacing: 2px;
+color: var(–muted);
+text-transform: uppercase;
+margin-top: 6px;
+}
+
+.hero-right {
 display: flex;
 gap: 20px;
 align-items: center;
 flex-wrap: wrap;
 }
 
-.hstat {
-text-align: center;
+/* Ring */
+.ring-wrap { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
+.ring-wrap svg { transform: rotate(-90deg); display: block; }
+.ring-bg { fill: none; stroke: #1C2A38; stroke-width: 8; }
+.ring-fill {
+fill: none; stroke: var(–fire); stroke-width: 8;
+stroke-linecap: round;
+stroke-dasharray: 226.2;
+stroke-dashoffset: 226.2;
+transition: stroke-dashoffset .8s ease, stroke .3s ease;
 }
-
-.hstat-val {
-font-family: ‘Bebas Neue’, sans-serif;
+.ring-inner {
+position: absolute; inset: 0;
+display: flex; flex-direction: column;
+align-items: center; justify-content: center;
+}
+.ring-pct {
+font-family: var(–ff-display);
 font-size: 24px;
-line-height: 1;
 color: var(–gold);
+line-height: 1;
 }
-
-.hstat-lbl {
-font-family: ‘JetBrains Mono’, monospace;
+.ring-lbl {
+font-family: var(–ff-mono);
 font-size: 8px;
-letter-spacing: 1px;
 color: var(–muted);
+letter-spacing: 1px;
 text-transform: uppercase;
 }
 
-.day-selector {
-display: flex;
-align-items: center;
-gap: 8px;
-background: var(–card);
-border: 1px solid var(–border);
-border-radius: 6px;
-padding: 6px 10px;
-}
+.hero-stats-col { display: flex; flex-direction: column; gap: 6px; }
 
-.day-btn {
-width: 28px; height: 28px;
-background: var(–border);
-border: none;
-border-radius: 4px;
-color: var(–text);
-font-size: 14px;
-cursor: pointer;
-display: flex; align-items: center; justify-content: center;
-transition: background .2s;
-}
-
-.day-btn:hover { background: var(–fire); }
-
-.day-display {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 20px;
-color: var(–fire);
-min-width: 80px;
-text-align: center;
-}
-
-/* PROGRESS BAR */
-.global-progress {
-height: 3px;
-background: var(–border);
-position: relative;
-}
-
-.global-progress-fill {
-height: 100%;
-background: linear-gradient(90deg, var(–fire), var(–gold), var(–green));
-transition: width .8s ease;
-}
-
-/* ── MAIN LAYOUT ── */
-.main { max-width: 1100px; margin: 0 auto; padding: 24px 20px 80px; }
-
-/* DATE HERO */
-.date-hero {
-display: flex;
-align-items: center;
-justify-content: space-between;
-margin-bottom: 28px;
-flex-wrap: wrap;
-gap: 16px;
-}
-
-.date-left .day-big {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: clamp(52px, 8vw, 80px);
-line-height: .9;
-color: var(–fire);
-}
-
-.date-left .day-big span {
-font-size: clamp(20px, 3vw, 28px);
-color: var(–muted);
-}
-
-.date-left .date-str {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 11px;
+.hs2-row { }
+.hs2-lbl {
+font-family: var(–ff-mono);
+font-size: 8px;
 letter-spacing: 2px;
 color: var(–muted);
 text-transform: uppercase;
-margin-top: 4px;
 }
-
-.daily-score-ring {
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 4px;
-}
-
-.ring-wrap { position: relative; width: 100px; height: 100px; }
-
-.ring-wrap svg { transform: rotate(-90deg); }
-
-.ring-bg { fill: none; stroke: var(–border2); stroke-width: 8; }
-.ring-fill {
-fill: none;
-stroke: var(–fire);
-stroke-width: 8;
-stroke-linecap: round;
-stroke-dasharray: 251.2;
-stroke-dashoffset: 251.2;
-transition: stroke-dashoffset 1s ease;
-}
-
-.ring-text {
-position: absolute;
-inset: 0;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-}
-
-.ring-pct {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 26px;
-color: var(–gold);
-line-height: 1;
-}
-
-.ring-lbl {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 8px;
-color: var(–muted);
-letter-spacing: 1px;
-text-transform: uppercase;
-}
-
-.daily-time-total {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 10px;
-letter-spacing: 1px;
-color: var(–muted);
-text-transform: uppercase;
-text-align: center;
-}
-
-.daily-time-val {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 20px;
+.hs2-val {
+font-family: var(–ff-display);
+font-size: 22px;
 color: var(–cyan);
-text-align: center;
+line-height: 1.1;
+letter-spacing: 1px;
+}
+.hs2-val.gold { color: var(–gold); }
+
+/* ── 100 DAY GRID ── */
+.sec-label {
+font-family: var(–ff-mono);
+font-size: 9px;
+letter-spacing: 3px;
+color: var(–muted);
+text-transform: uppercase;
+margin-bottom: 10px;
+display: flex;
+align-items: center;
+gap: 10px;
+}
+.sec-label::after { content: ‘’; flex: 1; height: 1px; background: var(–border); }
+
+.dgrid {
+display: grid;
+grid-template-columns: repeat(20, 1fr);
+gap: 3px;
+margin-bottom: 24px;
 }
 
-/* ── GRID ── */
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.grid-full { grid-column: 1 / -1; }
-
-@media(max-width: 700px) {
-.grid { grid-template-columns: 1fr; }
-.grid-full { grid-column: 1; }
+@media(max-width: 480px) {
+.dgrid { grid-template-columns: repeat(10, 1fr); gap: 4px; }
 }
+
+.ddot {
+aspect-ratio: 1;
+border-radius: 3px;
+background: var(–border);
+cursor: pointer;
+transition: transform .15s;
+position: relative;
+}
+.ddot:hover { transform: scale(1.4); z-index: 10; }
+.ddot.d-done  { background: var(–green); }
+.ddot.d-part  { background: var(–gold); }
+.ddot.d-today { background: var(–fire); box-shadow: 0 0 6px rgba(255,95,31,.6); }
+.ddot.d-future { background: var(–border); opacity: .35; }
 
 /* ── RITUAL CARD ── */
-.ritual-card {
+.rcard {
 background: var(–card);
 border: 1px solid var(–border);
 border-radius: 10px;
 overflow: hidden;
+margin-bottom: 12px;
 transition: border-color .3s;
 }
+.rcard.done { border-color: var(–green); }
+.rcard.done .rcard-hdr { background: rgba(46,204,138,.05); }
 
-.ritual-card.completed { border-color: var(–green); }
-.ritual-card.completed .card-header { background: rgba(46,204,138,.06); }
-
-.card-header {
+.rcard-hdr {
 display: flex;
 align-items: center;
-gap: 12px;
-padding: 14px 16px;
+gap: 10px;
+padding: 13px 14px;
 border-bottom: 1px solid var(–border);
 cursor: pointer;
 user-select: none;
 }
 
-.card-icon {
-width: 36px; height: 36px;
-border-radius: 8px;
+.rcard-icon {
+width: 34px; height: 34px;
+border-radius: 7px;
 display: flex; align-items: center; justify-content: center;
-font-size: 18px;
-flex-shrink: 0;
+font-size: 17px; flex-shrink: 0;
 }
 
-.card-meta { flex: 1; }
+.rcard-meta { flex: 1; min-width: 0; }
 
-.card-title {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 17px;
+.rcard-title {
+font-family: var(–ff-display);
+font-size: 16px;
 letter-spacing: .5px;
 line-height: 1.1;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
 }
 
-.card-subtitle {
-font-family: ‘JetBrains Mono’, monospace;
+.rcard-sub {
+font-family: var(–ff-mono);
 font-size: 9px;
 letter-spacing: 1px;
 color: var(–muted);
@@ -315,275 +353,188 @@ text-transform: uppercase;
 margin-top: 2px;
 }
 
-.card-status {
-display: flex;
-align-items: center;
-gap: 8px;
-}
+.rcard-right { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
 
-.done-badge {
+.done-tag {
 display: none;
 background: var(–green);
 color: #000;
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9px;
+font-family: var(–ff-mono);
+font-size: 8px;
 letter-spacing: 1px;
-padding: 3px 7px;
+padding: 2px 6px;
 border-radius: 3px;
 text-transform: uppercase;
-font-weight: 600;
+font-weight: 700;
 }
+.rcard.done .done-tag { display: block; }
 
-.ritual-card.completed .done-badge { display: block; }
-
-.toggle-arrow {
+.arr {
 color: var(–muted);
-font-size: 14px;
+font-size: 12px;
 transition: transform .3s;
 }
+.rcard.open .arr { transform: rotate(180deg); }
 
-.ritual-card.open .toggle-arrow { transform: rotate(180deg); }
+.rcard-body { display: none; padding: 14px; }
+.rcard.open .rcard-body { display: block; }
 
-.card-body { display: none; padding: 16px; }
-.ritual-card.open .card-body { display: block; }
+/* tags */
+.tag {
+display: inline-block;
+font-family: var(–ff-mono);
+font-size: 8px;
+letter-spacing: 1px;
+padding: 2px 6px;
+border-radius: 2px;
+text-transform: uppercase;
+margin-left: 5px;
+vertical-align: middle;
+}
+.tag-must { background: rgba(255,71,87,.15); border: 1px solid rgba(255,71,87,.3); color: var(–red); }
+.tag-opt  { background: rgba(74,98,120,.12); border: 1px solid rgba(74,98,120,.3); color: var(–muted); }
 
 /* ── TIMER ── */
-.timer-block {
+.timer-row {
 display: flex;
 align-items: center;
-gap: 12px;
+gap: 10px;
 background: var(–card2);
 border: 1px solid var(–border2);
 border-radius: 8px;
-padding: 14px 16px;
-margin-bottom: 14px;
+padding: 12px 14px;
+margin-bottom: 12px;
+flex-wrap: wrap;
 }
-
-.timer-display {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 32px;
+.timer-num {
+font-family: var(–ff-mono);
+font-size: 30px;
 font-weight: 600;
 color: var(–gold);
 letter-spacing: 2px;
-min-width: 100px;
+min-width: 90px;
+}
+.timer-num.trun { color: var(–fire); }
+.timer-num.tdone { color: var(–green); }
+
+.tbars { flex: 1; min-width: 120px; }
+.tbar-info {
+font-family: var(–ff-mono);
+font-size: 8px;
+letter-spacing: 1px;
+color: var(–muted);
+text-transform: uppercase;
+margin-bottom: 4px;
+}
+.tbar {
+height: 4px;
+background: var(–border2);
+border-radius: 2px;
+overflow: hidden;
+}
+.tbar-fill {
+height: 100%;
+background: linear-gradient(90deg, var(–fire), var(–gold));
+border-radius: 2px;
+width: 0%;
+transition: width .4s;
 }
 
-.timer-display.running { color: var(–fire); animation: blink-color 1s ease infinite; }
-.timer-display.done-t { color: var(–green); }
-
-@keyframes blink-color {
-0%, 100% { opacity: 1; }
-50% { opacity: .7; }
-}
-
-.timer-controls { display: flex; gap: 8px; flex-wrap: wrap; }
-
-.tbtn-ctrl {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 10px;
+.tbtns { display: flex; gap: 6px; flex-wrap: wrap; }
+.tbtn {
+font-family: var(–ff-mono);
+font-size: 9px;
 letter-spacing: 1px;
 text-transform: uppercase;
-padding: 7px 14px;
+padding: 6px 12px;
 border: 1px solid var(–border2);
 border-radius: 4px;
 background: transparent;
 color: var(–soft);
 cursor: pointer;
 transition: all .2s;
+white-space: nowrap;
 }
+.tbtn.ts { background: var(–fire); color: #fff; border-color: var(–fire); }
+.tbtn.tp { background: var(–red); color: #fff; border-color: var(–red); }
+.tbtn:hover:not(.ts):not(.tp) { border-color: var(–soft); color: var(–text); }
 
-.tbtn-ctrl.start { background: var(–fire); color: #fff; border-color: var(–fire); }
-.tbtn-ctrl.stop { background: var(–red); color: #fff; border-color: var(–red); }
-.tbtn-ctrl.reset { background: transparent; }
-.tbtn-ctrl:hover:not(.start):not(.stop) { border-color: var(–muted); color: var(–text); }
-
-.timer-target {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9px;
-letter-spacing: 1px;
-color: var(–muted);
-text-transform: uppercase;
-margin-top: 4px;
-}
-
-.timer-bar {
-height: 3px;
-background: var(–border2);
-border-radius: 2px;
-margin-top: 10px;
-overflow: hidden;
-}
-
-.timer-bar-fill {
-height: 100%;
-background: linear-gradient(90deg, var(–fire), var(–gold));
-border-radius: 2px;
-width: 0%;
-transition: width .5s ease;
-}
-
-/* ── FORM ELEMENTS ── */
-.field-group { margin-bottom: 12px; }
-
-.field-label {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9px;
+/* ── FORM ── */
+.fl { margin-bottom: 10px; }
+.fl label {
+display: block;
+font-family: var(–ff-mono);
+font-size: 8px;
 letter-spacing: 2px;
 color: var(–muted);
 text-transform: uppercase;
-margin-bottom: 5px;
-display: block;
+margin-bottom: 4px;
 }
-
-.field-input, .field-textarea, .field-select {
+.fi, .fta, .fsel {
 width: 100%;
 background: var(–bg);
 border: 1px solid var(–border2);
 border-radius: 6px;
 color: var(–text);
-font-family: ‘DM Sans’, sans-serif;
+font-family: var(–ff-body);
 font-size: 13px;
-padding: 9px 12px;
+padding: 8px 11px;
 transition: border-color .2s;
-resize: vertical;
+appearance: none;
 }
+.fi:focus, .fta:focus, .fsel:focus { outline: none; border-color: var(–fire); }
+.fta { min-height: 65px; resize: vertical; line-height: 1.55; }
 
-.field-input:focus, .field-textarea:focus, .field-select:focus {
-outline: none;
-border-color: var(–fire);
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+@media(max-width:480px) { .g2,.g3 { grid-template-columns: 1fr; } }
+
+.div { height: 1px; background: var(–border); margin: 12px 0; }
+
+/* ── AFFIRM ── */
+.aff-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.aff-n {
+font-family: var(–ff-display);
+font-size: 18px;
+color: rgba(245,166,35,.25);
+width: 18px; flex-shrink: 0;
 }
-
-.field-textarea { min-height: 70px; line-height: 1.55; }
-
-.field-2col {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 10px;
-}
-
-.field-3col {
-display: grid;
-grid-template-columns: 1fr 1fr 1fr;
-gap: 10px;
-}
-
-@media(max-width:500px) {
-.field-2col, .field-3col { grid-template-columns: 1fr; }
-}
-
-/* ── AFFIRMATIONS ── */
-.affirm-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
-
-.affirm-item {
-display: flex;
-align-items: center;
-gap: 10px;
-}
-
-.affirm-num {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 20px;
-color: rgba(245,166,35,.3);
-flex-shrink: 0;
-width: 20px;
-}
-
-.affirm-input {
+.aff-fi {
 flex: 1;
 background: var(–bg);
 border: 1px solid var(–border2);
 border-radius: 6px;
 color: var(–text);
-font-family: ‘DM Sans’, sans-serif;
+font-family: var(–ff-body);
 font-size: 13px;
-padding: 8px 12px;
+padding: 7px 11px;
 transition: border-color .2s;
 }
+.aff-fi:focus { outline: none; border-color: var(–gold); }
 
-.affirm-input:focus { outline: none; border-color: var(–gold); }
-
-.repeat-badge {
-display: inline-flex;
-align-items: center;
-gap: 5px;
-background: rgba(245,166,35,.1);
-border: 1px solid rgba(245,166,35,.2);
-color: var(–gold);
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9px;
-letter-spacing: 1px;
-padding: 4px 10px;
-border-radius: 3px;
-text-transform: uppercase;
-margin-bottom: 10px;
-}
-
-.repeat-counter {
-display: flex;
-gap: 8px;
-margin-bottom: 12px;
-}
-
+.rep-wrap { display: flex; gap: 8px; margin: 10px 0; }
 .rep-btn {
-padding: 7px 16px;
-border-radius: 4px;
+flex: 1;
+padding: 8px;
+border-radius: 5px;
 border: 1px solid var(–border2);
 background: transparent;
 color: var(–soft);
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 10px;
+font-family: var(–ff-mono);
+font-size: 9px;
 letter-spacing: 1px;
 cursor: pointer;
 transition: all .2s;
 text-transform: uppercase;
+text-align: center;
 }
-
-.rep-btn.done-rep { background: var(–gold); color: #000; border-color: var(–gold); }
-
-/* ── TRADE CARD ── */
-.trade-section {
-background: var(–card2);
-border: 1px solid var(–border2);
-border-radius: 8px;
-overflow: hidden;
-margin-bottom: 12px;
-}
-
-.trade-header {
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding: 11px 14px;
-background: rgba(59,158,255,.05);
-border-bottom: 1px solid var(–border2);
-}
-
-.trade-num {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 16px;
-letter-spacing: 1px;
-color: var(–blue);
-}
-
-.trade-result-badge {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9px;
-letter-spacing: 1px;
-padding: 3px 8px;
-border-radius: 3px;
-text-transform: uppercase;
-}
-
-.trade-body { padding: 12px 14px; }
+.rep-btn.rdone { background: var(–gold); color: #000; border-color: var(–gold); font-weight: 700; }
 
 /* ── CHECKLIST ── */
-.checklist { display: flex; flex-direction: column; gap: 8px; }
-
-.check-item {
-display: flex;
-align-items: center;
-gap: 10px;
-padding: 10px 12px;
+.clist { display: flex; flex-direction: column; gap: 7px; }
+.ci {
+display: flex; align-items: center; gap: 9px;
+padding: 9px 11px;
 background: var(–bg);
 border: 1px solid var(–border);
 border-radius: 6px;
@@ -591,260 +542,176 @@ cursor: pointer;
 transition: border-color .2s, background .2s;
 user-select: none;
 }
-
-.check-item:hover { border-color: var(–border2); }
-
-.check-item.checked {
-background: rgba(46,204,138,.05);
-border-color: rgba(46,204,138,.3);
-}
-
-.check-box {
-width: 20px; height: 20px;
+.ci:hover { border-color: var(–border2); }
+.ci.ck { background: rgba(46,204,138,.05); border-color: rgba(46,204,138,.3); }
+.ci-box {
+width: 18px; height: 18px;
 border: 2px solid var(–border2);
-border-radius: 4px;
+border-radius: 3px;
 flex-shrink: 0;
 display: flex; align-items: center; justify-content: center;
-font-size: 11px;
-color: #000;
+font-size: 10px; color: #000;
 transition: all .2s;
 }
+.ci.ck .ci-box { background: var(–green); border-color: var(–green); }
+.ci-txt { font-size: 13px; color: var(–soft); flex: 1; line-height: 1.4; }
+.ci.ck .ci-txt { color: var(–green); text-decoration: line-through; }
+.ci-ic { font-size: 15px; flex-shrink: 0; }
 
-.check-item.checked .check-box {
-background: var(–green);
-border-color: var(–green);
+/* ── TRADE SECTION ── */
+.trade-wrap {
+background: var(–card2);
+border: 1px solid var(–border2);
+border-radius: 8px;
+overflow: hidden;
+margin-bottom: 10px;
 }
-
-.check-text { font-size: 13px; color: var(–soft); flex: 1; }
-.check-item.checked .check-text { color: var(–green); text-decoration: line-through; }
-
-.check-icon { font-size: 16px; }
-
-/* ── GRATITUDE ── */
-.gratitude-list { display: flex; flex-direction: column; gap: 7px; }
-
-.gratitude-item {
-display: flex;
-align-items: center;
-gap: 8px;
+.trade-hdr {
+display: flex; align-items: center; justify-content: space-between;
+padding: 9px 13px;
+background: rgba(59,158,255,.05);
+border-bottom: 1px solid var(–border2);
 }
-
-.gratitude-num {
-font-family: ‘JetBrains Mono’, monospace;
+.trade-lbl {
+font-family: var(–ff-display);
+font-size: 15px;
+letter-spacing: 1px;
+color: var(–blue);
+}
+.trade-body { padding: 11px 13px; }
+.fsel {
+background: var(–bg);
+border: 1px solid var(–border2);
+border-radius: 4px;
+color: var(–text);
+font-family: var(–ff-mono);
 font-size: 10px;
-color: var(–muted);
-flex-shrink: 0;
-width: 16px;
+padding: 4px 8px;
+cursor: pointer;
 }
 
-/* ── SUMMARY SECTION ── */
-.summary-grid {
+/* ── SUMMARY ── */
+.sum-grid {
 display: grid;
-grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-gap: 10px;
-margin-bottom: 16px;
+grid-template-columns: repeat(3, 1fr);
+gap: 8px;
+margin-bottom: 14px;
 }
+@media(max-width:480px) { .sum-grid { grid-template-columns: repeat(2, 1fr); } }
 
-.sum-card {
+.sum-c {
 background: var(–card2);
 border: 1px solid var(–border);
-border-radius: 8px;
-padding: 14px;
+border-radius: 7px;
+padding: 12px 10px;
 text-align: center;
 }
-
-.sum-icon { font-size: 22px; margin-bottom: 6px; }
-.sum-time {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 26px;
+.sum-ic { font-size: 20px; margin-bottom: 4px; }
+.sum-v {
+font-family: var(–ff-display);
+font-size: 24px;
 color: var(–gold);
 line-height: 1;
-margin-bottom: 3px;
+margin-bottom: 2px;
+letter-spacing: 1px;
 }
-
-.sum-label {
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9px;
+.sum-l {
+font-family: var(–ff-mono);
+font-size: 8px;
 letter-spacing: 1px;
 color: var(–muted);
 text-transform: uppercase;
 }
 
-/* ── 100 DAY GRID ── */
-.hundred-grid {
-display: grid;
-grid-template-columns: repeat(20, 1fr);
-gap: 4px;
-margin-top: 12px;
+.total-box {
+background: var(–card2);
+border: 1px solid rgba(245,166,35,.2);
+border-radius: 8px;
+padding: 16px;
+text-align: center;
 }
-
-.day-dot {
-aspect-ratio: 1;
-border-radius: 3px;
-background: var(–border);
-cursor: pointer;
-transition: all .2s;
-position: relative;
-}
-
-.day-dot:hover { transform: scale(1.3); z-index: 10; }
-.day-dot.done { background: var(–green); }
-.day-dot.partial { background: var(–gold); }
-.day-dot.today { background: var(–fire); box-shadow: 0 0 8px rgba(255,95,31,.5); }
-.day-dot.future { background: var(–border); opacity: .4; }
-
-.day-dot-tip {
-position: absolute;
-bottom: calc(100% + 5px);
-left: 50%;
-transform: translateX(-50%);
-background: var(–card);
-border: 1px solid var(–border2);
-border-radius: 4px;
-padding: 3px 7px;
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 9px;
-color: var(–text);
-white-space: nowrap;
-display: none;
-z-index: 100;
-}
-
-.day-dot:hover .day-dot-tip { display: block; }
-
-/* ── SECTION LABELS ── */
-.section-label {
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 13px;
+.total-lbl {
+font-family: var(–ff-mono);
+font-size: 8px;
 letter-spacing: 2px;
 color: var(–muted);
 text-transform: uppercase;
-margin-bottom: 12px;
-display: flex;
-align-items: center;
-gap: 8px;
+margin-bottom: 5px;
 }
-
-.section-label::after {
-content: ‘’;
-flex: 1;
-height: 1px;
-background: var(–border);
+.total-val {
+font-family: var(–ff-display);
+font-size: 50px;
+color: var(–gold);
+line-height: 1;
+letter-spacing: 2px;
+}
+.total-target {
+font-family: var(–ff-mono);
+font-size: 9px;
+color: var(–muted);
+margin-top: 5px;
+}
+.total-pbar { height: 5px; background: var(–border2); border-radius: 3px; margin-top: 10px; overflow: hidden; }
+.total-pfill {
+height: 100%;
+background: linear-gradient(90deg, var(–fire), var(–gold));
+border-radius: 3px;
+width: 0%;
+transition: width .8s ease;
 }
 
 /* ── SAVE BTN ── */
-.save-btn {
-display: block;
-width: 100%;
-padding: 14px;
-background: linear-gradient(135deg, var(–fire), #FF8C00);
-border: none;
-border-radius: 8px;
+.sbtn {
+display: block; width: 100%;
+padding: 12px; margin-top: 10px;
+background: linear-gradient(135deg, var(–fire), #e05000);
+border: none; border-radius: 7px;
 color: #fff;
-font-family: ‘Bebas Neue’, sans-serif;
-font-size: 18px;
+font-family: var(–ff-display);
+font-size: 16px;
 letter-spacing: 2px;
 cursor: pointer;
 transition: transform .2s, box-shadow .2s;
-margin-top: 8px;
 }
-
-.save-btn:hover {
-transform: translateY(-2px);
-box-shadow: 0 8px 24px rgba(255,95,31,.3);
-}
+.sbtn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,95,31,.3); }
+.sbtn.g { background: linear-gradient(135deg, var(–green), #1a9a60); }
+.sbtn.b { background: linear-gradient(135deg, var(–gold), #c47a00); }
+.sbtn.p { background: linear-gradient(135deg, var(–purple), #5b21b6); }
+.sbtn.c { background: linear-gradient(135deg, var(–cyan), #0090aa); }
 
 /* ── TOAST ── */
 .toast {
-position: fixed;
-bottom: 24px;
-right: 24px;
-background: var(–green);
-color: #000;
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 11px;
-letter-spacing: 1px;
-padding: 10px 18px;
-border-radius: 6px;
-opacity: 0;
-transform: translateY(10px);
-transition: all .3s;
-z-index: 999;
-text-transform: uppercase;
+position: fixed; bottom: 20px; right: 16px;
+background: var(–green); color: #000;
+font-family: var(–ff-mono);
+font-size: 10px; letter-spacing: 1px;
+padding: 9px 16px; border-radius: 6px;
+opacity: 0; transform: translateY(8px);
+transition: all .3s; z-index: 999;
+text-transform: uppercase; font-weight: 700;
+max-width: calc(100vw - 32px);
 }
-
 .toast.show { opacity: 1; transform: translateY(0); }
 
-/* ── COLOUR ACCENTS PER CARD ── */
-.c-meditation .card-icon { background: rgba(139,92,246,.2); }
-.c-meditation .card-title { color: var(–purple); }
-.c-meditation .timer-display { color: var(–purple); }
-.c-meditation .timer-display.running { color: var(–fire); }
-.c-meditation .timer-display.done-t { color: var(–green); }
-.c-meditation.completed .card-header { border-bottom-color: rgba(139,92,246,.2); }
-
-.c-physical .card-icon { background: rgba(46,204,138,.2); }
-.c-physical .card-title { color: var(–green); }
-
-.c-affirmations .card-icon { background: rgba(245,166,35,.2); }
-.c-affirmations .card-title { color: var(–gold); }
-
-.c-podcast .card-icon { background: rgba(0,212,255,.2); }
-.c-podcast .card-title { color: var(–cyan); }
-
-.c-trading .card-icon { background: rgba(59,158,255,.2); }
-.c-trading .card-title { color: var(–blue); }
-
-.c-learning .card-icon { background: rgba(255,95,31,.2); }
-.c-learning .card-title { color: var(–fire); }
-
-.c-diploma .card-icon { background: rgba(139,92,246,.2); }
-.c-diploma .card-title { color: var(–purple); }
-
-.c-night .card-icon { background: rgba(255,190,11,.2); }
-.c-night .card-title { color: var(–amber); }
-
-/* COMPULSORY tag */
-.compulsory-tag {
-display: inline-block;
-background: rgba(255,71,87,.15);
-border: 1px solid rgba(255,71,87,.3);
-color: var(–red);
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 8px;
-letter-spacing: 1px;
-padding: 2px 6px;
-border-radius: 2px;
-text-transform: uppercase;
-margin-left: 6px;
-}
-
-.optional-tag {
-display: inline-block;
-background: rgba(74,98,120,.15);
-border: 1px solid rgba(74,98,120,.3);
-color: var(–muted);
-font-family: ‘JetBrains Mono’, monospace;
-font-size: 8px;
-letter-spacing: 1px;
-padding: 2px 6px;
-border-radius: 2px;
-text-transform: uppercase;
-margin-left: 6px;
-}
-
-.divider { height: 1px; background: var(–border); margin: 14px 0; }
-
-@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-.ritual-card { animation: fadeIn .4s ease both; }
-.ritual-card:nth-child(1) { animation-delay: .05s; }
-.ritual-card:nth-child(2) { animation-delay: .1s; }
-.ritual-card:nth-child(3) { animation-delay: .15s; }
-.ritual-card:nth-child(4) { animation-delay: .2s; }
-.ritual-card:nth-child(5) { animation-delay: .25s; }
-.ritual-card:nth-child(6) { animation-delay: .3s; }
-
+/* ── COLOUR ACCENTS ── */
+.c-med .rcard-icon { background: rgba(139,92,246,.2); }
+.c-med .rcard-title { color: var(–purple); }
+.c-phy .rcard-icon { background: rgba(46,204,138,.2); }
+.c-phy .rcard-title { color: var(–green); }
+.c-aff .rcard-icon { background: rgba(245,166,35,.2); }
+.c-aff .rcard-title { color: var(–gold); }
+.c-pod .rcard-icon { background: rgba(0,212,255,.2); }
+.c-pod .rcard-title { color: var(–cyan); }
+.c-trd .rcard-icon { background: rgba(59,158,255,.2); }
+.c-trd .rcard-title { color: var(–blue); }
+.c-pat .rcard-icon { background: rgba(255,95,31,.2); }
+.c-pat .rcard-title { color: var(–fire); }
+.c-dip .rcard-icon { background: rgba(139,92,246,.2); }
+.c-dip .rcard-title { color: var(–purple); }
+.c-ngt .rcard-icon { background: rgba(255,190,11,.2); }
+.c-ngt .rcard-title { color: var(–amber); }
 </style>
+
 </head>
 <body>
 
@@ -854,959 +721,722 @@ margin-left: 6px;
   <div class="header-top">
     <div class="brand">
       <div class="brand-icon">🏆</div>
-      <div class="brand-text">
-        <div class="title">50K Challenge</div>
-        <div class="sub">100 Day Transformation · 2026</div>
+      <div>
+        <div class="brand-title">50K CHALLENGE</div>
+        <div class="brand-sub">100 Day · 2026</div>
       </div>
     </div>
-
-```
-<div class="day-selector">
-  <button class="day-btn" onclick="changeDay(-1)">‹</button>
-  <div class="day-display" id="dayDisplay">DAY 1</div>
-  <button class="day-btn" onclick="changeDay(1)">›</button>
-</div>
-
-<div class="header-stats">
-  <div class="hstat">
-    <div class="hstat-val" id="hDaysLeft">99</div>
-    <div class="hstat-lbl">Days Left</div>
+    <div class="header-right">
+      <div class="day-nav">
+        <button class="nav-btn" onclick="chDay(-1)">‹</button>
+        <div class="day-label" id="dayLbl">DAY 1</div>
+        <button class="nav-btn" onclick="chDay(1)">›</button>
+      </div>
+      <div class="hstats">
+        <div class="hs"><span class="hs-val" id="hLeft">99</span><span class="hs-lbl">Left</span></div>
+        <div class="hs"><span class="hs-val" id="hStreak">0🔥</span><span class="hs-lbl">Streak</span></div>
+        <div class="hs"><span class="hs-val" id="hPct">0%</span><span class="hs-lbl">Done</span></div>
+      </div>
+    </div>
   </div>
-  <div class="hstat">
-    <div class="hstat-val" id="hStreak">0🔥</div>
-    <div class="hstat-lbl">Streak</div>
-  </div>
-  <div class="hstat">
-    <div class="hstat-val" id="hCompleted">0%</div>
-    <div class="hstat-lbl">Challenge</div>
-  </div>
-</div>
-```
-
-  </div>
-  <div class="global-progress">
-    <div class="global-progress-fill" id="globalFill" style="width:1%"></div>
-  </div>
+  <div class="gpbar"><div class="gpbar-fill" id="gpFill" style="width:1%"></div></div>
 </div>
 
 <!-- MAIN -->
 
 <div class="main">
 
-  <!-- DATE HERO -->
+<!-- DATE HERO -->
 
-  <div class="date-hero">
-    <div class="date-left">
-      <div class="day-big">DAY <span id="bigDay">1</span></div>
-      <div class="date-str" id="dateStr">Loading...</div>
-    </div>
-    <div style="display:flex; gap:24px; align-items:center; flex-wrap:wrap;">
-      <div class="daily-score-ring">
-        <div class="ring-wrap">
-          <svg width="100" height="100" viewBox="0 0 100 100">
-            <circle class="ring-bg" cx="50" cy="50" r="40"/>
-            <circle class="ring-fill" id="ringFill" cx="50" cy="50" r="40"/>
-          </svg>
-          <div class="ring-text">
-            <div class="ring-pct" id="ringPct">0%</div>
-            <div class="ring-lbl">Today</div>
-          </div>
-        </div>
+<div class="date-hero">
+  <div>
+    <div style="font-family:var(--ff-mono);font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Day of Challenge</div>
+    <div class="day-big-num">DAY <span id="bigDay">1</span></div>
+    <div class="day-big-sub" id="dateStr">Thursday, 1 January 2026</div>
+  </div>
+  <div class="hero-right">
+    <div class="ring-wrap">
+      <svg width="90" height="90" viewBox="0 0 90 90">
+        <circle class="ring-bg" cx="45" cy="45" r="36"/>
+        <circle class="ring-fill" id="ringCirc" cx="45" cy="45" r="36"/>
+      </svg>
+      <div class="ring-inner">
+        <div class="ring-pct" id="ringPct">0%</div>
+        <div class="ring-lbl">Today</div>
       </div>
-      <div>
-        <div class="daily-time-lbl" style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">Productive Today</div>
-        <div class="daily-time-val" id="totalProdTime">0h 0m</div>
-        <div style="height:8px;"></div>
-        <div class="daily-time-lbl" style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">Tasks Done</div>
-        <div class="daily-time-val" id="tasksDone" style="color:var(--gold);">0 / 8</div>
+    </div>
+    <div class="hero-stats-col">
+      <div class="hs2-row">
+        <div class="hs2-lbl">Productive Today</div>
+        <div class="hs2-val" id="prodTime">0h 0m</div>
+      </div>
+      <div class="hs2-row">
+        <div class="hs2-lbl">Tasks Done</div>
+        <div class="hs2-val gold" id="tasksDone">0 / 8</div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- 100 DAY GRID -->
+<!-- 100 DAY GRID -->
 
-  <div class="section-label">100 Day Progress Map</div>
-  <div class="hundred-grid" id="hundredGrid"></div>
+<div class="sec-label">100 Day Progress Map</div>
+<div class="dgrid" id="dgrid"></div>
 
-  <div style="height:28px;"></div>
+<!-- SECTION: MORNING -->
 
-  <!-- ════ RITUALS ════ -->
+<div class="sec-label" style="margin-top:6px;">Morning Rituals</div>
 
-  <div class="section-label" style="margin-top:8px;">Morning Rituals</div>
+<!-- MEDITATION -->
 
-  <div class="grid">
+<div class="rcard c-med" id="rc-med">
+  <div class="rcard-hdr" onclick="tog('med')">
+    <div class="rcard-icon">🧘</div>
+    <div class="rcard-meta">
+      <div class="rcard-title">Meditation <span class="tag tag-must">Compulsory</span></div>
+      <div class="rcard-sub">15 min · Silence &amp; Breath · Day <span class="db">1</span>/100</div>
+    </div>
+    <div class="rcard-right"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+  </div>
+  <div class="rcard-body">
+    <div class="timer-row">
+      <div class="timer-num" id="t-med">15:00</div>
+      <div class="tbars">
+        <div class="tbar-info">Target — 15 minutes</div>
+        <div class="tbar"><div class="tbar-fill" id="tb-med"></div></div>
+      </div>
+      <div class="tbtns">
+        <button class="tbtn ts" onclick="tStart('med',15)">▶️ Start</button>
+        <button class="tbtn tp" onclick="tStop('med')">■ Stop</button>
+        <button class="tbtn" onclick="tReset('med',15)">↺</button>
+      </div>
+    </div>
+    <div class="fl"><label>How did you feel during meditation?</label>
+    <textarea class="fta" id="f-med-note" placeholder="Mind was restless for first 5 min, then settled. Felt calm after..."></textarea></div>
+    <button class="sbtn p" onclick="done('med')">✓ Mark Meditation Complete</button>
+  </div>
+</div>
+
+<!-- PHYSICAL -->
+
+<div class="rcard c-phy" id="rc-phy">
+  <div class="rcard-hdr" onclick="tog('phy')">
+    <div class="rcard-icon">🏀</div>
+    <div class="rcard-meta">
+      <div class="rcard-title">Physical Activity <span class="tag tag-must">Compulsory</span></div>
+      <div class="rcard-sub">30 min · Move · Win the morning</div>
+    </div>
+    <div class="rcard-right"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+  </div>
+  <div class="rcard-body">
+    <div class="fl"><label>Activity Name — What did you do?</label>
+    <input type="text" class="fi" id="f-phy-act" placeholder="e.g. Basketball · Running 3km · Home Circuit · Cycling..."></div>
+    <div class="timer-row">
+      <div class="timer-num" id="t-phy">30:00</div>
+      <div class="tbars">
+        <div class="tbar-info">Target — 30 minutes</div>
+        <div class="tbar"><div class="tbar-fill" id="tb-phy"></div></div>
+      </div>
+      <div class="tbtns">
+        <button class="tbtn ts" onclick="tStart('phy',30)">▶️ Start</button>
+        <button class="tbtn tp" onclick="tStop('phy')">■ Stop</button>
+        <button class="tbtn" onclick="tReset('phy',30)">↺</button>
+      </div>
+    </div>
+    <div class="fl"><label>Energy level / how it felt</label>
+    <textarea class="fta" id="f-phy-note" placeholder="Felt heavy at start. Won 3 basketball games. Energised after..." style="min-height:50px;"></textarea></div>
+    <button class="sbtn g" onclick="done('phy')">✓ Mark Physical Complete</button>
+  </div>
+</div>
+
+<!-- AFFIRMATIONS -->
+
+<div class="rcard c-aff" id="rc-aff">
+  <div class="rcard-hdr" onclick="tog('aff')">
+    <div class="rcard-icon">✍️</div>
+    <div class="rcard-meta">
+      <div class="rcard-title">Affirmations + Gratitude <span class="tag tag-must">Compulsory</span></div>
+      <div class="rcard-sub">5 affirmations · Speak 2× · 3 gratitudes</div>
+    </div>
+    <div class="rcard-right"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+  </div>
+  <div class="rcard-body">
+    <div class="sec-label" style="font-size:8px;margin-bottom:8px;">Write 5 Affirmations in Your Notebook</div>
+    <div class="aff-row"><div class="aff-n">1</div><input type="text" class="aff-fi" id="f-a1" placeholder="I am a disciplined trader who follows my rules..."></div>
+    <div class="aff-row"><div class="aff-n">2</div><input type="text" class="aff-fi" id="f-a2" placeholder="I wake at 5:30 AM and invest in my future daily..."></div>
+    <div class="aff-row"><div class="aff-n">3</div><input type="text" class="aff-fi" id="f-a3" placeholder="I am building a life my daughter is proud of..."></div>
+    <div class="aff-row"><div class="aff-n">4</div><input type="text" class="aff-fi" id="f-a4" placeholder="I learn from every trade, win or loss..."></div>
+    <div class="aff-row"><div class="aff-n">5</div><input type="text" class="aff-fi" id="f-a5" placeholder="I am becoming top 1% through daily consistency..."></div>
+    <div class="div"></div>
+    <div class="sec-label" style="font-size:8px;margin-bottom:6px;">Speak Aloud — 2 Rounds</div>
+    <div class="rep-wrap">
+      <button class="rep-btn" id="rb1" onclick="rep(1)">Round 1 — Speak Now</button>
+      <button class="rep-btn" id="rb2" onclick="rep(2)">Round 2 — Speak Now</button>
+    </div>
+    <div class="div"></div>
+    <div class="sec-label" style="font-size:8px;margin-bottom:8px;">3 Gratitudes</div>
+    <div class="fl"><input type="text" class="fi" id="f-g1" placeholder="I am grateful for..."></div>
+    <div class="fl"><input type="text" class="fi" id="f-g2" placeholder="I am grateful for..."></div>
+    <div class="fl"><input type="text" class="fi" id="f-g3" placeholder="I am grateful for..."></div>
+    <button class="sbtn b" onclick="done('aff')" style="margin-top:10px;">✓ Mark Affirmations Complete</button>
+  </div>
+</div>
+
+<!-- PODCAST -->
+
+<div class="rcard c-pod" id="rc-pod">
+  <div class="rcard-hdr" onclick="tog('pod')">
+    <div class="rcard-icon">🎧</div>
+    <div class="rcard-meta">
+      <div class="rcard-title">Morning Podcast <span class="tag tag-must">Compulsory</span></div>
+      <div class="rcard-sub">40 min · One episode · Metro / Home</div>
+    </div>
+    <div class="rcard-right"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+  </div>
+  <div class="rcard-body">
+    <div class="fl"><label>Podcast Name + Episode</label>
+    <input type="text" class="fi" id="f-pod-name" placeholder="e.g. Chat With Traders Ep.245 — Risk Management Systems..."></div>
+    <div class="timer-row">
+      <div class="timer-num" id="t-pod">40:00</div>
+      <div class="tbars">
+        <div class="tbar-info">Target — 40 minutes</div>
+        <div class="tbar"><div class="tbar-fill" id="tb-pod"></div></div>
+      </div>
+      <div class="tbtns">
+        <button class="tbtn ts" onclick="tStart('pod',40)">▶️ Start</button>
+        <button class="tbtn tp" onclick="tStop('pod')">■ Stop</button>
+        <button class="tbtn" onclick="tReset('pod',40)">↺</button>
+      </div>
+    </div>
+    <div class="fl"><label>Key Insight from this Episode</label>
+    <textarea class="fta" id="f-pod-note" placeholder="The single most important thing I learned today was..."></textarea></div>
+    <button class="sbtn c" onclick="done('pod')">✓ Mark Podcast Complete</button>
+  </div>
+</div>
+
+<!-- TRADING -->
+
+<div class="sec-label" style="margin-top:6px;">Trading Block</div>
+
+<div class="rcard c-trd" id="rc-trd">
+  <div class="rcard-hdr" onclick="tog('trd')">
+    <div class="rcard-icon">📊</div>
+    <div class="rcard-meta">
+      <div class="rcard-title">Paper Trades 1 + 2 <span class="tag tag-must">Compulsory</span></div>
+      <div class="rcard-sub">Max loss $100 each · Full journal · Both trades</div>
+    </div>
+    <div class="rcard-right"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+  </div>
+  <div class="rcard-body">
 
 ```
-<!-- 1. MEDITATION -->
-<div class="ritual-card c-meditation" id="card-meditation">
-  <div class="card-header" onclick="toggleCard('meditation')">
-    <div class="card-icon">🧘</div>
-    <div class="card-meta">
-      <div class="card-title">Meditation <span class="compulsory-tag">Compulsory</span></div>
-      <div class="card-subtitle">15 min · Silence & Breath · Day <span class="day-badge">1</span>/100</div>
-    </div>
-    <div class="card-status">
-      <div class="done-badge">✓ Done</div>
-      <div class="toggle-arrow">▼</div>
-    </div>
+<!-- TRADE 1 -->
+<div class="trade-wrap">
+  <div class="trade-hdr">
+    <div class="trade-lbl">📈 TRADE 1</div>
+    <select class="fsel" id="f-t1-res">
+      <option value="">— Result —</option>
+      <option value="win">✅ WIN</option>
+      <option value="loss">❌ LOSS</option>
+      <option value="be">⚖️ BREAKEVEN</option>
+    </select>
   </div>
-  <div class="card-body">
-    <div class="timer-block">
-      <div>
-        <div class="timer-display" id="timer-meditation">15:00</div>
-        <div class="timer-target">Target: 15 minutes</div>
-        <div class="timer-bar"><div class="timer-bar-fill" id="bar-meditation"></div></div>
-      </div>
-      <div class="timer-controls">
-        <button class="tbtn-ctrl start" onclick="startTimer('meditation', 15)">▶️ Start</button>
-        <button class="tbtn-ctrl stop" onclick="stopTimer('meditation')">■ Stop</button>
-        <button class="tbtn-ctrl reset" onclick="resetTimer('meditation', 15)">↺ Reset</button>
-      </div>
+  <div class="trade-body">
+    <div class="fl"><label>Structure / Setup Seen</label>
+    <input type="text" class="fi" id="f-t1-str" placeholder="e.g. Bullish Engulfing at support — BankNifty 15min..."></div>
+    <div class="g3">
+      <div class="fl"><label>Entry Price</label><input type="text" class="fi" id="f-t1-en" placeholder="₹44,200"></div>
+      <div class="fl"><label>Stop Loss (Max $100)</label><input type="text" class="fi" id="f-t1-sl" placeholder="₹43,900"></div>
+      <div class="fl"><label>Target (2:1 R:R)</label><input type="text" class="fi" id="f-t1-tg" placeholder="₹44,700"></div>
     </div>
-    <div class="field-group">
-      <label class="field-label">Meditation Note — How did you feel?</label>
-      <textarea class="field-textarea" id="meditation-note" placeholder="e.g. Mind was restless for first 5 min, then settled. Felt calm after..."></textarea>
+    <div class="g2">
+      <div class="fl"><label>Exit Price</label><input type="text" class="fi" id="f-t1-ex" placeholder="Actual exit"></div>
+      <div class="fl"><label>Time in Trade</label><input type="text" class="fi" id="f-t1-tm" placeholder="e.g. 1h 20m"></div>
     </div>
-    <button class="save-btn" onclick="markDone('meditation')">Mark Meditation Complete ✓</button>
-  </div>
-</div>
-
-<!-- 2. PHYSICAL -->
-<div class="ritual-card c-physical" id="card-physical">
-  <div class="card-header" onclick="toggleCard('physical')">
-    <div class="card-icon">🏀</div>
-    <div class="card-meta">
-      <div class="card-title">Physical Activity <span class="compulsory-tag">Compulsory</span></div>
-      <div class="card-subtitle">30 min · Move the body · Day <span class="day-badge">1</span>/100</div>
+    <div class="fl"><label>Entry Logic / Reason</label>
+    <textarea class="fta" id="f-t1-why" placeholder="Why did this setup qualify? Be specific about your rules..."></textarea></div>
+    <div class="g2">
+      <div class="fl"><label>✅ Good Decision</label>
+      <textarea class="fta" id="f-t1-gd" placeholder="What you did right — followed SL, waited for confirmation..." style="min-height:55px;"></textarea></div>
+      <div class="fl"><label>❌ Bad Decision</label>
+      <textarea class="fta" id="f-t1-bd" placeholder="What you did wrong — moved SL, entered early, FOMO..." style="min-height:55px;"></textarea></div>
     </div>
-    <div class="card-status">
-      <div class="done-badge">✓ Done</div>
-      <div class="toggle-arrow">▼</div>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="field-group">
-      <label class="field-label">Activity Name — What did you do today?</label>
-      <input type="text" class="field-input" id="physical-activity" placeholder="e.g. Basketball · Running · Home Circuit · Cycling...">
-    </div>
-    <div class="timer-block">
-      <div>
-        <div class="timer-display" id="timer-physical">30:00</div>
-        <div class="timer-target">Target: 30 minutes</div>
-        <div class="timer-bar"><div class="timer-bar-fill" id="bar-physical"></div></div>
-      </div>
-      <div class="timer-controls">
-        <button class="tbtn-ctrl start" onclick="startTimer('physical', 30)">▶️ Start</button>
-        <button class="tbtn-ctrl stop" onclick="stopTimer('physical')">■ Stop</button>
-        <button class="tbtn-ctrl reset" onclick="resetTimer('physical', 30)">↺ Reset</button>
-      </div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">How did it feel? Energy level after?</label>
-      <textarea class="field-textarea" id="physical-note" placeholder="e.g. Ran 3km. Legs were heavy at start. Felt energised after. Basketball — won 3 games..." style="min-height:55px;"></textarea>
-    </div>
-    <button class="save-btn" style="background:linear-gradient(135deg,var(--green),#1ea56a);" onclick="markDone('physical')">Mark Physical Complete ✓</button>
+    <div class="fl"><label>📚 Learning + Patience Score (1-10)</label>
+    <textarea class="fta" id="f-t1-lrn" placeholder="Key learning from this trade. Patience score: X/10 because..."></textarea></div>
   </div>
 </div>
 
-<!-- 3. AFFIRMATIONS -->
-<div class="ritual-card c-affirmations" id="card-affirmations">
-  <div class="card-header" onclick="toggleCard('affirmations')">
-    <div class="card-icon">✍️</div>
-    <div class="card-meta">
-      <div class="card-title">Affirmations + Gratitude <span class="compulsory-tag">Compulsory</span></div>
-      <div class="card-subtitle">5 affirmations · 2x repeat · 3 gratitudes</div>
-    </div>
-    <div class="card-status">
-      <div class="done-badge">✓ Done</div>
-      <div class="toggle-arrow">▼</div>
-    </div>
+<!-- TRADE 2 -->
+<div class="trade-wrap">
+  <div class="trade-hdr">
+    <div class="trade-lbl">📉 TRADE 2</div>
+    <select class="fsel" id="f-t2-res">
+      <option value="">— Result —</option>
+      <option value="win">✅ WIN</option>
+      <option value="loss">❌ LOSS</option>
+      <option value="be">⚖️ BREAKEVEN</option>
+    </select>
   </div>
-  <div class="card-body">
-    <div class="repeat-badge">📖 Write in notebook · Then speak aloud 2 times</div>
-
-    <div class="section-label" style="font-size:10px; margin-bottom:8px;">5 Affirmations</div>
-    <div class="affirm-list">
-      <div class="affirm-item"><div class="affirm-num">1</div><input type="text" class="affirm-input" id="affirm-1" placeholder="I am a disciplined trader who follows my system..."></div>
-      <div class="affirm-item"><div class="affirm-num">2</div><input type="text" class="affirm-input" id="affirm-2" placeholder="I wake up at 5:30 AM and invest in my future..."></div>
-      <div class="affirm-item"><div class="affirm-num">3</div><input type="text" class="affirm-input" id="affirm-3" placeholder="I am building a life my daughter will be proud of..."></div>
-      <div class="affirm-item"><div class="affirm-num">4</div><input type="text" class="affirm-input" id="affirm-4" placeholder="I learn from every trade, win or loss..."></div>
-      <div class="affirm-item"><div class="affirm-num">5</div><input type="text" class="affirm-input" id="affirm-5" placeholder="I am becoming the top 1% through daily consistency..."></div>
+  <div class="trade-body">
+    <div class="fl"><label>Structure / Setup Seen</label>
+    <input type="text" class="fi" id="f-t2-str" placeholder="e.g. Bearish breakdown below resistance — Nifty 5min..."></div>
+    <div class="g3">
+      <div class="fl"><label>Entry Price</label><input type="text" class="fi" id="f-t2-en" placeholder="₹19,850"></div>
+      <div class="fl"><label>Stop Loss (Max $100)</label><input type="text" class="fi" id="f-t2-sl" placeholder="₹20,050"></div>
+      <div class="fl"><label>Target (2:1 R:R)</label><input type="text" class="fi" id="f-t2-tg" placeholder="₹19,450"></div>
     </div>
-
-    <div class="divider"></div>
-
-    <div class="section-label" style="font-size:10px; margin-bottom:8px;">Spoken 2 Times — Mark Each Round</div>
-    <div class="repeat-counter">
-      <button class="rep-btn" id="rep1" onclick="markRepeat(1)">Round 1 — Speak It</button>
-      <button class="rep-btn" id="rep2" onclick="markRepeat(2)">Round 2 — Speak It</button>
+    <div class="g2">
+      <div class="fl"><label>Exit Price</label><input type="text" class="fi" id="f-t2-ex" placeholder="Actual exit"></div>
+      <div class="fl"><label>Time in Trade</label><input type="text" class="fi" id="f-t2-tm" placeholder="e.g. 45m"></div>
     </div>
-
-    <div class="divider"></div>
-
-    <div class="section-label" style="font-size:10px; margin-bottom:8px;">3 Gratitudes</div>
-    <div class="gratitude-list">
-      <div class="gratitude-item">
-        <div class="gratitude-num">1.</div>
-        <input type="text" class="field-input" id="gratitude-1" placeholder="I am grateful for...">
-      </div>
-      <div class="gratitude-item">
-        <div class="gratitude-num">2.</div>
-        <input type="text" class="field-input" id="gratitude-2" placeholder="I am grateful for...">
-      </div>
-      <div class="gratitude-item">
-        <div class="gratitude-num">3.</div>
-        <input type="text" class="field-input" id="gratitude-3" placeholder="I am grateful for...">
-      </div>
+    <div class="fl"><label>Entry Logic / Reason</label>
+    <textarea class="fta" id="f-t2-why" placeholder="What rule did this setup meet? Why did you enter?"></textarea></div>
+    <div class="g2">
+      <div class="fl"><label>✅ Good Decision</label>
+      <textarea class="fta" id="f-t2-gd" style="min-height:55px;" placeholder="What you did right..."></textarea></div>
+      <div class="fl"><label>❌ Bad Decision</label>
+      <textarea class="fta" id="f-t2-bd" style="min-height:55px;" placeholder="What you did wrong..."></textarea></div>
     </div>
-
-    <button class="save-btn" style="margin-top:14px; background:linear-gradient(135deg,var(--gold),#e07b00);" onclick="markDone('affirmations')">Mark Affirmations Complete ✓</button>
+    <div class="fl"><label>📚 Learning + Patience Score (1-10)</label>
+    <textarea class="fta" id="f-t2-lrn" placeholder="Key learning. Patience score: X/10 because..."></textarea></div>
   </div>
 </div>
 
-<!-- 4. PODCAST -->
-<div class="ritual-card c-podcast" id="card-podcast">
-  <div class="card-header" onclick="toggleCard('podcast')">
-    <div class="card-icon">🎧</div>
-    <div class="card-meta">
-      <div class="card-title">Morning Podcast <span class="compulsory-tag">Compulsory</span></div>
-      <div class="card-subtitle">40 min · One episode · Metro / Home</div>
-    </div>
-    <div class="card-status">
-      <div class="done-badge">✓ Done</div>
-      <div class="toggle-arrow">▼</div>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="field-group">
-      <label class="field-label">Podcast Name + Episode Title</label>
-      <input type="text" class="field-input" id="podcast-name" placeholder="e.g. Chat With Traders — Ep 245 · Risk Management...">
-    </div>
-    <div class="timer-block">
-      <div>
-        <div class="timer-display" id="timer-podcast">40:00</div>
-        <div class="timer-target">Target: 40 minutes</div>
-        <div class="timer-bar"><div class="timer-bar-fill" id="bar-podcast"></div></div>
-      </div>
-      <div class="timer-controls">
-        <button class="tbtn-ctrl start" onclick="startTimer('podcast', 40)">▶️ Start</button>
-        <button class="tbtn-ctrl stop" onclick="stopTimer('podcast')">■ Stop</button>
-        <button class="tbtn-ctrl reset" onclick="resetTimer('podcast', 40)">↺ Reset</button>
-      </div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Key Insight / Learning from this Episode</label>
-      <textarea class="field-textarea" id="podcast-note" placeholder="Write the single most important thing you learned..."></textarea>
-    </div>
-    <button class="save-btn" style="background:linear-gradient(135deg,var(--cyan),#0099bb);" onclick="markDone('podcast')">Mark Podcast Complete ✓</button>
-  </div>
-</div>
-```
-
-  </div><!-- /grid -->
-
-  <div style="height:20px;"></div>
-  <div class="section-label">Trading Block</div>
-
-  <div class="grid">
-
-```
-<!-- 5. TRADING -->
-<div class="ritual-card c-trading grid-full" id="card-trading">
-  <div class="card-header" onclick="toggleCard('trading')">
-    <div class="card-icon">📊</div>
-    <div class="card-meta">
-      <div class="card-title">Paper Trades — Trade 1 + Trade 2 <span class="compulsory-tag">Compulsory</span></div>
-      <div class="card-subtitle">2 trades · Max loss $100 each · Full journal required</div>
-    </div>
-    <div class="card-status">
-      <div class="done-badge">✓ Done</div>
-      <div class="toggle-arrow">▼</div>
-    </div>
-  </div>
-  <div class="card-body">
-
-    <!-- TRADE 1 -->
-    <div class="trade-section">
-      <div class="trade-header">
-        <div class="trade-num">📈 TRADE 1</div>
-        <select id="t1-result" style="background:var(--bg);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;" onchange="updateTradeResult(1)">
-          <option value="">— Result —</option>
-          <option value="win">✅ WIN</option>
-          <option value="loss">❌ LOSS</option>
-          <option value="breakeven">⚖️ BREAKEVEN</option>
-        </select>
-      </div>
-      <div class="trade-body">
-        <div class="field-group">
-          <label class="field-label">Structure / Setup Seen</label>
-          <input type="text" class="field-input" id="t1-structure" placeholder="e.g. Bullish Engulfing at support on BankNifty 15min chart...">
-        </div>
-        <div class="field-3col">
-          <div class="field-group">
-            <label class="field-label">Entry Price</label>
-            <input type="text" class="field-input" id="t1-entry" placeholder="e.g. ₹44,200">
-          </div>
-          <div class="field-group">
-            <label class="field-label">Stop Loss</label>
-            <input type="text" class="field-input" id="t1-sl" placeholder="e.g. ₹43,900 (Max $100)">
-          </div>
-          <div class="field-group">
-            <label class="field-label">Target</label>
-            <input type="text" class="field-input" id="t1-target" placeholder="e.g. ₹44,700 (2:1 R:R)">
-          </div>
-        </div>
-        <div class="field-2col">
-          <div class="field-group">
-            <label class="field-label">Exit Price</label>
-            <input type="text" class="field-input" id="t1-exit" placeholder="Actual exit price">
-          </div>
-          <div class="field-group">
-            <label class="field-label">Total Time in Trade</label>
-            <input type="text" class="field-input" id="t1-time" placeholder="e.g. 1 hr 20 min">
-          </div>
-        </div>
-        <div class="field-group">
-          <label class="field-label">Reason / Logic for Entry</label>
-          <textarea class="field-textarea" id="t1-reason" placeholder="Why did this setup qualify by your rules? Be specific..."></textarea>
-        </div>
-        <div class="field-2col">
-          <div class="field-group">
-            <label class="field-label">✅ Good Decision in This Trade</label>
-            <textarea class="field-textarea" id="t1-good" placeholder="What did you do right? Entry timing, patience, following rules..." style="min-height:60px;"></textarea>
-          </div>
-          <div class="field-group">
-            <label class="field-label">❌ Bad Decision in This Trade</label>
-            <textarea class="field-textarea" id="t1-bad" placeholder="What did you do wrong? Moved SL, entered early, FOMO..." style="min-height:60px;"></textarea>
-          </div>
-        </div>
-        <div class="field-group">
-          <label class="field-label">📚 Learning + Patience Score (1-10)</label>
-          <textarea class="field-textarea" id="t1-learning" placeholder="Key learning from this trade. Patience score: X/10 — Why..."></textarea>
-        </div>
-      </div>
-    </div>
-
-    <!-- TRADE 2 -->
-    <div class="trade-section">
-      <div class="trade-header">
-        <div class="trade-num">📉 TRADE 2</div>
-        <select id="t2-result" style="background:var(--bg);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;" onchange="updateTradeResult(2)">
-          <option value="">— Result —</option>
-          <option value="win">✅ WIN</option>
-          <option value="loss">❌ LOSS</option>
-          <option value="breakeven">⚖️ BREAKEVEN</option>
-        </select>
-      </div>
-      <div class="trade-body">
-        <div class="field-group">
-          <label class="field-label">Structure / Setup Seen</label>
-          <input type="text" class="field-input" id="t2-structure" placeholder="e.g. Bearish breakdown below resistance on Nifty 5min...">
-        </div>
-        <div class="field-3col">
-          <div class="field-group">
-            <label class="field-label">Entry Price</label>
-            <input type="text" class="field-input" id="t2-entry" placeholder="e.g. ₹19,850">
-          </div>
-          <div class="field-group">
-            <label class="field-label">Stop Loss</label>
-            <input type="text" class="field-input" id="t2-sl" placeholder="Max $100 loss">
-          </div>
-          <div class="field-group">
-            <label class="field-label">Target</label>
-            <input type="text" class="field-input" id="t2-target" placeholder="Min 2:1 R:R">
-          </div>
-        </div>
-        <div class="field-2col">
-          <div class="field-group">
-            <label class="field-label">Exit Price</label>
-            <input type="text" class="field-input" id="t2-exit" placeholder="Actual exit">
-          </div>
-          <div class="field-group">
-            <label class="field-label">Total Time in Trade</label>
-            <input type="text" class="field-input" id="t2-time" placeholder="e.g. 45 min">
-          </div>
-        </div>
-        <div class="field-group">
-          <label class="field-label">Reason / Logic for Entry</label>
-          <textarea class="field-textarea" id="t2-reason" placeholder="Why this setup? What rule did it meet?"></textarea>
-        </div>
-        <div class="field-2col">
-          <div class="field-group">
-            <label class="field-label">✅ Good Decision</label>
-            <textarea class="field-textarea" id="t2-good" placeholder="What you did right..." style="min-height:60px;"></textarea>
-          </div>
-          <div class="field-group">
-            <label class="field-label">❌ Bad Decision</label>
-            <textarea class="field-textarea" id="t2-bad" placeholder="What you did wrong..." style="min-height:60px;"></textarea>
-          </div>
-        </div>
-        <div class="field-group">
-          <label class="field-label">📚 Learning + Patience Score (1-10)</label>
-          <textarea class="field-textarea" id="t2-learning" placeholder="Key learning. Patience score: X/10 — Why..."></textarea>
-        </div>
-      </div>
-    </div>
-
-    <button class="save-btn" onclick="markDone('trading')">Mark Both Trades Logged ✓</button>
-  </div>
-</div>
-
-<!-- 6. TRADE LEARNING -->
-<div class="ritual-card c-learning" id="card-tradelearn">
-  <div class="card-header" onclick="toggleCard('tradelearn')">
-    <div class="card-icon">🔬</div>
-    <div class="card-meta">
-      <div class="card-title">Trade Pattern Learning</div>
-      <div class="card-subtitle">30 min · One pattern deep · Office / Metro</div>
-    </div>
-    <div class="card-status">
-      <div class="done-badge">✓ Done</div>
-      <div class="toggle-arrow">▼</div>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="field-group">
-      <label class="field-label">Pattern / Topic Studied Today</label>
-      <input type="text" class="field-input" id="pattern-name" placeholder="e.g. Head & Shoulders · Double Bottom · Options Delta Decay...">
-    </div>
-    <div class="timer-block">
-      <div>
-        <div class="timer-display" id="timer-tradelearn">30:00</div>
-        <div class="timer-target">Target: 30 minutes</div>
-        <div class="timer-bar"><div class="timer-bar-fill" id="bar-tradelearn"></div></div>
-      </div>
-      <div class="timer-controls">
-        <button class="tbtn-ctrl start" onclick="startTimer('tradelearn', 30)">▶️ Start</button>
-        <button class="tbtn-ctrl stop" onclick="stopTimer('tradelearn')">■ Stop</button>
-        <button class="tbtn-ctrl reset" onclick="resetTimer('tradelearn', 30)">↺ Reset</button>
-      </div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">What I Learned — Key Insight</label>
-      <textarea class="field-textarea" id="pattern-note" placeholder="Describe the pattern in your own words. When does it work? When does it fail?"></textarea>
-    </div>
-    <button class="save-btn" style="background:linear-gradient(135deg,var(--fire),#cc3d00);" onclick="markDone('tradelearn')">Mark Pattern Study Complete ✓</button>
-  </div>
-</div>
-
-<!-- 7. HEALTH DIPLOMA -->
-<div class="ritual-card c-diploma" id="card-diploma">
-  <div class="card-header" onclick="toggleCard('diploma')">
-    <div class="card-icon">🎓</div>
-    <div class="card-meta">
-      <div class="card-title">Health Diploma / Certification <span class="optional-tag">If Time</span></div>
-      <div class="card-subtitle">40 min · Evening study · Stacks with Finance background</div>
-    </div>
-    <div class="card-status">
-      <div class="done-badge">✓ Done</div>
-      <div class="toggle-arrow">▼</div>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="field-group">
-      <label class="field-label">Course / Chapter / Module Studied</label>
-      <input type="text" class="field-input" id="diploma-topic" placeholder="e.g. NISM Options Module 3 · Precision Nutrition Unit 4 · CFA Reading 12...">
-    </div>
-    <div class="timer-block">
-      <div>
-        <div class="timer-display" id="timer-diploma">40:00</div>
-        <div class="timer-target">Target: 40 minutes</div>
-        <div class="timer-bar"><div class="timer-bar-fill" id="bar-diploma"></div></div>
-      </div>
-      <div class="timer-controls">
-        <button class="tbtn-ctrl start" onclick="startTimer('diploma', 40)">▶️ Start</button>
-        <button class="tbtn-ctrl stop" onclick="stopTimer('diploma')">■ Stop</button>
-        <button class="tbtn-ctrl reset" onclick="resetTimer('diploma', 40)">↺ Reset</button>
-      </div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Key Concept Learned Today</label>
-      <textarea class="field-textarea" id="diploma-note" placeholder="Summarise in your own words what you studied..."></textarea>
-    </div>
-    <button class="save-btn" style="background:linear-gradient(135deg,var(--purple),#6d28d9);" onclick="markDone('diploma')">Mark Diploma Study Complete ✓</button>
-  </div>
-</div>
-```
-
-  </div><!-- /grid -->
-
-  <div style="height:20px;"></div>
-  <div class="section-label">Night Rituals</div>
-
-  <!-- NIGHT RITUALS -->
-
-  <div class="ritual-card c-night" id="card-night">
-    <div class="card-header" onclick="toggleCard('night')">
-      <div class="card-icon">🌙</div>
-      <div class="card-meta">
-        <div class="card-title">Night Rituals — Sleep Before 10:30 PM <span class="compulsory-tag">Compulsory</span></div>
-        <div class="card-subtitle">5 habits · Prepare · Reflect · Rest · Begin before 10 PM</div>
-      </div>
-      <div class="card-status">
-        <div class="done-badge">✓ Done</div>
-        <div class="toggle-arrow">▼</div>
-      </div>
-    </div>
-    <div class="card-body">
-
-```
-  <div class="section-label" style="font-size:10px; margin-bottom:10px;">5 Compulsory Night Habits</div>
-  <div class="checklist" id="night-checklist">
-    <div class="check-item" onclick="toggleCheck(this)">
-      <div class="check-box"></div>
-      <div class="check-icon">📋</div>
-      <div class="check-text">Prepared tomorrow's plan — trades, schedule, one priority written</div>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this)">
-      <div class="check-box"></div>
-      <div class="check-icon">🦷</div>
-      <div class="check-text">Brushed teeth before sleep — non-negotiable daily habit</div>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this)">
-      <div class="check-box"></div>
-      <div class="check-icon">😴</div>
-      <div class="check-text">Started sleep preparation at 10:00 PM — phone outside bedroom, lights dim</div>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this)">
-      <div class="check-box"></div>
-      <div class="check-icon">📖</div>
-      <div class="check-text">Read Vision Board — pictured the 400 gaj house, basketball, family, office</div>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this)">
-      <div class="check-box"></div>
-      <div class="check-icon">✨</div>
-      <div class="check-text">Wrote 10 good things about myself in notebook — full 10, no shortcuts</div>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="section-label" style="font-size:10px; margin-bottom:8px;">10 Good Things About Me — Tonight</div>
-  <div id="good-things-list" style="display:flex;flex-direction:column;gap:6px;">
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="field-group">
-    <label class="field-label">Tomorrow's Top Priority (Write Now)</label>
-    <input type="text" class="field-input" id="tmrw-priority" placeholder="e.g. Study Options Greeks Delta for 60 min · Paper trade BankNifty breakout...">
-  </div>
-
-  <div class="field-group">
-    <label class="field-label">Sleep Time Target</label>
-    <input type="text" class="field-input" id="sleep-time" placeholder="10:30 PM — Phone in hall. Lights off. Eyes closed." value="10:30 PM">
-  </div>
-
-  <button class="save-btn" style="background:linear-gradient(135deg,var(--amber),#c47a00);" onclick="markDone('night')">Mark Night Rituals Complete ✓</button>
-</div>
+<button class="sbtn" onclick="done('trd')">✓ Both Trades Logged</button>
 ```
 
   </div>
+</div>
 
-  <div style="height:24px;"></div>
-  <div class="section-label">Daily Summary</div>
+<!-- TRADE PATTERN STUDY -->
 
-  <!-- SUMMARY -->
-
-  <div class="ritual-card" style="border-color:rgba(245,166,35,.2);">
-    <div class="card-header" onclick="toggleCard('summary')" style="cursor:pointer;">
-      <div class="card-icon" style="background:rgba(245,166,35,.15); font-size:20px;">⚡</div>
-      <div class="card-meta">
-        <div class="card-title" style="color:var(--gold);">Day Summary — Productive Time Breakdown</div>
-        <div class="card-subtitle">Auto-calculated from completed timers</div>
-      </div>
-      <div class="toggle-arrow">▼</div>
+<div class="rcard c-pat" id="rc-pat">
+  <div class="rcard-hdr" onclick="tog('pat')">
+    <div class="rcard-icon">🔬</div>
+    <div class="rcard-meta">
+      <div class="rcard-title">Trade Pattern Study</div>
+      <div class="rcard-sub">30 min · One pattern · Office / Metro</div>
     </div>
-    <div class="card-body" id="card-body-summary" style="display:block;">
-      <div class="summary-grid" id="summaryGrid">
-        <div class="sum-card">
-          <div class="sum-icon">🧘</div>
-          <div class="sum-time" id="sum-meditation">0m</div>
-          <div class="sum-label">Meditation</div>
-        </div>
-        <div class="sum-card">
-          <div class="sum-icon">🏀</div>
-          <div class="sum-time" id="sum-physical">0m</div>
-          <div class="sum-label">Physical</div>
-        </div>
-        <div class="sum-card">
-          <div class="sum-icon">🎧</div>
-          <div class="sum-time" id="sum-podcast">0m</div>
-          <div class="sum-label">Podcast</div>
-        </div>
-        <div class="sum-card">
-          <div class="sum-icon">📊</div>
-          <div class="sum-time" id="sum-trading">0m</div>
-          <div class="sum-label">Trading</div>
-        </div>
-        <div class="sum-card">
-          <div class="sum-icon">🔬</div>
-          <div class="sum-time" id="sum-tradelearn">0m</div>
-          <div class="sum-label">Patterns</div>
-        </div>
-        <div class="sum-card">
-          <div class="sum-icon">🎓</div>
-          <div class="sum-time" id="sum-diploma">0m</div>
-          <div class="sum-label">Diploma</div>
-        </div>
+    <div class="rcard-right"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+  </div>
+  <div class="rcard-body">
+    <div class="fl"><label>Pattern / Topic Studied</label>
+    <input type="text" class="fi" id="f-pat-name" placeholder="e.g. Head &amp; Shoulders · Double Bottom · Options Delta Decay..."></div>
+    <div class="timer-row">
+      <div class="timer-num" id="t-pat">30:00</div>
+      <div class="tbars">
+        <div class="tbar-info">Target — 30 minutes</div>
+        <div class="tbar"><div class="tbar-fill" id="tb-pat"></div></div>
       </div>
+      <div class="tbtns">
+        <button class="tbtn ts" onclick="tStart('pat',30)">▶️ Start</button>
+        <button class="tbtn tp" onclick="tStop('pat')">■ Stop</button>
+        <button class="tbtn" onclick="tReset('pat',30)">↺</button>
+      </div>
+    </div>
+    <div class="fl"><label>Key Insight — Describe in Your Own Words</label>
+    <textarea class="fta" id="f-pat-note" placeholder="When does this pattern work? When does it fail? What confirmation do I wait for?"></textarea></div>
+    <button class="sbtn" onclick="done('pat')">✓ Mark Pattern Study Complete</button>
+  </div>
+</div>
+
+<!-- HEALTH DIPLOMA -->
+
+<div class="rcard c-dip" id="rc-dip">
+  <div class="rcard-hdr" onclick="tog('dip')">
+    <div class="rcard-icon">🎓</div>
+    <div class="rcard-meta">
+      <div class="rcard-title">Health Diploma / Certification <span class="tag tag-opt">If Time</span></div>
+      <div class="rcard-sub">40 min · Evening study · Compound with Finance background</div>
+    </div>
+    <div class="rcard-right"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+  </div>
+  <div class="rcard-body">
+    <div class="fl"><label>Course / Module Studied Today</label>
+    <input type="text" class="fi" id="f-dip-topic" placeholder="e.g. NISM Options Module 3 · Precision Nutrition Unit 4 · CFA Reading 12..."></div>
+    <div class="timer-row">
+      <div class="timer-num" id="t-dip">40:00</div>
+      <div class="tbars">
+        <div class="tbar-info">Target — 40 minutes</div>
+        <div class="tbar"><div class="tbar-fill" id="tb-dip"></div></div>
+      </div>
+      <div class="tbtns">
+        <button class="tbtn ts" onclick="tStart('dip',40)">▶️ Start</button>
+        <button class="tbtn tp" onclick="tStop('dip')">■ Stop</button>
+        <button class="tbtn" onclick="tReset('dip',40)">↺</button>
+      </div>
+    </div>
+    <div class="fl"><label>Concept Learned Today</label>
+    <textarea class="fta" id="f-dip-note" placeholder="Summarise in your own words what you studied today..."></textarea></div>
+    <button class="sbtn p" onclick="done('dip')">✓ Mark Diploma Study Complete</button>
+  </div>
+</div>
+
+<!-- NIGHT RITUALS -->
+
+<div class="sec-label" style="margin-top:6px;">Night Rituals</div>
+
+<div class="rcard c-ngt" id="rc-ngt">
+  <div class="rcard-hdr" onclick="tog('ngt')">
+    <div class="rcard-icon">🌙</div>
+    <div class="rcard-meta">
+      <div class="rcard-title">Night Rituals — Sleep by 10:30 PM <span class="tag tag-must">Compulsory</span></div>
+      <div class="rcard-sub">5 habits · Prepare · Reflect · Visualise · Rest</div>
+    </div>
+    <div class="rcard-right"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+  </div>
+  <div class="rcard-body">
+    <div class="sec-label" style="font-size:8px;margin-bottom:8px;">5 Compulsory Night Habits</div>
+    <div class="clist">
+      <div class="ci" onclick="ck(this)"><div class="ci-box"></div><div class="ci-ic">📋</div><div class="ci-txt">Prepared tomorrow — trades, schedule, 1 priority written in notebook</div></div>
+      <div class="ci" onclick="ck(this)"><div class="ci-box"></div><div class="ci-ic">🦷</div><div class="ci-txt">Brushed teeth — non-negotiable nightly habit</div></div>
+      <div class="ci" onclick="ck(this)"><div class="ci-box"></div><div class="ci-ic">😴</div><div class="ci-txt">Sleep prep started at 10:00 PM — phone in hall, lights dim</div></div>
+      <div class="ci" onclick="ck(this)"><div class="ci-box"></div><div class="ci-ic">🖼️</div><div class="ci-txt">Read Vision Board — basketball, 400 gaj house, family, personal office</div></div>
+      <div class="ci" onclick="ck(this)"><div class="ci-box"></div><div class="ci-ic">✨</div><div class="ci-txt">Wrote 10 good things about myself — full 10, no shortcuts</div></div>
+    </div>
 
 ```
-  <div style="background:var(--card2);border:1px solid rgba(245,166,35,.2);border-radius:8px;padding:18px;text-align:center;">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Total Productive Time Today</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--gold);line-height:1;" id="totalTimeDisplay">0h 0m</div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:6px;">Target: 3h 15m+ per day</div>
-    <div style="height:6px;background:var(--border2);border-radius:3px;margin-top:12px;overflow:hidden;">
-      <div id="totalTimeFill" style="height:100%;background:linear-gradient(90deg,var(--fire),var(--gold));border-radius:3px;width:0%;transition:width .8s ease;"></div>
+<div class="div"></div>
+<div class="sec-label" style="font-size:8px;margin-bottom:8px;">10 Good Things About Me Tonight</div>
+<div id="gthings"></div>
+
+<div class="div"></div>
+<div class="fl"><label>Tomorrow's Top Priority</label>
+<input type="text" class="fi" id="f-tmrw" placeholder="e.g. Study Options Delta 60min · Paper trade BankNifty breakout setup..."></div>
+<div class="fl"><label>Actual Sleep Time</label>
+<input type="text" class="fi" id="f-sleep" value="10:30 PM" placeholder="10:30 PM target"></div>
+
+<button class="sbtn b" onclick="done('ngt')">✓ Night Rituals Complete — Rest Well 🌙</button>
+```
+
+  </div>
+</div>
+
+<!-- SUMMARY -->
+
+<div class="sec-label" style="margin-top:6px;">Day Summary</div>
+
+<div class="rcard" style="border-color:rgba(245,166,35,.2);">
+  <div class="rcard-hdr" onclick="tog('sum')" style="cursor:pointer;">
+    <div class="rcard-icon" style="background:rgba(245,166,35,.15);font-size:18px;">⚡</div>
+    <div class="rcard-meta">
+      <div class="rcard-title" style="color:var(--gold);">Productive Time Breakdown</div>
+      <div class="rcard-sub">Auto-calculated from timers</div>
+    </div>
+    <div class="rcard-right"><div class="arr">▼</div></div>
+  </div>
+  <div class="rcard-body" style="display:block;">
+    <div class="sum-grid">
+      <div class="sum-c"><div class="sum-ic">🧘</div><div class="sum-v" id="s-med">0m</div><div class="sum-l">Meditation</div></div>
+      <div class="sum-c"><div class="sum-ic">🏀</div><div class="sum-v" id="s-phy">0m</div><div class="sum-l">Physical</div></div>
+      <div class="sum-c"><div class="sum-ic">🎧</div><div class="sum-v" id="s-pod">0m</div><div class="sum-l">Podcast</div></div>
+      <div class="sum-c"><div class="sum-ic">📊</div><div class="sum-v" id="s-trd">0m</div><div class="sum-l">Trading</div></div>
+      <div class="sum-c"><div class="sum-ic">🔬</div><div class="sum-v" id="s-pat">0m</div><div class="sum-l">Patterns</div></div>
+      <div class="sum-c"><div class="sum-ic">🎓</div><div class="sum-v" id="s-dip">0m</div><div class="sum-l">Diploma</div></div>
+    </div>
+    <div class="total-box">
+      <div class="total-lbl">Total Productive Time Today</div>
+      <div class="total-val" id="totalVal">0h 0m</div>
+      <div class="total-target">Target: 3h 15m+ daily</div>
+      <div class="total-pbar"><div class="total-pfill" id="totalFill"></div></div>
     </div>
   </div>
 </div>
-```
-
-  </div>
 
 </div><!-- /main -->
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── STATE ───────────────────────────────────────────────────
-let currentDay = 1;
-const TOTAL_DAYS = 100;
-const TARGET_MINS = 195; // 3h 15m
+// ── State ──────────────────────────────────────────────────────
+var day = 1;
+var allData = {};
+var timState = {}; // {id: {interval, elapsed, target}}
+var doneMap = {};
 
-// Timer state
-const timers = {};
-const timerDurations = {
-  meditation: 15,
-  physical: 30,
-  podcast: 40,
-  tradelearn: 30,
-  diploma: 40
-};
-const timerElapsed = {};
-
-// Completed tasks
-const completedTasks = {};
-const dayData = {};
-
-// ─── INIT ─────────────────────────────────────────────────────
-window.onload = () => {
-  buildGoodThings();
-  buildHundredGrid();
-  updateDateDisplay();
-  updateHeaderStats();
+// ── Init ──────────────────────────────────────────────────────
+(function init() {
+  buildGthings();
+  buildGrid();
+  setDate();
   updateRing();
   updateSummary();
-};
+  updateHeader();
+  // open meditation by default
+  document.getElementById('rc-med').classList.add('open');
+})();
 
-// ─── GOOD THINGS ─────────────────────────────────────────────
-function buildGoodThings() {
-  const container = document.getElementById('good-things-list');
-  container.innerHTML = '';
-  for (let i = 1; i <= 10; i++) {
-    const div = document.createElement('div');
-    div.style.cssText = 'display:flex;align-items:center;gap:8px;';
-    div.innerHTML = `
-      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);width:18px;flex-shrink:0;">${i}.</div>
-      <input type="text" class="field-input" id="good-${i}" placeholder="Something good about me today..." style="flex:1;">
-    `;
-    container.appendChild(div);
+// ── Good Things ───────────────────────────────────────────────
+function buildGthings() {
+  var c = document.getElementById('gthings');
+  c.innerHTML = '';
+  for (var i = 1; i <= 10; i++) {
+    var d = document.createElement('div');
+    d.className = 'fl';
+    d.style.cssText = 'display:flex;align-items:center;gap:7px;';
+    d.innerHTML = '<span style="font-family:var(--ff-mono);font-size:9px;color:var(--muted);width:16px;flex-shrink:0;">' + i + '.</span>' +
+      '<input type="text" class="fi" id="f-gt' + i + '" placeholder="Something good about me today..." style="flex:1;">';
+    c.appendChild(d);
   }
 }
 
-// ─── 100 DAY GRID ─────────────────────────────────────────────
-function buildHundredGrid() {
-  const grid = document.getElementById('hundredGrid');
-  grid.innerHTML = '';
-  for (let d = 1; d <= 100; d++) {
-    const dot = document.createElement('div');
-    dot.className = 'day-dot';
-    const data = dayData[d] || {};
-    if (d < currentDay) {
-      dot.classList.add(data.completed ? 'done' : 'partial');
-    } else if (d === currentDay) {
-      dot.classList.add('today');
-    } else {
-      dot.classList.add('future');
-    }
-    dot.innerHTML = `<div class="day-dot-tip">Day ${d}</div>`;
-    dot.onclick = () => { currentDay = d; refreshDay(); };
-    grid.appendChild(dot);
+// ── 100 Day Grid ──────────────────────────────────────────────
+function buildGrid() {
+  var g = document.getElementById('dgrid');
+  g.innerHTML = '';
+  for (var d = 1; d <= 100; d++) {
+    var el = document.createElement('div');
+    el.className = 'ddot';
+    var dd = allData[d];
+    if (d < day) el.classList.add(dd && dd._done ? 'd-done' : 'd-part');
+    else if (d === day) el.classList.add('d-today');
+    else el.classList.add('d-future');
+    (function(n){ el.onclick = function(){ goDay(n); }; })(d);
+    g.appendChild(el);
   }
 }
 
-// ─── DAY CHANGE ───────────────────────────────────────────────
-function changeDay(delta) {
-  currentDay = Math.max(1, Math.min(100, currentDay + delta));
-  refreshDay();
-}
-
-function refreshDay() {
-  // Save current completions
+// ── Day Navigation ────────────────────────────────────────────
+function chDay(delta) {
   saveDay();
-  // Reset timers display
-  Object.keys(timerDurations).forEach(id => {
-    resetTimer(id, timerDurations[id]);
-  });
-  // Load new day
+  day = Math.max(1, Math.min(100, day + delta));
   loadDay();
-  updateDateDisplay();
-  buildHundredGrid();
-  updateHeaderStats();
-  updateRing();
-  updateSummary();
-  updateDayBadges();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goDay(n) {
+  saveDay();
+  day = n;
+  loadDay();
 }
 
 function saveDay() {
-  const data = {};
-  // collect all inputs
-  document.querySelectorAll('input[id], textarea[id]').forEach(el => {
-    if (el.id) data[el.id] = el.value;
+  var data = { _done: Object.values(doneMap).filter(Boolean).length >= 4 };
+  document.querySelectorAll('[id^="f-"]').forEach(function(el) {
+    data[el.id] = el.value;
   });
-  data.completedTasks = { ...completedTasks };
-  data.completed = Object.keys(completedTasks).filter(k => completedTasks[k]).length >= 4;
-  dayData[currentDay] = data;
+  data._doneMap = Object.assign({}, doneMap);
+  // night checks
+  var cks = [];
+  document.querySelectorAll('.clist .ci').forEach(function(ci) {
+    cks.push(ci.classList.contains('ck'));
+  });
+  data._nightCks = cks;
+  data._rep1 = document.getElementById('rb1').classList.contains('rdone');
+  data._rep2 = document.getElementById('rb2').classList.contains('rdone');
+  allData[day] = data;
 }
 
 function loadDay() {
-  const data = dayData[currentDay] || {};
-  document.querySelectorAll('input[id], textarea[id]').forEach(el => {
-    if (el.id && data[el.id] !== undefined) el.value = data[el.id];
-    else if (el.id !== 'sleep-time') el.value = '';
+  // stop all timers
+  Object.keys(timState).forEach(function(id) { tStop(id); });
+  timState = {};
+
+  var data = allData[day] || {};
+
+  // reset inputs
+  document.querySelectorAll('[id^="f-"]').forEach(function(el) {
+    el.value = (data[el.id] !== undefined) ? data[el.id] : '';
   });
-  // restore sleep time default
-  const st = document.getElementById('sleep-time');
+  var st = document.getElementById('f-sleep');
   if (st && !st.value) st.value = '10:30 PM';
 
-  // restore completed
-  const stored = data.completedTasks || {};
-  const taskKeys = ['meditation','physical','affirmations','podcast','trading','tradelearn','diploma','night'];
-  taskKeys.forEach(k => {
-    completedTasks[k] = stored[k] || false;
-    const card = document.getElementById('card-' + k);
-    if (card) {
-      card.classList.toggle('completed', !!completedTasks[k]);
+  // restore doneMap
+  doneMap = Object.assign({}, data._doneMap || {});
+  var ids = ['med','phy','aff','pod','trd','pat','dip','ngt'];
+  ids.forEach(function(id) {
+    var card = document.getElementById('rc-' + id);
+    if (card) card.classList.toggle('done', !!doneMap[id]);
+  });
+
+  // restore rep
+  document.getElementById('rb1').classList.toggle('rdone', !!data._rep1);
+  document.getElementById('rb1').textContent = data._rep1 ? '✓ Round 1 Done' : 'Round 1 — Speak Now';
+  document.getElementById('rb2').classList.toggle('rdone', !!data._rep2);
+  document.getElementById('rb2').textContent = data._rep2 ? '✓ Round 2 Done' : 'Round 2 — Speak Now';
+
+  // restore night checks
+  var cks = data._nightCks || [];
+  document.querySelectorAll('.clist .ci').forEach(function(ci, i) {
+    ci.classList.toggle('ck', !!cks[i]);
+    ci.querySelector('.ci-box').textContent = cks[i] ? '✓' : '';
+  });
+
+  // reset timers display
+  var tDefs = {med:15,phy:30,pod:40,pat:30,dip:40};
+  Object.keys(tDefs).forEach(function(id) { tReset(id, tDefs[id]); });
+
+  // rebuild good things
+  buildGthings();
+  if (data) {
+    for (var i = 1; i <= 10; i++) {
+      var el = document.getElementById('f-gt' + i);
+      if (el && data['f-gt' + i]) el.value = data['f-gt' + i];
     }
-  });
+  }
 
-  // restore repeats
-  document.getElementById('rep1').classList.toggle('done-rep', !!(data['rep1done']));
-  document.getElementById('rep2').classList.toggle('done-rep', !!(data['rep2done']));
-
-  // restore night checklist
-  const checks = document.querySelectorAll('#night-checklist .check-item');
-  const nightChecks = data.nightChecks || [];
-  checks.forEach((c, i) => {
-    c.classList.toggle('checked', nightChecks[i] || false);
-    c.querySelector('.check-box').textContent = (nightChecks[i] ? '✓' : '');
-  });
+  // update UI
+  buildGrid();
+  setDate();
+  updateRing();
+  updateSummary();
+  updateHeader();
+  document.querySelectorAll('.db').forEach(function(b) { b.textContent = day; });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ─── DATE DISPLAY ─────────────────────────────────────────────
-function updateDateDisplay() {
-  const startDate = new Date('2026-01-01');
-  const d = new Date(startDate);
-  d.setDate(d.getDate() + currentDay - 1);
-  const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  document.getElementById('dateStr').textContent = d.toLocaleDateString('en-IN', opts);
-  document.getElementById('dayDisplay').textContent = `DAY ${currentDay}`;
-  document.getElementById('bigDay').textContent = currentDay;
+// ── Date Display ──────────────────────────────────────────────
+function setDate() {
+  var start = new Date('2026-01-01T00:00:00');
+  start.setDate(start.getDate() + day - 1);
+  var opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+  document.getElementById('dateStr').textContent = start.toLocaleDateString('en-IN', opts);
+  document.getElementById('dayLbl').textContent = 'DAY ' + day;
+  document.getElementById('bigDay').textContent = day;
 }
 
-function updateDayBadges() {
-  document.querySelectorAll('.day-badge').forEach(b => b.textContent = currentDay);
-}
-
-// ─── HEADER STATS ─────────────────────────────────────────────
-function updateHeaderStats() {
-  document.getElementById('hDaysLeft').textContent = 100 - currentDay;
-  // streak
-  let streak = 0;
-  for (let d = currentDay - 1; d >= 1; d--) {
-    if (dayData[d] && dayData[d].completed) streak++;
+// ── Header ────────────────────────────────────────────────────
+function updateHeader() {
+  document.getElementById('hLeft').textContent = 100 - day;
+  var streak = 0;
+  for (var d = day - 1; d >= 1; d--) {
+    if (allData[d] && allData[d]._done) streak++;
     else break;
   }
   document.getElementById('hStreak').textContent = streak + '🔥';
-  // completed days
-  const doneDays = Object.values(dayData).filter(d => d && d.completed).length;
-  const pct = Math.round((doneDays / 100) * 100);
-  document.getElementById('hCompleted').textContent = pct + '%';
-  document.getElementById('globalFill').style.width = Math.max(1, pct) + '%';
+  var doneDays = Object.values(allData).filter(function(d) { return d && d._done; }).length;
+  var pct = Math.round(doneDays / 100 * 100);
+  document.getElementById('hPct').textContent = pct + '%';
+  document.getElementById('gpFill').style.width = Math.max(1, pct) + '%';
 }
 
-// ─── RING / SCORE ─────────────────────────────────────────────
+// ── Ring ──────────────────────────────────────────────────────
 function updateRing() {
-  const taskKeys = ['meditation','physical','affirmations','podcast','trading','tradelearn','diploma','night'];
-  const done = taskKeys.filter(k => completedTasks[k]).length;
-  const pct = Math.round((done / taskKeys.length) * 100);
+  var ids = ['med','phy','aff','pod','trd','pat','dip','ngt'];
+  var n = ids.filter(function(k) { return doneMap[k]; }).length;
+  var pct = Math.round(n / ids.length * 100);
   document.getElementById('ringPct').textContent = pct + '%';
-  document.getElementById('tasksDone').textContent = done + ' / ' + taskKeys.length;
-  const offset = 251.2 - (251.2 * pct / 100);
-  document.getElementById('ringFill').style.strokeDashoffset = offset;
-  // colour
-  const ring = document.getElementById('ringFill');
-  if (pct === 100) ring.style.stroke = 'var(--green)';
-  else if (pct >= 50) ring.style.stroke = 'var(--gold)';
-  else ring.style.stroke = 'var(--fire)';
+  document.getElementById('tasksDone').textContent = n + ' / ' + ids.length;
+  var circ = 226.2;
+  var offset = circ - (circ * pct / 100);
+  var ring = document.getElementById('ringCirc');
+  ring.style.strokeDashoffset = offset;
+  ring.style.stroke = pct === 100 ? 'var(--green)' : pct >= 50 ? 'var(--gold)' : 'var(--fire)';
 }
 
-// ─── TOGGLE CARD ──────────────────────────────────────────────
-function toggleCard(id) {
-  const card = document.getElementById('card-' + id);
-  if (!card) return;
-  card.classList.toggle('open');
+// ── Toggle Card ───────────────────────────────────────────────
+function tog(id) {
+  var card = document.getElementById('rc-' + id);
+  if (card) card.classList.toggle('open');
 }
 
-// ─── MARK DONE ────────────────────────────────────────────────
-function markDone(id) {
-  completedTasks[id] = true;
-  const card = document.getElementById('card-' + id);
-  if (card) {
-    card.classList.add('completed');
-    card.classList.remove('open');
-  }
+// ── Mark Done ─────────────────────────────────────────────────
+function done(id) {
+  doneMap[id] = true;
+  var card = document.getElementById('rc-' + id);
+  if (card) { card.classList.add('done'); card.classList.remove('open'); }
   updateRing();
   updateSummary();
-  showToast('✓ ' + id.toUpperCase() + ' logged for Day ' + currentDay);
+  updateHeader();
+  toast('✓ ' + id.toUpperCase() + ' — Day ' + day + ' logged!');
 }
 
-// ─── CHECK ITEMS ──────────────────────────────────────────────
-function toggleCheck(el) {
-  el.classList.toggle('checked');
-  const box = el.querySelector('.check-box');
-  box.textContent = el.classList.contains('checked') ? '✓' : '';
+// ── Check Items ───────────────────────────────────────────────
+function ck(el) {
+  el.classList.toggle('ck');
+  el.querySelector('.ci-box').textContent = el.classList.contains('ck') ? '✓' : '';
 }
 
-// ─── AFFIRMATION REPEATS ──────────────────────────────────────
-let rep1done = false, rep2done = false;
-function markRepeat(n) {
-  if (n === 1) {
-    rep1done = true;
-    document.getElementById('rep1').classList.add('done-rep');
-    document.getElementById('rep1').textContent = '✓ Round 1 Done';
-    showToast('Round 1 spoken! Now do Round 2 🔥');
-  } else {
-    rep2done = true;
-    document.getElementById('rep2').classList.add('done-rep');
-    document.getElementById('rep2').textContent = '✓ Round 2 Done';
-    showToast('Both rounds complete! Affirmations locked in 💪');
-  }
+// ── Reps ──────────────────────────────────────────────────────
+function rep(n) {
+  var btn = document.getElementById('rb' + n);
+  btn.classList.add('rdone');
+  btn.textContent = '✓ Round ' + n + ' Done';
+  toast('Round ' + n + ' spoken! 💪');
 }
 
-// ─── TIMERS ───────────────────────────────────────────────────
-function startTimer(id, mins) {
-  if (timers[id]) return;
-  const target = (mins * 60);
-  if (!timerElapsed[id]) timerElapsed[id] = 0;
-  let remaining = target - timerElapsed[id];
+// ── Timers ────────────────────────────────────────────────────
+function tStart(id, mins) {
+  if (timState[id] && timState[id].interval) return;
+  if (!timState[id]) timState[id] = { elapsed: 0, target: mins * 60 };
+  var ts = timState[id];
+  ts.target = mins * 60;
+  var disp = document.getElementById('t-' + id);
+  if (disp) { disp.classList.add('trun'); disp.classList.remove('tdone'); }
 
-  const display = document.getElementById('timer-' + id);
-  const bar = document.getElementById('bar-' + id);
-  display.classList.add('running');
-  display.classList.remove('done-t');
-
-  timers[id] = setInterval(() => {
-    timerElapsed[id]++;
-    remaining--;
-    if (remaining <= 0) {
-      clearInterval(timers[id]);
-      timers[id] = null;
-      display.textContent = '00:00';
-      display.classList.remove('running');
-      display.classList.add('done-t');
-      bar.style.width = '100%';
-      showToast('🎯 ' + id.toUpperCase() + ' timer complete!');
+  ts.interval = setInterval(function() {
+    ts.elapsed++;
+    var rem = ts.target - ts.elapsed;
+    if (rem <= 0) {
+      clearInterval(ts.interval);
+      ts.interval = null;
+      if (disp) { disp.textContent = '00:00'; disp.classList.remove('trun'); disp.classList.add('tdone'); }
+      var bar = document.getElementById('tb-' + id);
+      if (bar) bar.style.width = '100%';
+      toast('🎯 ' + id.toUpperCase() + ' timer complete!');
       updateSummary();
       return;
     }
-    const m = Math.floor(remaining / 60);
-    const s = remaining % 60;
-    display.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-    const pct = (timerElapsed[id] / target) * 100;
-    if (bar) bar.style.width = Math.min(100, pct) + '%';
+    var m = Math.floor(rem / 60), s = rem % 60;
+    if (disp) disp.textContent = pad(m) + ':' + pad(s);
+    var bar = document.getElementById('tb-' + id);
+    if (bar) bar.style.width = Math.min(100, ts.elapsed / ts.target * 100) + '%';
     updateSummary();
   }, 1000);
 }
 
-function stopTimer(id) {
-  if (timers[id]) {
-    clearInterval(timers[id]);
-    timers[id] = null;
-    const display = document.getElementById('timer-' + id);
-    display.classList.remove('running');
+function tStop(id) {
+  if (timState[id] && timState[id].interval) {
+    clearInterval(timState[id].interval);
+    timState[id].interval = null;
+    var disp = document.getElementById('t-' + id);
+    if (disp) disp.classList.remove('trun');
   }
 }
 
-function resetTimer(id, mins) {
-  stopTimer(id);
-  timerElapsed[id] = 0;
-  const display = document.getElementById('timer-' + id);
-  if (display) {
-    display.textContent = String(mins).padStart(2,'0') + ':00';
-    display.classList.remove('running', 'done-t');
-  }
-  const bar = document.getElementById('bar-' + id);
+function tReset(id, mins) {
+  tStop(id);
+  if (timState[id]) timState[id].elapsed = 0;
+  var disp = document.getElementById('t-' + id);
+  if (disp) { disp.textContent = pad(mins) + ':00'; disp.classList.remove('trun','tdone'); }
+  var bar = document.getElementById('tb-' + id);
   if (bar) bar.style.width = '0%';
   updateSummary();
 }
 
-// ─── SUMMARY ──────────────────────────────────────────────────
+function pad(n) { return String(n).padStart(2,'0'); }
+
+// ── Summary ───────────────────────────────────────────────────
 function updateSummary() {
-  let totalMins = 0;
-  const ids = ['meditation','physical','podcast','tradelearn','diploma'];
-  const targets = { meditation:15, physical:30, podcast:40, tradelearn:30, diploma:40 };
-  const labels = { meditation:'Trading', physical:'Physical', podcast:'Podcast', tradelearn:'Patterns', diploma:'Diploma' };
-
-  ids.forEach(id => {
-    const elapsed = timerElapsed[id] || 0;
-    const mins = Math.round(elapsed / 60);
-    const el = document.getElementById('sum-' + id);
-    if (el) el.textContent = mins + 'm';
-    totalMins += mins;
+  var timerIds = ['med','phy','pod','pat','dip'];
+  var total = 0;
+  timerIds.forEach(function(id) {
+    var el = document.getElementById('s-' + id);
+    var m = timState[id] ? Math.round(timState[id].elapsed / 60) : 0;
+    if (el) el.textContent = m + 'm';
+    total += m;
   });
+  var trdM = doneMap['trd'] ? 60 : 0;
+  var trdEl = document.getElementById('s-trd');
+  if (trdEl) trdEl.textContent = trdM + 'm';
+  total += trdM;
 
-  // Trading counted separately — if marked done add 60 min estimate
-  const tradingDone = completedTasks['trading'] ? 60 : 0;
-  const tradingSumEl = document.getElementById('sum-trading');
-  if (tradingSumEl) tradingSumEl.textContent = tradingDone + 'm';
-  totalMins += tradingDone;
-
-  const hrs = Math.floor(totalMins / 60);
-  const mins = totalMins % 60;
-  const display = hrs + 'h ' + mins + 'm';
-
-  document.getElementById('totalTimeDisplay').textContent = display;
-  document.getElementById('totalProdTime').textContent = display;
-
-  const pct = Math.min(100, Math.round((totalMins / TARGET_MINS) * 100));
-  document.getElementById('totalTimeFill').style.width = pct + '%';
+  var h = Math.floor(total / 60), m = total % 60;
+  var disp = h + 'h ' + m + 'm';
+  document.getElementById('totalVal').textContent = disp;
+  document.getElementById('prodTime').textContent = disp;
+  var pct = Math.min(100, Math.round(total / 195 * 100));
+  document.getElementById('totalFill').style.width = pct + '%';
 }
 
-// ─── TRADE RESULT ─────────────────────────────────────────────
-function updateTradeResult(n) {
-  const val = document.getElementById('t' + n + '-result').value;
-  // visual feedback could be added here
+// ── Toast ─────────────────────────────────────────────────────
+var toastTmr;
+function toast(msg) {
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTmr);
+  toastTmr = setTimeout(function() { el.classList.remove('show'); }, 2800);
 }
-
-// ─── TOAST ────────────────────────────────────────────────────
-let toastTimer;
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
-}
-
-// ─── INITIAL SETUP ────────────────────────────────────────────
-updateDayBadges();
-
-// Open first card by default
-document.getElementById('card-meditation').classList.add('open');
 </script>
 
 </body>
