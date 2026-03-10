@@ -221,6 +221,13 @@ margin-bottom:22px;
 .dot.part   { background:#F5A623; }
 .dot.today  { background:#FF5F1F; box-shadow:0 0 7px rgba(255,95,31,.6); }
 .dot.future { background:#1C2A38; opacity:.35; }
+.vb-item {
+font-size:13px; color:#C8D0DC; line-height:1.6;
+padding:8px 0; border-bottom:1px solid #1C2A38;
+font-style:italic;
+}
+.vb-item:last-child { border-bottom:none; }
+.dot.frozen { background:#00D4FF; box-shadow:0 0 6px rgba(0,212,255,.5); }
 
 /* ── RITUAL CARD ── */
 .rc {
@@ -273,6 +280,8 @@ font-size:8px; letter-spacing:1px; padding:2px 6px;
 border-radius:3px; text-transform:uppercase; font-weight:700;
 }
 .rc.done .done-tag { display:block; }
+.rc.done .rc-hdr { cursor:pointer; }
+.rc.done .rc-hdr:active { background:rgba(255,71,87,.05); }
 
 .arr { color:#4A6278; font-size:11px; transition:transform .3s; }
 .rc.open .arr { transform:rotate(180deg); }
@@ -481,6 +490,8 @@ font-size:16px; letter-spacing:2px;
 transition:transform .2s, box-shadow .2s;
 }
 .sbtn:hover { transform:translateY(-1px); }
+.undone-btn { background:linear-gradient(135deg,#FF4757,#cc0015) !important; color:#fff !important; border:none !important; opacity:1 !important; }
+.undone-btn::before { content:“↩ “; }
 .sbtn.fire { background:linear-gradient(135deg,#FF5F1F,#e05000); }
 .sbtn.grn  { background:linear-gradient(135deg,#2ECC8A,#1a9a60); }
 .sbtn.gld  { background:linear-gradient(135deg,#F5A623,#c47a00); }
@@ -538,7 +549,7 @@ max-width:calc(100vw - 28px);
       <div class="brand-icon">🏆</div>
       <div>
         <div class="brand-name">50K CHALLENGE</div>
-        <div class="brand-sub">100 Day · 2026</div>
+        <div class="brand-sub">10 Mar → 17 Jun 2026</div>
       </div>
     </div>
     <div class="hdr-r">
@@ -550,11 +561,16 @@ max-width:calc(100vw - 28px);
       <div class="hstats">
         <div class="hs"><span class="hs-v" id="hLeft">99</span><span class="hs-l">Left</span></div>
         <div class="hs"><span class="hs-v" id="hStreak">0🔥</span><span class="hs-l">Streak</span></div>
+        <div class="hs"><span class="hs-v" id="hFreeze">0🧊</span><span class="hs-l">Freezes</span></div>
         <div class="hs"><span class="hs-v" id="hPct">0%</span><span class="hs-l">Done</span></div>
       </div>
     </div>
   </div>
   <div class="gbar"><div class="gbar-f" id="gpf" style="width:1%"></div></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 14px;background:#070A0F;">
+    <div id="lastSaved" style="font-family:JetBrains Mono,Courier New,monospace;font-size:9px;color:#4A6278;letter-spacing:1px;"></div>
+    <button onclick="goToday()" style="font-family:JetBrains Mono,Courier New,monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;background:rgba(255,95,31,.15);border:1px solid rgba(255,95,31,.3);border-radius:3px;color:#FF5F1F;cursor:pointer;">📅 Go To Today</button>
+  </div>
 </div>
 
 <!-- MAIN -->
@@ -603,7 +619,7 @@ max-width:calc(100vw - 28px);
       <div class="rc-title">Meditation <span class="tag tag-m">Compulsory</span></div>
       <div class="rc-sub">15 min · Silence &amp; Breath · Day <span class="db">1</span>/100</div>
     </div>
-    <div class="rc-r"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+    <div class="rc-r"><div class="done-tag" title="Tap card to reopen and undo">✓ Done — Tap ↩ to undo</div><div class="arr">▼</div></div>
   </div>
   <div class="rc-body">
     <div class="trow">
@@ -620,7 +636,7 @@ max-width:calc(100vw - 28px);
     </div>
     <div class="fl"><label>How did you feel during meditation?</label>
     <textarea class="fta" id="f-med-n" placeholder="Mind was restless for first 5 min, then settled. Felt calm after..."></textarea></div>
-    <button class="sbtn pur" onclick="done('med')">✓ Mark Meditation Complete</button>
+    <button class="sbtn pur" id="btn-med" onclick="done('med')">✓ Mark Meditation Complete</button>
   </div>
 </div>
 
@@ -633,7 +649,7 @@ max-width:calc(100vw - 28px);
       <div class="rc-title">Physical Activity <span class="tag tag-m">Compulsory</span></div>
       <div class="rc-sub">30 min · Move · Win the morning</div>
     </div>
-    <div class="rc-r"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+    <div class="rc-r"><div class="done-tag" title="Tap card to reopen and undo">✓ Done — Tap ↩ to undo</div><div class="arr">▼</div></div>
   </div>
   <div class="rc-body">
     <div class="fl"><label>Activity Name — What did you do?</label>
@@ -652,7 +668,7 @@ max-width:calc(100vw - 28px);
     </div>
     <div class="fl"><label>Energy level / How it felt</label>
     <textarea class="fta" id="f-phy-n" placeholder="Felt heavy at start. Won 3 basketball games. Energised after..." style="min-height:50px"></textarea></div>
-    <button class="sbtn grn" onclick="done('phy')">✓ Mark Physical Complete</button>
+    <button class="sbtn grn" id="btn-phy" onclick="done('phy')">✓ Mark Physical Complete</button>
   </div>
 </div>
 
@@ -665,27 +681,44 @@ max-width:calc(100vw - 28px);
       <div class="rc-title">Affirmations + Gratitude <span class="tag tag-m">Compulsory</span></div>
       <div class="rc-sub">5 affirmations · Speak 2× · 3 gratitudes</div>
     </div>
-    <div class="rc-r"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+    <div class="rc-r"><div class="done-tag" title="Tap card to reopen and undo">✓ Done — Tap ↩ to undo</div><div class="arr">▼</div></div>
   </div>
   <div class="rc-body">
-    <div class="slbl" style="font-size:8px;margin-bottom:8px">Write 5 Affirmations in Notebook</div>
-    <div class="arow"><div class="an">1</div><input type="text" class="afi" id="f-a1" placeholder="I am a disciplined trader who follows my rules..."></div>
-    <div class="arow"><div class="an">2</div><input type="text" class="afi" id="f-a2" placeholder="I wake at 5:30 AM and invest in my future daily..."></div>
-    <div class="arow"><div class="an">3</div><input type="text" class="afi" id="f-a3" placeholder="I am building a life my daughter is proud of..."></div>
-    <div class="arow"><div class="an">4</div><input type="text" class="afi" id="f-a4" placeholder="I learn from every trade, win or loss..."></div>
-    <div class="arow"><div class="an">5</div><input type="text" class="afi" id="f-a5" placeholder="I am top 1% through daily consistency..."></div>
-    <div class="divr"></div>
-    <div class="slbl" style="font-size:8px;margin-bottom:6px">Speak Aloud — 2 Rounds</div>
-    <div class="repw">
-      <button class="repb" id="rb1" onclick="rep(1)">Round 1 — Speak Now</button>
-      <button class="repb" id="rb2" onclick="rep(2)">Round 2 — Speak Now</button>
-    </div>
-    <div class="divr"></div>
-    <div class="slbl" style="font-size:8px;margin-bottom:8px">3 Gratitudes</div>
-    <div class="fl"><input type="text" class="fi" id="f-g1" placeholder="I am grateful for..."></div>
-    <div class="fl"><input type="text" class="fi" id="f-g2" placeholder="I am grateful for..."></div>
-    <div class="fl"><input type="text" class="fi" id="f-g3" placeholder="I am grateful for..."></div>
-    <button class="sbtn gld" style="margin-top:10px" onclick="done('aff')">✓ Mark Affirmations Complete</button>
+
+```
+<!-- VISION BOARD -->
+<div class="slbl" style="font-size:8px;margin-bottom:10px">🌟 Vision Board — Read with Full Feeling</div>
+<div style="background:#070A0F;border:1px solid #243040;border-radius:8px;padding:14px;margin-bottom:14px;">
+  <div class="vb-item">🏃 Thank you Prabhu Ji for blessing me with completing my first 11km marathon in 2026</div>
+  <div class="vb-item">💰 Thank you Prabhu Ji for flowing ₹50 Lakh into my life and family in 2026</div>
+  <div class="vb-item">💪 Thank you Prabhu Ji for gifting me a strong, fit body with 4 visible abs in 2026</div>
+  <div class="vb-item">🥗 I nourish my body with clean food daily and I radiate the best health in 2026</div>
+  <div class="vb-item">🏔️ Thank you Prabhu Ji for our beautiful family trip to North East India in 2026</div>
+  <div class="vb-item">🏡 Thank you Prabhu Ji for our dream home in the finest society in Delhi in 2026</div>
+  <div class="vb-item">📈 Thank you Prabhu Ji for making me a calm, disciplined and profitable trader in 2026</div>
+  <div class="vb-item">👨‍👧 My daughter grows up watching a father who builds empires from 5:30 AM every day</div>
+  <div class="vb-item">🏢 Thank you Prabhu Ji for my personal office 20 minutes from home in 2026</div>
+  <div class="vb-item">🏆 I am in the top 1% — in health, wealth, mindset and family — in 2026</div>
+</div>
+
+<!-- MORNING + EVENING COMPLETION -->
+<div class="slbl" style="font-size:8px;margin-bottom:8px">Complete Vision Board — Twice Daily</div>
+<div class="repw">
+  <button class="repb" id="rb1" onclick="rep(1)">☀️ Morning — Read &amp; Feel</button>
+  <button class="repb" id="rb2" onclick="rep(2)">🌙 Evening — Read &amp; Feel</button>
+</div>
+
+<div class="divr"></div>
+
+<!-- GRATITUDES -->
+<div class="slbl" style="font-size:8px;margin-bottom:8px">3 Gratitudes Today</div>
+<div class="fl"><input type="text" class="fi" id="f-g1" placeholder="I am grateful for..."></div>
+<div class="fl"><input type="text" class="fi" id="f-g2" placeholder="I am grateful for..."></div>
+<div class="fl"><input type="text" class="fi" id="f-g3" placeholder="I am grateful for..."></div>
+
+<button class="sbtn gld" style="margin-top:10px" id="btn-aff" onclick="done('aff')">✓ Mark Vision Board Complete</button>
+```
+
   </div>
 </div>
 
@@ -698,7 +731,7 @@ max-width:calc(100vw - 28px);
       <div class="rc-title">Morning Podcast <span class="tag tag-m">Compulsory</span></div>
       <div class="rc-sub">40 min · One episode · Metro / Home</div>
     </div>
-    <div class="rc-r"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+    <div class="rc-r"><div class="done-tag" title="Tap card to reopen and undo">✓ Done — Tap ↩ to undo</div><div class="arr">▼</div></div>
   </div>
   <div class="rc-body">
     <div class="fl"><label>Podcast Name + Episode</label>
@@ -717,7 +750,7 @@ max-width:calc(100vw - 28px);
     </div>
     <div class="fl"><label>Key Insight from this Episode</label>
     <textarea class="fta" id="f-pod-k" placeholder="The single most important thing I learned..."></textarea></div>
-    <button class="sbtn cyn" onclick="done('pod')">✓ Mark Podcast Complete</button>
+    <button class="sbtn cyn" id="btn-pod" onclick="done('pod')">✓ Mark Podcast Complete</button>
   </div>
 </div>
 
@@ -732,7 +765,7 @@ max-width:calc(100vw - 28px);
       <div class="rc-title">Paper Trades 1 + 2 <span class="tag tag-m">Compulsory</span></div>
       <div class="rc-sub">Max loss $100 each · Full journal · Both trades</div>
     </div>
-    <div class="rc-r"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+    <div class="rc-r"><div class="done-tag" title="Tap card to reopen and undo">✓ Done — Tap ↩ to undo</div><div class="arr">▼</div></div>
   </div>
   <div class="rc-body">
 
@@ -808,7 +841,7 @@ max-width:calc(100vw - 28px);
     <textarea class="fta" id="f-t2ln" placeholder="Key learning. Patience score: X/10 because..."></textarea></div>
   </div>
 </div>
-<button class="sbtn fire" onclick="done('trd')">✓ Both Trades Logged</button>
+<button class="sbtn fire" id="btn-trd" onclick="done('trd')">✓ Both Trades Logged</button>
 ```
 
   </div>
@@ -823,7 +856,7 @@ max-width:calc(100vw - 28px);
       <div class="rc-title">Trade Pattern Study</div>
       <div class="rc-sub">30 min · One pattern · Office / Metro</div>
     </div>
-    <div class="rc-r"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+    <div class="rc-r"><div class="done-tag" title="Tap card to reopen and undo">✓ Done — Tap ↩ to undo</div><div class="arr">▼</div></div>
   </div>
   <div class="rc-body">
     <div class="fl"><label>Pattern / Topic Studied</label>
@@ -842,7 +875,7 @@ max-width:calc(100vw - 28px);
     </div>
     <div class="fl"><label>Key Insight — In Your Own Words</label>
     <textarea class="fta" id="f-pat-k" placeholder="When does this pattern work? When does it fail?"></textarea></div>
-    <button class="sbtn fire" onclick="done('pat')">✓ Mark Pattern Study Complete</button>
+    <button class="sbtn fire" id="btn-pat" onclick="done('pat')">✓ Mark Pattern Study Complete</button>
   </div>
 </div>
 
@@ -855,7 +888,7 @@ max-width:calc(100vw - 28px);
       <div class="rc-title">Health Diploma / Certification <span class="tag tag-o">If Time</span></div>
       <div class="rc-sub">40 min · Evening study · Compounds with Finance background</div>
     </div>
-    <div class="rc-r"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+    <div class="rc-r"><div class="done-tag" title="Tap card to reopen and undo">✓ Done — Tap ↩ to undo</div><div class="arr">▼</div></div>
   </div>
   <div class="rc-body">
     <div class="fl"><label>Course / Module Studied Today</label>
@@ -874,7 +907,7 @@ max-width:calc(100vw - 28px);
     </div>
     <div class="fl"><label>Concept Learned Today</label>
     <textarea class="fta" id="f-dip-k" placeholder="Summarise in your own words what you studied..."></textarea></div>
-    <button class="sbtn pur" onclick="done('dip')">✓ Mark Diploma Study Complete</button>
+    <button class="sbtn pur" id="btn-dip" onclick="done('dip')">✓ Mark Diploma Study Complete</button>
   </div>
 </div>
 
@@ -889,7 +922,7 @@ max-width:calc(100vw - 28px);
       <div class="rc-title">Night Rituals — Sleep by 10:30 PM <span class="tag tag-m">Compulsory</span></div>
       <div class="rc-sub">5 habits · Prepare · Reflect · Visualise · Rest</div>
     </div>
-    <div class="rc-r"><div class="done-tag">✓ Done</div><div class="arr">▼</div></div>
+    <div class="rc-r"><div class="done-tag" title="Tap card to reopen and undo">✓ Done — Tap ↩ to undo</div><div class="arr">▼</div></div>
   </div>
   <div class="rc-body">
     <div class="slbl" style="font-size:8px;margin-bottom:8px">5 Compulsory Night Habits</div>
@@ -901,14 +934,42 @@ max-width:calc(100vw - 28px);
       <div class="ci" onclick="ck(this)"><div class="ci-box"></div><div class="ci-ic">✨</div><div class="ci-t">Wrote 10 good things about myself — full 10, no shortcuts</div></div>
     </div>
     <div class="divr"></div>
-    <div class="slbl" style="font-size:8px;margin-bottom:8px">10 Good Things About Me Tonight</div>
-    <div id="gthings"></div>
-    <div class="divr"></div>
-    <div class="fl"><label>Tomorrow's Top Priority</label>
-    <input type="text" class="fi" id="f-tmrw" placeholder="e.g. Study Options Delta 60min · Paper trade BankNifty breakout..."></div>
-    <div class="fl"><label>Actual Sleep Time</label>
-    <input type="text" class="fi" id="f-sleep" value="10:30 PM"></div>
-    <button class="sbtn gld" onclick="done('ngt')">✓ Night Rituals Complete — Rest Well 🌙</button>
+    <div class="slbl" style="font-size:8px;margin-bottom:8px">3 Things I Will Improve Tomorrow</div>
+    <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-family:JetBrains Mono,monospace;font-size:11px;color:#FF5F1F;width:20px;flex-shrink:0">1.</span>
+        <input type="text" class="fi" id="f-imp1" placeholder="Tomorrow I will improve...">
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-family:JetBrains Mono,monospace;font-size:11px;color:#FF5F1F;width:20px;flex-shrink:0">2.</span>
+        <input type="text" class="fi" id="f-imp2" placeholder="Tomorrow I will improve...">
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-family:JetBrains Mono,monospace;font-size:11px;color:#FF5F1F;width:20px;flex-shrink:0">3.</span>
+        <input type="text" class="fi" id="f-imp3" placeholder="Tomorrow I will improve...">
+      </div>
+    </div>
+
+```
+<div class="slbl" style="font-size:8px;margin-bottom:8px">2 People I Complimented Today 🤝</div>
+<div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px;">
+  <div style="display:flex;align-items:center;gap:8px;">
+    <span style="font-size:16px">👤</span>
+    <input type="text" class="fi" id="f-comp1" placeholder="Name — what I said to them...">
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <span style="font-size:16px">👤</span>
+    <input type="text" class="fi" id="f-comp2" placeholder="Name — what I said to them...">
+  </div>
+</div>
+<div class="divr"></div>
+<div class="fl"><label>Tomorrow's Top Priority</label>
+<input type="text" class="fi" id="f-tmrw" placeholder="e.g. Study Options Delta 60min · Paper trade BankNifty breakout..."></div>
+<div class="fl"><label>Actual Sleep Time</label>
+<input type="text" class="fi" id="f-sleep" value="10:30 PM"></div>
+<button class="sbtn gld" id="btn-ngt" onclick="done('ngt')">✓ Night Rituals Complete — Rest Well 🌙</button>
+```
+
   </div>
 </div>
 
@@ -947,85 +1008,158 @@ max-width:calc(100vw - 28px);
 <div class="toast" id="toast"></div>
 
 <script>
-var day=1, allData={}, timState={}, doneMap={};
+/* ═══════════════════════════════════════════════════════
+   PERSISTENT STORAGE + AUTO DAY DETECTION
+   All data saved to localStorage keyed by day number.
+   Survives closing browser, switching apps, rebooting phone.
+   Set CHALLENGE_START to your actual Day 1 date.
+   ═══════════════════════════════════════════════════════ */
+
+var CHALLENGE_START = new Date('2026-03-10T00:00:00');
+var timState = {}, doneMap = {};
+
+function getTodayDay(){
+  var now = new Date();
+  var diff = now.getTime() - CHALLENGE_START.getTime();
+  var d = Math.floor(diff / (1000*60*60*24)) + 1;
+  return Math.max(1, Math.min(100, d));
+}
+
+var day = getTodayDay();
+
+// localStorage helpers
+function lsKey(d){ return '50k_day_' + d; }
+function lsSave(d, data){ try{ localStorage.setItem(lsKey(d), JSON.stringify(data)); }catch(e){} }
+function lsLoad(d){ try{ var r=localStorage.getItem(lsKey(d)); return r?JSON.parse(r):{}; }catch(e){ return {}; } }
+
+// Auto-save: fires 800ms after last change
+var _asTmr = null;
+function scheduleSave(){ clearTimeout(_asTmr); _asTmr = setTimeout(saveDay, 800); }
+function attachAutoSave(){
+  document.querySelectorAll('input,textarea,select').forEach(function(el){
+    el.addEventListener('input', scheduleSave);
+    el.addEventListener('change', scheduleSave);
+  });
+}
 
 (function(){
-  buildGT();buildGrid();setDate();updRing();updSum();updHdr();
+  loadDay();
+  attachAutoSave();
   document.getElementById('rc-med').classList.add('open');
+  var td = getTodayDay();
+  setTimeout(function(){
+    var dateStr = new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+    toast('📅 Day ' + td + ' of 100 · ' + dateStr + ' · Challenge started!');
+  }, 700);
 })();
 
-function buildGT(){
-  var c=document.getElementById('gthings'); c.innerHTML='';
-  for(var i=1;i<=10;i++){
-    var d=document.createElement('div');
-    d.className='fl';
-    d.style.cssText='display:flex;align-items:center;gap:7px;';
-    d.innerHTML='<span style="font-family:JetBrains Mono,Courier New,monospace;font-size:9px;color:#4A6278;width:16px;flex-shrink:0">'+i+'.</span>'+
-      '<input type="text" class="fi" id="f-gt'+i+'" placeholder="Something good about me today..." style="flex:1">';
-    c.appendChild(d);
-  }
+// buildGT removed — replaced by improve/compliments fields
+
+function getDayOk(d){
+  // Check localStorage directly — works across sessions
+  try{
+    var raw = localStorage.getItem(lsKey(d));
+    if(!raw) return null; // no data
+    var obj = JSON.parse(raw);
+    return obj._ok ? 'done' : 'part';
+  }catch(e){ return null; }
 }
 
 function buildGrid(){
-  var g=document.getElementById('dgrid'); g.innerHTML='';
+  var g = document.getElementById('dgrid'); g.innerHTML = '';
   for(var d=1;d<=100;d++){
-    var el=document.createElement('div');
-    el.className='dot';
-    var dd=allData[d];
-    if(d<day) el.classList.add(dd&&dd._ok?'done':'part');
-    else if(d===day) el.classList.add('today');
-    else el.classList.add('future');
-    (function(n){el.onclick=function(){goDay(n);};})(d);
+    var el = document.createElement('div');
+    el.className = 'dot';
+    if(d < day){
+      var status = getDayOk(d);
+      if(isDayFrozen(d)) el.classList.add('frozen');
+      else el.classList.add(status || 'part');
+      // Show USE FREEZE button on click for missed past days
+      if(!status && !isDayFrozen(d)){
+        (function(dn){ el.title='Day '+dn+' missed — click to use freeze'; el.onclick=function(){ 
+          if(confirm('Use a freeze to protect Day '+dn+'?')) useFreeze(dn); 
+        }; })(d);
+      }
+    } else if(d === day){
+      el.classList.add('today');
+    } else {
+      el.classList.add('future');
+    }
+    (function(n){ el.onclick = function(){ goDay(n); }; })(d);
     g.appendChild(el);
   }
 }
 
 function chDay(delta){ saveDay(); day=Math.max(1,Math.min(100,day+delta)); loadDay(); }
 function goDay(n){ saveDay(); day=n; loadDay(); }
+function goToday(){ saveDay(); day=getTodayDay(); loadDay(); toast('📅 Jumped to Day '+day+' — Today'); }
 
 function saveDay(){
-  var data={_ok:Object.values(doneMap).filter(Boolean).length>=4};
-  document.querySelectorAll('[id^="f-"]').forEach(function(e){ data[e.id]=e.value; });
-  data._dm=Object.assign({},doneMap);
-  var cks=[];
+  var data = { _ok: Object.values(doneMap).filter(Boolean).length >= 4 };
+  document.querySelectorAll('[id^="f-"]').forEach(function(e){ data[e.id] = e.value; });
+  data._dm = Object.assign({}, doneMap);
+  var cks = [];
   document.querySelectorAll('.clist .ci').forEach(function(ci){ cks.push(ci.classList.contains('ck')); });
-  data._cks=cks;
-  data._r1=document.getElementById('rb1').classList.contains('rd');
-  data._r2=document.getElementById('rb2').classList.contains('rd');
-  allData[day]=data;
+  data._cks = cks;
+  data._r1 = document.getElementById('rb1').classList.contains('rd');
+  data._r2 = document.getElementById('rb2').classList.contains('rd');
+  data._savedAt = new Date().toISOString();
+  lsSave(day, data); // ← persist to localStorage
+  updHdr(); // refresh streak/grid after save
 }
 
 function loadDay(){
-  Object.keys(timState).forEach(function(id){ tP(id); }); timState={};
-  var data=allData[day]||{};
-  document.querySelectorAll('[id^="f-"]').forEach(function(e){ e.value=data[e.id]!==undefined?data[e.id]:''; });
-  var st=document.getElementById('f-sleep'); if(st&&!st.value) st.value='10:30 PM';
-  doneMap=Object.assign({},data._dm||{});
+  Object.keys(timState).forEach(function(id){ tP(id); }); timState = {};
+  var data = lsLoad(day); // ← load from localStorage
+  document.querySelectorAll('[id^="f-"]').forEach(function(e){
+    e.value = (data[e.id] !== undefined) ? data[e.id] : '';
+  });
+  var st = document.getElementById('f-sleep'); if(st && !st.value) st.value = '10:30 PM';
+  doneMap = Object.assign({}, data._dm || {});
   ['med','phy','aff','pod','trd','pat','dip','ngt'].forEach(function(id){
-    var c=document.getElementById('rc-'+id);
-    if(c) c.classList.toggle('done',!!doneMap[id]);
+    var c = document.getElementById('rc-' + id);
+    if(c) c.classList.toggle('done', !!doneMap[id]);
+    // Restore button text and style
+    var btn = document.getElementById('btn-' + id);
+    if(btn){
+      if(doneMap[id]){
+        btn.textContent = '↩ Tap to Undo — '+(TASK_LABELS[id]||id);
+        btn.classList.add('undone-btn');
+      } else {
+        btn.textContent = TASK_DEFAULT_BTN[id] || '✓ Mark Complete';
+        btn.classList.remove('undone-btn');
+      }
+    }
   });
-  var rb1=document.getElementById('rb1');
-  rb1.classList.toggle('rd',!!data._r1);
-  rb1.textContent=data._r1?'✓ Round 1 Done':'Round 1 — Speak Now';
-  var rb2=document.getElementById('rb2');
-  rb2.classList.toggle('rd',!!data._r2);
-  rb2.textContent=data._r2?'✓ Round 2 Done':'Round 2 — Speak Now';
-  var cks=data._cks||[];
-  document.querySelectorAll('.clist .ci').forEach(function(ci,i){
-    ci.classList.toggle('ck',!!cks[i]);
-    ci.querySelector('.ci-box').textContent=cks[i]?'✓':'';
+  var rb1 = document.getElementById('rb1');
+  rb1.classList.toggle('rd', !!data._r1);
+  rb1.textContent = data._r1 ? '✓ Morning Done' : '☀️ Morning — Read & Feel';
+  var rb2 = document.getElementById('rb2');
+  rb2.classList.toggle('rd', !!data._r2);
+  rb2.textContent = data._r2 ? '✓ Evening Done' : '🌙 Evening — Read & Feel';
+  var cks = data._cks || [];
+  document.querySelectorAll('.clist .ci').forEach(function(ci, i){
+    ci.classList.toggle('ck', !!cks[i]);
+    ci.querySelector('.ci-box').textContent = cks[i] ? '✓' : '';
   });
-  var tD={med:15,phy:30,pod:40,pat:30,dip:40};
+  var tD = {med:15, phy:30, pod:40, pat:30, dip:40};
   Object.keys(tD).forEach(function(id){
-    timState[id]={elapsedAtPause:0,tg:tD[id]*60,running:false};
-    tR(id,tD[id]);
+    timState[id] = {elapsedAtPause:0, tg:tD[id]*60, running:false};
+    tR(id, tD[id]);
   });
-  buildGT();
-  if(data){ for(var i=1;i<=10;i++){ var el=document.getElementById('f-gt'+i); if(el&&data['f-gt'+i]) el.value=data['f-gt'+i]; } }
+  // improve/compliment fields are handled by main f- field loop above
+  // Show last saved time if available
+  if(data._savedAt){
+    var sv = new Date(data._savedAt);
+    var timeStr = sv.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    var dateStr2 = sv.toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+    document.getElementById('lastSaved').textContent = 'Last saved: ' + dateStr2 + ' ' + timeStr;
+  } else {
+    document.getElementById('lastSaved').textContent = day === getTodayDay() ? 'New day — not saved yet' : 'No data for this day';
+  }
   buildGrid(); setDate(); updRing(); updSum(); updHdr();
-  document.querySelectorAll('.db').forEach(function(b){ b.textContent=day; });
-  window.scrollTo({top:0,behavior:'smooth'});
+  document.querySelectorAll('.db').forEach(function(b){ b.textContent = day; });
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
 function setDate(){
@@ -1035,15 +1169,65 @@ function setDate(){
   document.getElementById('bigDay').textContent=day;
 }
 
+function getFreezesEarned(){
+  // 1 freeze awarded per every 10 completed days
+  var completedDays = 0;
+  for(var d=1; d<=100; d++){ if(getDayOk(d)==='done') completedDays++; }
+  return Math.floor(completedDays / 10);
+}
+
+function getFreezesUsed(){
+  // Count days that were missed (not done) between Day 1 and yesterday
+  // but streak continued — meaning freeze was consumed
+  var used = 0;
+  try{ used = parseInt(localStorage.getItem('50k_freezes_used')||'0'); }catch(e){}
+  return used;
+}
+
+function getFreezesAvailable(){
+  return Math.max(0, getFreezesEarned() - getFreezesUsed());
+}
+
+function useFreeze(forDay){
+  // Consume 1 freeze to protect streak for a missed day
+  var avail = getFreezesAvailable();
+  if(avail <= 0){ toast('❌ No freezes available! Complete 10 days to earn one.'); return; }
+  var used = getFreezesUsed() + 1;
+  try{ localStorage.setItem('50k_freezes_used', used); }catch(e){}
+  // Mark that day as freeze-protected
+  var key = '50k_freeze_' + forDay;
+  try{ localStorage.setItem(key, '1'); }catch(e){}
+  toast('🧊 Freeze used for Day ' + forDay + '! Streak protected. ' + (avail-1) + ' freezes left.');
+  updHdr(); buildGrid();
+}
+
+function isDayFrozen(d){
+  try{ return localStorage.getItem('50k_freeze_'+d)==='1'; }catch(e){ return false; }
+}
+
 function updHdr(){
-  document.getElementById('hLeft').textContent=100-day;
-  var streak=0;
-  for(var d=day-1;d>=1;d--){ if(allData[d]&&allData[d]._ok) streak++; else break; }
-  document.getElementById('hStreak').textContent=streak+'🔥';
-  var done=Object.values(allData).filter(function(d){ return d&&d._ok; }).length;
-  var pct=Math.round(done/100*100);
-  document.getElementById('hPct').textContent=pct+'%';
-  document.getElementById('gpf').style.width=Math.max(1,pct)+'%';
+  document.getElementById('hLeft').textContent = 100 - day;
+  // Streak: consecutive completed days, frozen missed days count as kept
+  var streak = 0;
+  for(var d = day-1; d >= 1; d--){
+    var status = getDayOk(d);
+    if(status === 'done' || isDayFrozen(d)) streak++;
+    else break;
+  }
+  document.getElementById('hStreak').textContent = streak + '🔥';
+  // Freezes
+  var earned = getFreezesEarned();
+  var avail  = getFreezesAvailable();
+  var fEl = document.getElementById('hFreeze');
+  if(fEl) fEl.textContent = avail + '🧊';
+  // Total completed days across all 100
+  var doneDays = 0;
+  for(var d2=1; d2<=100; d2++){
+    if(getDayOk(d2) === 'done') doneDays++;
+  }
+  var pct = Math.round(doneDays / 100 * 100);
+  document.getElementById('hPct').textContent = pct + '%';
+  document.getElementById('gpf').style.width = Math.max(1, pct) + '%';
 }
 
 function updRing(){
@@ -1062,12 +1246,51 @@ function tog(id){
   var c=document.getElementById('rc-'+id); if(c) c.classList.toggle('open');
 }
 
+// Labels for each task
+var TASK_LABELS = {
+  med: 'Meditation', phy: 'Physical Activity', aff: 'Vision Board',
+  pod: 'Podcast', trd: 'Both Trades', pat: 'Pattern Study',
+  dip: 'Diploma Study', ngt: 'Night Rituals'
+};
+var TASK_DEFAULT_BTN = {
+  med: '✓ Mark Meditation Complete',
+  phy: '✓ Mark Physical Complete',
+  aff: '✓ Mark Vision Board Complete',
+  pod: '✓ Mark Podcast Complete',
+  trd: '✓ Both Trades Logged',
+  pat: '✓ Mark Pattern Study Complete',
+  dip: '✓ Mark Diploma Study Complete',
+  ngt: '✓ Night Rituals Complete — Rest Well 🌙'
+};
+
 function done(id){
-  doneMap[id]=true;
-  var c=document.getElementById('rc-'+id);
-  if(c){ c.classList.add('done'); c.classList.remove('open'); }
-  updRing(); updSum(); updHdr();
-  toast('✓ '+id.toUpperCase()+' — Day '+day+' logged!');
+  var card = document.getElementById('rc-'+id);
+  var btn  = document.getElementById('btn-'+id);
+
+  if(doneMap[id]){
+    // ── UNDO: already marked done → reopen ──
+    doneMap[id] = false;
+    if(card){ card.classList.remove('done'); card.classList.add('open'); }
+    if(btn){ btn.textContent = TASK_DEFAULT_BTN[id]||'✓ Mark Complete'; btn.classList.remove('undone-btn'); }
+    saveDay(); updRing(); updSum(); updHdr();
+    toast('↩ '+TASK_LABELS[id]+' unmarked — fix it and re-complete');
+  } else {
+    // ── DONE: mark complete ──
+    doneMap[id] = true;
+    if(card){ card.classList.add('done'); card.classList.remove('open'); }
+    if(btn){ btn.textContent = '↩ Tap Again to Undo — '+TASK_LABELS[id]; btn.classList.add('undone-btn'); }
+    saveDay(); updRing(); updSum(); updHdr();
+    // Freeze milestone check
+    var completedNow = 0;
+    for(var d2=1;d2<=100;d2++){ if(getDayOk(d2)==='done') completedNow++; }
+    if(completedNow > 0 && completedNow % 10 === 0){
+      setTimeout(function(){
+        toast('🧊 FREEZE UNLOCKED! You completed '+completedNow+' days!');
+      }, 1500);
+    } else {
+      toast('✓ '+TASK_LABELS[id]+' logged — Day '+day+'!');
+    }
+  }
 }
 
 function ck(el){
