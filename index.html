@@ -583,7 +583,7 @@ max-width:calc(100vw - 28px);
   <div>
     <div class="day-eyebrow">Day of Challenge</div>
     <div class="day-big">DAY <span id="bigDay">1</span></div>
-    <div class="day-date" id="dateStr">Thursday, 1 January 2026</div>
+    <div class="day-date" id="dateStr"></div>
   </div>
   <div class="hero-r">
     <div class="ring-w">
@@ -1034,13 +1034,29 @@ function lsLoad(d){ try{ var r=localStorage.getItem(lsKey(d)); return r?JSON.par
 
 // Auto-save: fires 800ms after last change
 var _asTmr = null;
-function scheduleSave(){ clearTimeout(_asTmr); _asTmr = setTimeout(saveDay, 800); }
+function scheduleSave(){ clearTimeout(_asTmr); _asTmr = setTimeout(function(){ saveDay(); updRing(); updSum(); buildGrid(); updHdr(); buildGrid(); }, 800); }
 function attachAutoSave(){
   document.querySelectorAll('input,textarea,select').forEach(function(el){
     el.addEventListener('input', scheduleSave);
     el.addEventListener('change', scheduleSave);
   });
 }
+
+var TASK_LABELS = {
+  med: 'Meditation', phy: 'Physical Activity', aff: 'Vision Board',
+  pod: 'Podcast', trd: 'Both Trades', pat: 'Pattern Study',
+  dip: 'Diploma Study', ngt: 'Night Rituals'
+};
+var TASK_DEFAULT_BTN = {
+  med: '✓ Mark Meditation Complete',
+  phy: '✓ Mark Physical Complete',
+  aff: '✓ Mark Vision Board Complete',
+  pod: '✓ Mark Podcast Complete',
+  trd: '✓ Both Trades Logged',
+  pat: '✓ Mark Pattern Study Complete',
+  dip: '✓ Mark Diploma Study Complete',
+  ngt: '✓ Night Rituals Complete — Rest Well 🌙'
+};
 
 (function(){
   loadDay();
@@ -1137,6 +1153,7 @@ function loadDay(){
   var rb2 = document.getElementById('rb2');
   rb2.classList.toggle('rd', !!data._r2);
   rb2.textContent = data._r2 ? '✓ Evening Done' : '🌙 Evening — Read & Feel';
+  updRing(); updHdr(); buildGrid();
   var cks = data._cks || [];
   document.querySelectorAll('.clist .ci').forEach(function(ci, i){
     ci.classList.toggle('ck', !!cks[i]);
@@ -1163,7 +1180,7 @@ function loadDay(){
 }
 
 function setDate(){
-  var s=new Date('2026-01-01T00:00:00'); s.setDate(s.getDate()+day-1);
+  var s=new Date(CHALLENGE_START.getTime()); s.setDate(s.getDate()+day-1);
   document.getElementById('dateStr').textContent=s.toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   document.getElementById('dayLbl').textContent='DAY '+day;
   document.getElementById('bigDay').textContent=day;
@@ -1247,21 +1264,6 @@ function tog(id){
 }
 
 // Labels for each task
-var TASK_LABELS = {
-  med: 'Meditation', phy: 'Physical Activity', aff: 'Vision Board',
-  pod: 'Podcast', trd: 'Both Trades', pat: 'Pattern Study',
-  dip: 'Diploma Study', ngt: 'Night Rituals'
-};
-var TASK_DEFAULT_BTN = {
-  med: '✓ Mark Meditation Complete',
-  phy: '✓ Mark Physical Complete',
-  aff: '✓ Mark Vision Board Complete',
-  pod: '✓ Mark Podcast Complete',
-  trd: '✓ Both Trades Logged',
-  pat: '✓ Mark Pattern Study Complete',
-  dip: '✓ Mark Diploma Study Complete',
-  ngt: '✓ Night Rituals Complete — Rest Well 🌙'
-};
 
 function done(id){
   var card = document.getElementById('rc-'+id);
@@ -1272,14 +1274,14 @@ function done(id){
     doneMap[id] = false;
     if(card){ card.classList.remove('done'); card.classList.add('open'); }
     if(btn){ btn.textContent = TASK_DEFAULT_BTN[id]||'✓ Mark Complete'; btn.classList.remove('undone-btn'); }
-    saveDay(); updRing(); updSum(); updHdr();
+    saveDay(); updRing(); updSum(); buildGrid(); updHdr(); buildGrid();
     toast('↩ '+TASK_LABELS[id]+' unmarked — fix it and re-complete');
   } else {
     // ── DONE: mark complete ──
     doneMap[id] = true;
     if(card){ card.classList.add('done'); card.classList.remove('open'); }
     if(btn){ btn.textContent = '↩ Tap Again to Undo — '+TASK_LABELS[id]; btn.classList.add('undone-btn'); }
-    saveDay(); updRing(); updSum(); updHdr();
+    saveDay(); updRing(); updSum(); buildGrid(); updHdr();
     // Freeze milestone check
     var completedNow = 0;
     for(var d2=1;d2<=100;d2++){ if(getDayOk(d2)==='done') completedNow++; }
